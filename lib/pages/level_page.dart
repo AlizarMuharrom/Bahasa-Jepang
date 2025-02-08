@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+
+class LevelSelectionPage extends StatefulWidget {
+  const LevelSelectionPage({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _LevelSelectionPageState createState() => _LevelSelectionPageState();
+}
+
+class _LevelSelectionPageState extends State<LevelSelectionPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue.shade100,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/image_splash.png',
+              width: 150,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Pilih level kemampuanmu",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            _buildLevelButton(
+              "Pemula (Belum pernah belajar bahasa Jepang)",
+              Colors.blue.shade200,
+              () {
+                Navigator.pushNamed(context, '/pemula');
+              },
+            ),
+            const SizedBox(height: 10),
+            _buildLevelButton(
+              "N5 (Mengetahui huruf dasar bahasa Jepang)",
+              const Color.fromRGBO(100, 181, 246, 1),
+              () {
+                Navigator.pushNamed(context, '/n5');
+              },
+            ),
+            const SizedBox(height: 10),
+            _buildLevelButton(
+              "N4 (Mengetahui lebih dari 100 kanji dan 800 kosakata)",
+              Colors.blue.shade400,
+              () {
+                Navigator.pushNamed(context, '/n4');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      onPressed: onPressed,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.black, fontSize: 14),
+      ),
+    );
+  }
+}
