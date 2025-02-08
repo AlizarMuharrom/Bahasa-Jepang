@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:bahasajepang/service/API_config.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -9,7 +13,42 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPage extends State<SignUpPage> {
+  final TextEditingController _fullnameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
+  Future<void> functionRegister() async {
+    String fullname = _fullnameController.text;
+    String username = _usernameController.text;
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    try {
+      const endpoint = "/register";
+      var response = await http.post(
+        Uri.parse(ApiConfig.baseUrl + endpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'fullname': fullname,
+          'username': username,
+          'email': email,
+          'password': password
+        }),
+      );
+      
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['status'] == 'success') {
+          print('${jsonResponse['message']}');
+          Navigator.pushNamed(context, '/sign-in');
+        }
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   Widget build(BuildContext context) {
     Widget header() {
       return Container(
@@ -57,6 +96,7 @@ class _SignUpPage extends State<SignUpPage> {
                     SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
+                        controller: _fullnameController,
                         style: primaryTextStyle.copyWith(
                           fontSize: 14,
                           fontWeight: medium,
@@ -103,6 +143,7 @@ class _SignUpPage extends State<SignUpPage> {
                     SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
+                        controller: _usernameController,
                         style: primaryTextStyle.copyWith(
                           fontSize: 14,
                           fontWeight: medium,
@@ -149,6 +190,7 @@ class _SignUpPage extends State<SignUpPage> {
                     SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
+                        controller: _emailController,
                         style: primaryTextStyle.copyWith(
                           fontSize: 14,
                           fontWeight: medium,
@@ -195,6 +237,7 @@ class _SignUpPage extends State<SignUpPage> {
                     SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
+                        controller: _passwordController,
                         style: primaryTextStyle.copyWith(
                           fontSize: 14,
                           fontWeight: medium,
@@ -225,7 +268,8 @@ class _SignUpPage extends State<SignUpPage> {
         margin: EdgeInsets.only(top: 30),
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/home');
+            functionRegister();
+            // Navigator.pushNamed(context, '/home');
           },
           style: TextButton.styleFrom(
               backgroundColor: primaryColor,

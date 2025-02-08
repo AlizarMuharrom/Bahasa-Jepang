@@ -60,7 +60,7 @@ class _PengenalanHiraganaPageState extends State<PengenalanHiraganaPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (currentPage >
-                    1) // Tombol prev hanya muncul jika bukan halaman pertama
+                    1)
                   ElevatedButton(
                     onPressed: prevPage,
                     style: ElevatedButton.styleFrom(
@@ -71,7 +71,7 @@ class _PengenalanHiraganaPageState extends State<PengenalanHiraganaPage> {
                     child: Text("Prev", style: primaryTextStyle),
                   ),
                 if (currentPage <
-                    3) // Tombol next hanya muncul jika bukan halaman terakhir
+                    3)
                   ElevatedButton(
                     onPressed: nextPage,
                     style: ElevatedButton.styleFrom(

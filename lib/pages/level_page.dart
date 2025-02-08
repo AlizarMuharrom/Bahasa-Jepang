@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:bahasajepang/service/API_config.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class LevelSelectionPage extends StatefulWidget {
   const LevelSelectionPage({super.key});
@@ -10,6 +14,26 @@ class LevelSelectionPage extends StatefulWidget {
 
 class _LevelSelectionPageState extends State<LevelSelectionPage> {
   @override
+  Future<void> sendNumberToDatabase(int number) async {
+    const endpoint = "/level";
+    try {
+      var response = await http.post(
+        Uri.parse(ApiConfig.baseUrl + endpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'number': number}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        print('Response: ${jsonResponse}');
+      } else {
+        print('Failed to send number. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue.shade100,
@@ -30,7 +54,9 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
             _buildLevelButton(
               "Pemula (Belum pernah belajar bahasa Jepang)",
               Colors.blue.shade200,
-              () {
+              () async {
+                print(1);
+                await sendNumberToDatabase(1);
                 Navigator.pushNamed(context, '/pemula');
               },
             ),
