@@ -11,7 +11,7 @@ class _KanjiPageState extends State<KanjiPage> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Kanji Page'),
+      child: Text('Kanji Belum Tersedia Di Level Anda'),
     );
   }
 }

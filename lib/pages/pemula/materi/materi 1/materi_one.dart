@@ -90,7 +90,7 @@ class _MateriOnePemulaPageState extends State<MateriOnePemulaPage> {
                   child: Text(
                     item["title"]!,
                     style: primaryTextStyle.copyWith(
-                      decoration: TextDecoration.underline, // Tambahkan underline agar terlihat bisa diklik
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
