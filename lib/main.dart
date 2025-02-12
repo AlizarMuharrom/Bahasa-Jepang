@@ -1,4 +1,12 @@
 import 'package:bahasajepang/pages/level_page.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_air.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_angin.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_api.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_buku.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_hari.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_ibu.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_mata.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_pohon.dart';
 import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_tandoku.dart';
 import 'package:bahasajepang/pages/n5/main_page.dart';
 import 'package:bahasajepang/pages/pemula/materi/materi%201/materi_one.dart';
@@ -27,7 +35,16 @@ class MyApp extends StatelessWidget {
         '/materi1pemula': (context) => MateriOnePemulaPage(),
         '/pengenalan-hiragana': (context) => PengenalanHiraganaPage(),
         '/n5': (context) => NlimaPage(),
-        '/kanji-tandoku': (context) => KanjiTandokuPage(),
+        '/kanji-tandoku5': (context) => KanjiTandokuPage(),
+        '/kanji-okurigana5': (context) => KanjiTandokuPage(),
+        '/kanji-pohon': (context) => DetailPohonPage(),
+        '/kanji-ibu': (context) => DetailIbuPage(),
+        '/kanji-buku': (context) => DetailBukuPage(),
+        '/kanji-air': (context) => DetailAirPage(),
+        '/kanji-api': (context) => DetailApiPage(),
+        '/kanji-angin': (context) => DetailAnginPage(),
+        '/kanji-mata': (context) => DetailMataPage(),
+        '/kanji-hari': (context) => DetailHariPage(),
       },
     );
   }

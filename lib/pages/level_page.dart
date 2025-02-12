@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bahasajepang/service/API_config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LevelSelectionPage extends StatefulWidget {
   const LevelSelectionPage({super.key});
@@ -55,9 +56,19 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
               "Pemula (Belum pernah belajar bahasa Jepang)",
               Colors.blue.shade200,
               () async {
-                print(1);
-                await sendNumberToDatabase(1);
-                Navigator.pushNamed(context, '/pemula');
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? userId = prefs.getString('userId');
+
+                if (userId != null) {
+                  print('User ID: $userId');
+                  print('Level: 1');
+
+                  await sendNumberToDatabase(1);
+
+                  Navigator.pushNamed(context, '/pemula');
+                } else {
+                  print('User ID tidak ditemukan');
+                }
               },
             ),
             const SizedBox(height: 10),

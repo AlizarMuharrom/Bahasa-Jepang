@@ -4,6 +4,7 @@ import 'package:bahasajepang/service/API_config.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -32,6 +33,11 @@ class _SignInPage extends State<SignInPage> {
         var jsonResponse = jsonDecode(response.body);
         if (jsonResponse['status'] == 'success') {
           print('${jsonResponse['message']}');
+
+          // SharedPreferences prefs = await SharedPreferences.getInstance();
+          // await prefs.setString('token', jsonResponse['data']);
+          // await prefs.setString('email', _emailController.text);
+
           Navigator.pushNamed(context, '/level');
         }
       }

@@ -22,13 +22,13 @@ class _KanjiPageState extends State<KanjiPage> {
               width: 200,
             ),
             _buildKanjiButton(
-                "Kanji Tandoku", Colors.blue.shade200, '/kanji-tandoku'),
+                "Kanji Tandoku", Colors.blue.shade200, '/kanji-tandoku5'),
             const SizedBox(height: 10),
             _buildKanjiButton("Kanji Okurigana",
-                const Color.fromRGBO(100, 181, 246, 1), '/kanji-okurigana'),
+                const Color.fromRGBO(100, 181, 246, 1), '/kanji-okurigana5'),
             const SizedBox(height: 10),
             _buildKanjiButton(
-                "Kanji Jukugo", Colors.blue.shade400, '/kanji-jukugo'),
+                "Kanji Jukugo", Colors.blue.shade400, '/kanji-jukugo5'),
           ],
         ),
       ),
