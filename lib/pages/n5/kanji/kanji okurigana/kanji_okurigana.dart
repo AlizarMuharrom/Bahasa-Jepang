@@ -1,4 +1,4 @@
-import 'package:bahasajepang/pages/n5/kanji/kanji%20okurigana/model/kanji_okurigana.model.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20okurigana/model/detail_kanji.model.dart';
 import 'package:flutter/material.dart';
 
 class KanjiOkuriganaPage extends StatefulWidget {
@@ -10,12 +10,13 @@ class KanjiOkuriganaPage extends StatefulWidget {
 
 class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, String>> _filteredKanji = List.from(kanjiOkuriganaList);
+  List<Map<String, dynamic>> _filteredKanji = List.from(detailOkuriganaList);
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = kanjiOkuriganaList
-          .where((kanji) => kanji["title"]!.contains(query))
+      _filteredKanji = detailOkuriganaList
+          .where((kanji) =>
+              kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -73,10 +74,14 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
     );
   }
 
-  Widget _kanjiButton(Map<String, String> kanji, BuildContext context) {
+  Widget _kanjiButton(Map<String, dynamic> kanji, BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, kanji["route"]!);
+        Navigator.pushNamed(
+          context,
+          '/detail-okurigana',
+          arguments: kanji,
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -85,7 +90,7 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
         ),
         child: Center(
           child: Text(
-            kanji["title"]!,
+            kanji["judul"]!,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),

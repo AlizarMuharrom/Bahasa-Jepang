@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/model/kanji_tangan.model.dart';
 
-class DetailTanganPage extends StatefulWidget {
-  const DetailTanganPage({super.key});
+class DetailOkuriganaPage extends StatefulWidget {
+  const DetailOkuriganaPage({super.key});
 
   @override
-  State<DetailTanganPage> createState() => _DetailTanganPageState();
+  State<DetailOkuriganaPage> createState() => _DetailOkuriganaPageState();
 }
 
-class _DetailTanganPageState extends State<DetailTanganPage> {
-  final Map<String, dynamic> kanjiData = detailTanganList[0];
+class _DetailOkuriganaPageState extends State<DetailOkuriganaPage> {
+  late Map<String, dynamic> kanjiData;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    kanjiData =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+  }
 
   void _showWritingModal(BuildContext context) {
     showDialog(
@@ -79,7 +85,6 @@ class _DetailTanganPageState extends State<DetailTanganPage> {
                     ),
                   ),
                   const SizedBox(width: 10),
-
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,6 +229,7 @@ class _DetailTanganPageState extends State<DetailTanganPage> {
   }
 }
 
+// Modal untuk menulis (tidak diubah)
 class WritingModal extends StatefulWidget {
   @override
   _WritingModalState createState() => _WritingModalState();

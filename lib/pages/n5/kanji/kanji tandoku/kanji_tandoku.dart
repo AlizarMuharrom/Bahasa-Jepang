@@ -1,4 +1,4 @@
-import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/model/kanji_tandoku.model.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/model/detail_kanji.model.dart';
 import 'package:flutter/material.dart';
 
 class KanjiTandokuPage extends StatefulWidget {
@@ -10,14 +10,13 @@ class KanjiTandokuPage extends StatefulWidget {
 
 class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, String>> _filteredKanji =
-      List.from(kanjiList); // ✅ Inisialisasi langsung dengan model
+  List<Map<String, dynamic>> _filteredKanji = List.from(detailTandokuList);
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = kanjiList
+      _filteredKanji = detailTandokuList
           .where((kanji) =>
-              kanji["title"]!.contains(query)) // ✅ Akses 'title' dari Map
+              kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -59,7 +58,7 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
               padding: const EdgeInsets.all(10),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4, // 4 kolom sesuai gambar
+                  crossAxisCount: 4,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
@@ -75,10 +74,14 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
     );
   }
 
-  Widget _kanjiButton(Map<String, String> kanji, BuildContext context) {
+  Widget _kanjiButton(Map<String, dynamic> kanji, BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, kanji["route"]!);
+        Navigator.pushNamed(
+          context,
+          '/detail-tandoku',
+          arguments: kanji,
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -87,7 +90,7 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
         ),
         child: Center(
           child: Text(
-            kanji["title"]!,
+            kanji["judul"]!,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
