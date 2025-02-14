@@ -173,8 +173,8 @@ class _SignInPage extends State<SignInPage> {
         margin: EdgeInsets.only(top: 30),
         child: TextButton(
           onPressed: () {
-            functionLogin();
-            // Navigator.pushNamed(context, '/level');
+            // functionLogin();
+            Navigator.pushNamed(context, '/level');
           },
           style: TextButton.styleFrom(
               backgroundColor: primaryColor,

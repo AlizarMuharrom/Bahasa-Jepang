@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/model/kanji_mata.model.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/model/kanji_hutan.model.dart';
 
-class DetailMataPage extends StatefulWidget {
-  const DetailMataPage({super.key});
+class DetailHutanPage extends StatefulWidget {
+  const DetailHutanPage({super.key});
 
   @override
-  State<DetailMataPage> createState() => _DetailMataPageState();
+  State<DetailHutanPage> createState() => _DetailHutanPageState();
 }
 
-class _DetailMataPageState extends State<DetailMataPage> {
-  final Map<String, dynamic> kanjiData = detailMataList[0];
+class _DetailHutanPageState extends State<DetailHutanPage> {
+  final Map<String, dynamic> kanjiData = detailHutanList[0];
 
   void _showWritingModal(BuildContext context) {
     showDialog(

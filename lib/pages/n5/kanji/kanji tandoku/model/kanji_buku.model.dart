@@ -8,7 +8,7 @@ final List<Map<String, dynamic>> detailBukuList = [
       {"kanji": "日本", "furigana": "にほん", "arti": "Jepang"},
       {"kanji": "本屋", "furigana": "ほんや", "arti": "Toko Buku"},
       {"kanji": "本当", "furigana": "ほんとう", "arti": "Kebenaran"},
-      {"kanji": "山本", "furigana": "やまもと", "arti": "Yamamoto (Nama Jepang)"},
+      {"kanji": "本気", "furigana": "ほんき", "arti": "Serius"},
     ]
   },
 ];
