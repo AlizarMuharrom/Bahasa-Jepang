@@ -1,20 +1,20 @@
-import 'package:bahasajepang/pages/n5/kanji/kanji%20jukugo/model/detail_kanji.model.dart';
+import 'package:bahasajepang/pages/n4/kanji/kanji%20okurigana/model/detail_kanji.model.dart';
 import 'package:flutter/material.dart';
 
-class KanjiJukugoPage extends StatefulWidget {
-  const KanjiJukugoPage({super.key});
+class KanjiOkurigana4Page extends StatefulWidget {
+  const KanjiOkurigana4Page({super.key});
 
   @override
-  _KanjiJukugoPageState createState() => _KanjiJukugoPageState();
+  _KanjiOkurigana4PageState createState() => _KanjiOkurigana4PageState();
 }
 
-class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
+class _KanjiOkurigana4PageState extends State<KanjiOkurigana4Page> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredKanji = List.from(detailJukugoList);
+  List<Map<String, dynamic>> _filteredKanji = List.from(detailOkuriganaList);
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = detailJukugoList
+      _filteredKanji = detailOkuriganaList
           .where((kanji) =>
               kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
           .toList();
@@ -25,7 +25,7 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Kanji Jukugo"),
+        title: const Text("Kanji Okurigana"),
         backgroundColor: Colors.blue.shade300,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -79,7 +79,7 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/detail-jukugo',
+          '/detail-Okurigana4',
           arguments: kanji,
         );
       },

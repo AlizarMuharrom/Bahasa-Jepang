@@ -52,25 +52,26 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            _buildLevelButton(
-              "Pemula (Belum pernah belajar bahasa Jepang)",
-              Colors.blue.shade200,
-              () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                String? userId = prefs.getString('userId');
+            _buildLevelButton("Pemula (Belum pernah belajar bahasa Jepang)",
+                Colors.blue.shade200,
+                // () async {
+                () {
+              Navigator.pushNamed(context, '/pemula');
+            }
+                // SharedPreferences prefs = await SharedPreferences.getInstance();
+                // String? userId = prefs.getString('userId');
 
-                if (userId != null) {
-                  print('User ID: $userId');
-                  print('Level: 1');
+                // if (userId != null) {
+                //   print('User ID: $userId');
+                //   print('Level: 1');
 
-                  await sendNumberToDatabase(1);
+                //   await sendNumberToDatabase(1);
 
-                  Navigator.pushNamed(context, '/pemula');
-                } else {
-                  print('User ID tidak ditemukan');
-                }
-              },
-            ),
+                //   Navigator.pushNamed(context, '/pemula');
+                // } else {
+                //   print('User ID tidak ditemukan');
+                // }
+                ),
             const SizedBox(height: 10),
             _buildLevelButton(
               "N5 (Mengetahui huruf dasar bahasa Jepang)",

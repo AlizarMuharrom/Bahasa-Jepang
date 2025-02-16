@@ -1,3 +1,4 @@
+import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
 class DetailOkuriganaPage extends StatefulWidget {
@@ -79,7 +80,7 @@ class _DetailOkuriganaPageState extends State<DetailOkuriganaPage> {
                         ),
                         Text(
                           kanjiData["nama"],
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 13),
                         ),
                       ],
                     ),
@@ -175,8 +176,8 @@ class _DetailOkuriganaPageState extends State<DetailOkuriganaPage> {
                           children: [
                             Text(
                               kanji["furigana"],
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14, color: secondaryTextColor),
                             ),
                             const SizedBox(height: 5),
                             Text(

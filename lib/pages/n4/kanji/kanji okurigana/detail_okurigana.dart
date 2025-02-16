@@ -1,14 +1,14 @@
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
-class DetailTandokuPage extends StatefulWidget {
-  const DetailTandokuPage({super.key});
+class DetailOkurigana4Page extends StatefulWidget {
+  const DetailOkurigana4Page({super.key});
 
   @override
-  State<DetailTandokuPage> createState() => _DetailTandokuPageState();
+  State<DetailOkurigana4Page> createState() => _DetailOkurigana4PageState();
 }
 
-class _DetailTandokuPageState extends State<DetailTandokuPage> {
+class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
   late Map<String, dynamic> kanjiData;
 
   @override

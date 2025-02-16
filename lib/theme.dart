@@ -10,7 +10,7 @@ Color bgColor1 = Color.fromRGBO(187, 222, 251, 1);
 Color bgColor2 = Color.fromRGBO(144, 202, 249, 1);
 Color bgColor3 = Color.fromRGBO(100, 181, 246, 1);
 Color primaryTextColor = Color(0xff1C1C1C);
-Color secondaryTextColor = Color.fromARGB(255, 109, 109, 109);
+Color secondaryTextColor = Color.fromARGB(255, 90, 90, 90);
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(color: primaryTextColor);
 

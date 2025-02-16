@@ -1,14 +1,14 @@
-import 'package:bahasajepang/pages/n5/kanji/kanji%20jukugo/model/detail_kanji.model.dart';
+import 'package:bahasajepang/pages/n4/kanji/kanji%20jukugo/model/detail_kanji.model.dart';
 import 'package:flutter/material.dart';
 
-class KanjiJukugoPage extends StatefulWidget {
-  const KanjiJukugoPage({super.key});
+class KanjiJukugo4Page extends StatefulWidget {
+  const KanjiJukugo4Page({super.key});
 
   @override
-  _KanjiJukugoPageState createState() => _KanjiJukugoPageState();
+  _KanjiJukugo4PageState createState() => _KanjiJukugo4PageState();
 }
 
-class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
+class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _filteredKanji = List.from(detailJukugoList);
 
@@ -79,7 +79,7 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/detail-jukugo',
+          '/detail-Jukugo4',
           arguments: kanji,
         );
       },
