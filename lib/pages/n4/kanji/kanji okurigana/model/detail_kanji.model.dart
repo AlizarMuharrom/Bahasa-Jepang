@@ -242,5 +242,65 @@ List<Map<String, dynamic>> detailOkuriganaList = [
       {"kanji": "昼飯", "furigana": "ひるめし", "arti": "Makan siang"},
       {"kanji": "晩飯", "furigana": "ばんめし", "arti": "Makan malam"}
     ]
-  }
+  },
+  {
+    "judul": "転",
+    "nama": "Terguling",
+    "kunyomi": ["ころ"],
+    "onyomi": ["てん"],
+    "kanjiGabungan": [
+      {"kanji": "自転車", "furigana": "じてんしゃ", "arti": "Sepeda"},
+      {"kanji": "転職", "furigana": "てんしょく", "arti": "Pindah Pekerjaan"},
+      {"kanji": "転がる", "furigana": "ころがる", "arti": "Berguling"},
+      {"kanji": "回転", "furigana": "かいてん", "arti": "Rotasi"}
+    ]
+  },
+  {
+    "judul": "洗",
+    "nama": "Mencuci",
+    "kunyomi": ["あら"],
+    "onyomi": ["せん"],
+    "kanjiGabungan": [
+      {"kanji": "洗う", "furigana": "あらう", "arti": "Mencuci"},
+      {"kanji": "洗濯", "furigana": "せんたく", "arti": "Cuci Pakaian"},
+      {"kanji": "洗面所", "furigana": "せんめんじょ", "arti": "Tempat Cuci Muka"},
+      {"kanji": "洗礼", "furigana": "せんれい", "arti": "Pembaptisan"}
+    ]
+  },
+  {
+    "judul": "計",
+    "nama": "Mengukur",
+    "kunyomi": ["はか"],
+    "onyomi": ["けい"],
+    "kanjiGabungan": [
+      {"kanji": "計る", "furigana": "はかる", "arti": "Mengukur"},
+      {"kanji": "時計", "furigana": "とけい", "arti": "Jam"},
+      {"kanji": "計算", "furigana": "けいさん", "arti": "Perhitungan"},
+      {"kanji": "設計", "furigana": "せっけい", "arti": "Desain / Rancangan"}
+    ]
+  },
+  {
+    "judul": "図",
+    "nama": "Rencana",
+    "kunyomi": ["はか"],
+    "onyomi": ["ず", "と"],
+    "kanjiGabungan": [
+      {"kanji": "図る", "furigana": "はかる", "arti": "Rencana"},
+      {"kanji": "地図", "furigana": "ちず", "arti": "Peta"},
+      {"kanji": "図書館", "furigana": "としょかん", "arti": "Perpustakaan"},
+      {"kanji": "図面", "furigana": "ずめん", "arti": "Denah"}
+    ]
+  },
+  {
+    "judul": "仕",
+    "nama": "Mengabdi",
+    "kunyomi": ["つか"],
+    "onyomi": ["し"],
+    "kanjiGabungan": [
+      {"kanji": "仕える", "furigana": "つかえる", "arti": "Mengabdi"},
+      {"kanji": "仕事", "furigana": "しごと", "arti": "Pekerjaan"},
+      {"kanji": "仕組み", "furigana": "しくみ", "arti": "Struktur / Mekanisme"},
+      {"kanji": "仕方", "furigana": "しかた", "arti": "Cara / Metode"}
+    ]
+  },
 ];
