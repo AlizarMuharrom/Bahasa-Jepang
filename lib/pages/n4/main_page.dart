@@ -83,7 +83,7 @@ class _NEmpatPageState extends State<NEmpatPage> {
         case 0:
           return MateriPage();
         case 1:
-          return KamusPage();
+          return Kamus4Page();
         case 2:
           return KanjiPage();
         case 3:

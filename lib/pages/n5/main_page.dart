@@ -83,7 +83,7 @@ class _NlimaPageState extends State<NlimaPage> {
         case 0:
           return MateriPage();
         case 1:
-          return KamusPage();
+          return Kamus5Page();
         case 2:
           return KanjiPage();
         case 3:

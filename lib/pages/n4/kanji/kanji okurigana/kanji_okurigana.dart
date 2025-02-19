@@ -79,7 +79,7 @@ class _KanjiOkurigana4PageState extends State<KanjiOkurigana4Page> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/detail-Okurigana4',
+          '/detail-okurigana4',
           arguments: kanji,
         );
       },
