@@ -17,6 +17,7 @@ class _SignUpPage extends State<SignUpPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
   @override
   Future<void> functionRegister() async {
     String fullname = _fullnameController.text;
@@ -36,7 +37,7 @@ class _SignUpPage extends State<SignUpPage> {
           'password': password
         }),
       );
-      
+
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
         if (jsonResponse['status'] == 'success') {
@@ -88,7 +89,7 @@ class _SignUpPage extends State<SignUpPage> {
               height: 45,
               padding: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  color: bgColor2, borderRadius: BorderRadius.circular(12)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Center(
                 child: Row(
                   children: [
@@ -135,7 +136,7 @@ class _SignUpPage extends State<SignUpPage> {
               height: 45,
               padding: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  color: bgColor2, borderRadius: BorderRadius.circular(12)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Center(
                 child: Row(
                   children: [
@@ -182,7 +183,7 @@ class _SignUpPage extends State<SignUpPage> {
               height: 45,
               padding: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  color: bgColor2, borderRadius: BorderRadius.circular(12)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Center(
                 child: Row(
                   children: [
@@ -229,7 +230,7 @@ class _SignUpPage extends State<SignUpPage> {
               height: 45,
               padding: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                  color: bgColor2, borderRadius: BorderRadius.circular(12)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Center(
                 child: Row(
                   children: [
@@ -242,14 +243,26 @@ class _SignUpPage extends State<SignUpPage> {
                           fontSize: 14,
                           fontWeight: medium,
                         ),
-                        obscureText: true,
-                        decoration: InputDecoration.collapsed(
+                        obscureText: _obscureText,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
                           hintText: 'Your Password',
                           hintStyle: primaryTextStyle.copyWith(
                             fontSize: 14,
                             fontWeight: medium,
                           ),
                         ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                      child: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey,
                       ),
                     ),
                   ],

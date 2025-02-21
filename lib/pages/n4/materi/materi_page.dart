@@ -20,7 +20,7 @@ class _MateriPageState extends State<MateriPage> {
     return Scaffold(
       backgroundColor: bgColor1,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16, 35, 16, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,7 +38,8 @@ class _MateriPageState extends State<MateriPage> {
     );
   }
 
-  Widget _buildMateriContainer(BuildContext context, String title, String routeName) {
+  Widget _buildMateriContainer(
+      BuildContext context, String title, String routeName) {
     return GestureDetector(
       onTap: () => navigateToMateri(context, routeName),
       child: Container(
@@ -50,10 +51,7 @@ class _MateriPageState extends State<MateriPage> {
         ),
         child: Text(
           title,
-          style: primaryTextStyle.copyWith(
-            fontSize: 16,
-            fontWeight: medium
-          ),
+          style: primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
         ),
       ),
     );

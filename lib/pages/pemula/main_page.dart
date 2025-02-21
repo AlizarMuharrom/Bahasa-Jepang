@@ -21,68 +21,61 @@ class _PemulaPageState extends State<PemulaPage> {
       return ClipRRect(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         child: BottomNavigationBar(
-            backgroundColor: bgColor3,
-            currentIndex: currentIndex,
-            onTap: (value) {
-              setState(() {
-                currentIndex = value;
-              });
-            },
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Image.asset(
-                    'assets/subject-matter.png',
-                    width: 35,
-                    color: currentIndex == 0
-                        ? bgColor2
-                        : bgColor1,
-                  ),
+          backgroundColor: bgColor3,
+          currentIndex: currentIndex,
+          onTap: (value) {
+            setState(() {
+              currentIndex = value;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Icon(
+                  Icons.book,
+                  size: 35,
+                  color: currentIndex == 0 ? bgColor2 : bgColor1,
                 ),
-                label: '',
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Image.asset(
-                    'assets/dictionary.png',
-                    width: 35,
-                    color: currentIndex == 1
-                        ? bgColor2
-                        : bgColor1,
-                  ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Icon(
+                  Icons.menu_book,
+                  size: 35,
+                  color: currentIndex == 1 ? bgColor2 : bgColor1,
                 ),
-                label: '',
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Image.asset(
-                    'assets/kanji.png',
-                    width: 33,
-                    color: currentIndex == 2
-                        ? bgColor2
-                        : bgColor1,
-                  ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Icon(
+                  Icons.translate,
+                  size: 35,
+                  color: currentIndex == 2 ? bgColor2 : bgColor1,
                 ),
-                label: '',
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Image.asset(
-                    'assets/setting.png',
-                    width: 35,
-                    color: currentIndex == 3
-                        ? bgColor2
-                        : bgColor1,
-                  ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Icon(
+                  Icons.settings,
+                  size: 35,
+                  color: currentIndex == 3 ? bgColor2 : bgColor1,
                 ),
-                label: '',
               ),
-            ]),
+              label: '',
+            ),
+          ],
+        ),
       );
     }
 

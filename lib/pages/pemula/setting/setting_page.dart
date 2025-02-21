@@ -1,3 +1,4 @@
+import 'package:bahasajepang/pages/pemula/setting/edit_page.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -81,7 +82,15 @@ class _SettingPageState extends State<SettingPage> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const EditProfilePage(),
+                                            ),
+                                          );
+                                        },
                                         style: TextButton.styleFrom(
                                           foregroundColor: Colors.blue,
                                         ),

@@ -16,6 +16,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPage extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscureText = true;
+
   @override
   Future<void> functionLogin() async {
     String email = _emailController.text;
@@ -33,11 +35,6 @@ class _SignInPage extends State<SignInPage> {
         var jsonResponse = jsonDecode(response.body);
         if (jsonResponse['status'] == 'success') {
           print('${jsonResponse['message']}');
-
-          // SharedPreferences prefs = await SharedPreferences.getInstance();
-          // await prefs.setString('token', jsonResponse['data']);
-          // await prefs.setString('email', _emailController.text);
-
           Navigator.pushNamed(context, '/level');
         }
       }
@@ -62,7 +59,7 @@ class _SignInPage extends State<SignInPage> {
               height: 2,
             ),
             Text(
-              'Sign In to Countinue',
+              'Sign In to Continue',
               style: secondaryTextStyle.copyWith(
                   fontSize: 14, fontWeight: regular),
             ),
@@ -149,12 +146,26 @@ class _SignInPage extends State<SignInPage> {
                       fontSize: 14,
                       fontWeight: medium,
                     ),
-                    obscureText: true,
-                    decoration: InputDecoration.collapsed(
+                    obscureText: _obscureText,
+                    decoration: InputDecoration(
                       hintText: 'Your Password',
                       hintStyle: primaryTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: medium,
+                      ),
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
                       ),
                     ),
                   )),
@@ -173,7 +184,6 @@ class _SignInPage extends State<SignInPage> {
         margin: EdgeInsets.only(top: 30),
         child: TextButton(
           onPressed: () {
-            // functionLogin();
             Navigator.pushNamed(context, '/level');
           },
           style: TextButton.styleFrom(
