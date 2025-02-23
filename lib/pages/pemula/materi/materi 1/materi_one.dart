@@ -1,4 +1,4 @@
-import 'package:bahasajepang/pages/pemula/materi/materi%201/model/materi_one.model.dart';
+import 'package:bahasajepang/pages/pemula/materi/model/materi_one.model.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
