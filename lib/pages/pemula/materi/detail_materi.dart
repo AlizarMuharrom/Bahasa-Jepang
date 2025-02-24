@@ -1,3 +1,4 @@
+import 'package:bahasajepang/pages/pemula/materi/isi_materi.dart';
 import 'package:flutter/material.dart';
 
 class DetailMateriPage extends StatefulWidget {
@@ -10,7 +11,6 @@ class DetailMateriPage extends StatefulWidget {
 }
 
 class _DetailMateriPageState extends State<DetailMateriPage> {
-  // State untuk mengontrol expand/collapse dropdown
   bool isPembukaanExpanded = false;
   bool isMateriExpanded = false;
   bool isPenutupExpanded = false;
@@ -27,7 +27,6 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Dropdown untuk Pembukaan
               ExpansionTile(
                 title: const Text('Pembukaan'),
                 initiallyExpanded: isPembukaanExpanded,
@@ -40,11 +39,15 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                   return ListTile(
                     title: Text(item['judul']),
                     onTap: () {
-                      // Navigasi ke IsiMateriPage dengan membawa data item
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => IsiMateriPage(item: item),
+                          builder: (context) => IsiMateriPage(
+                            items: widget.materi[
+                                'pembukaan'],
+                            initialIndex: widget.materi['pembukaan']
+                                .indexOf(item),
+                          ),
                         ),
                       );
                     },
@@ -53,7 +56,6 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
               ),
               const SizedBox(height: 16),
 
-              // Dropdown untuk Materi
               ExpansionTile(
                 title: const Text('Materi'),
                 initiallyExpanded: isMateriExpanded,
@@ -69,7 +71,12 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => IsiMateriPage(item: item),
+                          builder: (context) => IsiMateriPage(
+                            items: widget
+                                .materi['materi'],
+                            initialIndex: widget.materi['materi']
+                                .indexOf(item),
+                          ),
                         ),
                       );
                     },
@@ -86,14 +93,22 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                     isPenutupExpanded = expanded;
                   });
                 },
-                children: (widget.materi['penutup'] as List).map((item) {
+                children: (widget.materi['penutup'] as List)
+                    .where((item) => item.containsKey(
+                        'judul'))
+                    .map((item) {
                   return ListTile(
-                    title: Text(item['judul'] ?? 'Test'),
+                    title: Text(item['judul']),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => IsiMateriPage(item: item),
+                          builder: (context) => IsiMateriPage(
+                            items: widget
+                                .materi['penutup'],
+                            initialIndex: widget.materi['penutup']
+                                .indexOf(item),
+                          ),
                         ),
                       );
                     },
@@ -103,25 +118,6 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-// Placeholder untuk IsiMateriPage (akan diimplementasikan nanti)
-class IsiMateriPage extends StatelessWidget {
-  final Map<String, dynamic> item;
-
-  const IsiMateriPage({super.key, required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(item['judul'] ?? 'Detail'),
-      ),
-      body: Center(
-        child: Text('Isi Materi: ${item['judul']}'),
       ),
     );
   }

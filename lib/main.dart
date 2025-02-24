@@ -13,8 +13,6 @@ import 'package:bahasajepang/pages/n5/kanji/kanji%20okurigana/kanji_okurigana.da
 import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/detail_tandoku.dart';
 import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/kanji_tandoku.dart';
 import 'package:bahasajepang/pages/n5/main_page.dart';
-import 'package:bahasajepang/pages/pemula/materi/materi%201/materi_one.dart';
-import 'package:bahasajepang/pages/pemula/materi/materi%201/pengenalan/pengenalan_hiragana.dart';
 import 'package:bahasajepang/pages/sign_in_page.dart';
 import 'package:bahasajepang/pages/sign_up_page.dart';
 import 'package:bahasajepang/pages/pemula/main_page.dart';
@@ -36,8 +34,6 @@ class MyApp extends StatelessWidget {
         '/sign-up': (context) => SignUpPage(),
         '/level': (context) => LevelSelectionPage(),
         '/pemula': (context) => PemulaPage(),
-        '/materi1pemula': (context) => MateriOnePemulaPage(),
-        '/pengenalan-hiragana': (context) => PengenalanHiraganaPage(),
         '/n5': (context) => NlimaPage(),
         '/n4': (context) => NEmpatPage(),
         '/kanji-tandoku5': (context) => KanjiTandokuPage(),
