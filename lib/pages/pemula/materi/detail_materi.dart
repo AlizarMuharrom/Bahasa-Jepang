@@ -1,4 +1,5 @@
 import 'package:bahasajepang/pages/pemula/materi/isi_materi.dart';
+import 'package:bahasajepang/pages/pemula/materi/test_page.dart';
 import 'package:flutter/material.dart';
 
 class DetailMateriPage extends StatefulWidget {
@@ -43,10 +44,9 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => IsiMateriPage(
-                            items: widget.materi[
-                                'pembukaan'],
-                            initialIndex: widget.materi['pembukaan']
-                                .indexOf(item),
+                            items: widget.materi['pembukaan'],
+                            initialIndex:
+                                widget.materi['pembukaan'].indexOf(item),
                           ),
                         ),
                       );
@@ -55,7 +55,6 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
-
               ExpansionTile(
                 title: const Text('Materi'),
                 initiallyExpanded: isMateriExpanded,
@@ -72,10 +71,8 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => IsiMateriPage(
-                            items: widget
-                                .materi['materi'],
-                            initialIndex: widget.materi['materi']
-                                .indexOf(item),
+                            items: widget.materi['materi'],
+                            initialIndex: widget.materi['materi'].indexOf(item),
                           ),
                         ),
                       );
@@ -84,7 +81,6 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
-
               ExpansionTile(
                 title: const Text('Penutup'),
                 initiallyExpanded: isPenutupExpanded,
@@ -94,8 +90,7 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                   });
                 },
                 children: (widget.materi['penutup'] as List)
-                    .where((item) => item.containsKey(
-                        'judul'))
+                    .where((item) => item.containsKey('judul'))
                     .map((item) {
                   return ListTile(
                     title: Text(item['judul']),
@@ -103,11 +98,9 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => IsiMateriPage(
-                            items: widget
-                                .materi['penutup'],
-                            initialIndex: widget.materi['penutup']
-                                .indexOf(item),
+                          builder: (context) => TestPage(
+                            soal: widget.materi['penutup'][1]['soal'] ??
+                                [], // Gunakan operator null-coalescing untuk menghindari null
                           ),
                         ),
                       );

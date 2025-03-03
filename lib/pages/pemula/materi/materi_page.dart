@@ -2,9 +2,14 @@ import 'package:bahasajepang/pages/pemula/materi/detail_materi.dart';
 import 'package:bahasajepang/pages/pemula/materi/model/materi_model.dart';
 import 'package:flutter/material.dart';
 
-class MateriPage extends StatelessWidget {
+class MateriPage extends StatefulWidget {
   const MateriPage({super.key});
 
+  @override
+  State<MateriPage> createState() => _MateriPageState();
+}
+
+class _MateriPageState extends State<MateriPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

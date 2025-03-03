@@ -74,26 +74,106 @@ List<Map<String, dynamic>> detailMateri = [
       {"judul": "Test Hiragana"},
       {
         "soal": [
-          {"pertanyaan": "Apa bunyi dari ひ?", "jawaban": "hi"},
-          {"pertanyaan": "Apa bunyi dari さ?", "jawaban": "sa"},
-          {"pertanyaan": "Apa bunyi dari つ?", "jawaban": "tsu"},
-          {"pertanyaan": "Apa bunyi dari み?", "jawaban": "mi"},
-          {"pertanyaan": "Apa bunyi dari ぬ?", "jawaban": "nu"},
-          {"pertanyaan": "Apa bunyi dari け?", "jawaban": "ke"},
-          {"pertanyaan": "Apa bunyi dari こ?", "jawaban": "ko"},
-          {"pertanyaan": "Apa bunyi dari そ?", "jawaban": "so"},
-          {"pertanyaan": "Apa bunyi dari ち?", "jawaban": "chi"},
-          {"pertanyaan": "Apa bunyi dari ね?", "jawaban": "ne"},
-          {"pertanyaan": "Apa bunyi dari ひゃ?", "jawaban": "hya"},
-          {"pertanyaan": "Apa bunyi dari りょ?", "jawaban": "ryo"},
-          {"pertanyaan": "Apa bunyi dari ふ?", "jawaban": "fu"},
-          {"pertanyaan": "Apa bunyi dari ま?", "jawaban": "ma"},
-          {"pertanyaan": "Apa bunyi dari ゆ?", "jawaban": "yu"},
-          {"pertanyaan": "Apa bunyi dari わ?", "jawaban": "wa"},
-          {"pertanyaan": "Apa bunyi dari し?", "jawaban": "shi"},
-          {"pertanyaan": "Apa bunyi dari え?", "jawaban": "e"},
-          {"pertanyaan": "Apa bunyi dari ら?", "jawaban": "ra"},
-          {"pertanyaan": "Apa bunyi dari ぐ?", "jawaban": "gu"},
+          {
+            "pertanyaan": "Apa bunyi dari ひ?",
+            "jawaban": "hi",
+            "jawabanSalah": ["ha", "ho", "he"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari さ?",
+            "jawaban": "sa",
+            "jawabanSalah": ["shi", "su", "se"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari つ?",
+            "jawaban": "tsu",
+            "jawabanSalah": ["ta", "te", "to"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari み?",
+            "jawaban": "mi",
+            "jawabanSalah": ["ma", "mu", "me"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ぬ?",
+            "jawaban": "nu",
+            "jawabanSalah": ["na", "ni", "ne"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari け?",
+            "jawaban": "ke",
+            "jawabanSalah": ["ka", "ki", "ku"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari こ?",
+            "jawaban": "ko",
+            "jawabanSalah": ["ka", "ki", "ku"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari そ?",
+            "jawaban": "so",
+            "jawabanSalah": ["sa", "shi", "su"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ち?",
+            "jawaban": "chi",
+            "jawabanSalah": ["ta", "tsu", "te"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ね?",
+            "jawaban": "ne",
+            "jawabanSalah": ["na", "ni", "nu"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ひゃ?",
+            "jawaban": "hya",
+            "jawabanSalah": ["hyu", "hyo", "ha"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari りょ?",
+            "jawaban": "ryo",
+            "jawabanSalah": ["rya", "ryu", "ro"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ふ?",
+            "jawaban": "fu",
+            "jawabanSalah": ["ha", "hi", "he"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ま?",
+            "jawaban": "ma",
+            "jawabanSalah": ["mi", "mu", "me"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ゆ?",
+            "jawaban": "yu",
+            "jawabanSalah": ["ya", "yo", "yori"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari わ?",
+            "jawaban": "wa",
+            "jawabanSalah": ["wo", "n", "wi"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari し?",
+            "jawaban": "shi",
+            "jawabanSalah": ["sa", "su", "se"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari え?",
+            "jawaban": "e",
+            "jawabanSalah": ["a", "i", "u"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ら?",
+            "jawaban": "ra",
+            "jawabanSalah": ["ri", "ru", "re"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ぐ?",
+            "jawaban": "gu",
+            "jawabanSalah": ["ga", "gi", "ge"]
+          },
         ],
       },
     ],
@@ -171,26 +251,110 @@ List<Map<String, dynamic>> detailMateri = [
     ],
     "penutup": [
       {"judul": "Test Katakana"},
-      {"pertanyaan": "Apa bunyi dari カ?", "jawaban": "ka"},
-      {"pertanyaan": "Apa bunyi dari サ?", "jawaban": "sa"},
-      {"pertanyaan": "Apa bunyi dari ツ?", "jawaban": "tsu"},
-      {"pertanyaan": "Apa bunyi dari ミ?", "jawaban": "mi"},
-      {"pertanyaan": "Apa bunyi dari ヌ?", "jawaban": "nu"},
-      {"pertanyaan": "Apa bunyi dari ケ?", "jawaban": "ke"},
-      {"pertanyaan": "Apa bunyi dari コ?", "jawaban": "ko"},
-      {"pertanyaan": "Apa bunyi dari ソ?", "jawaban": "so"},
-      {"pertanyaan": "Apa bunyi dari チ?", "jawaban": "chi"},
-      {"pertanyaan": "Apa bunyi dari ネ?", "jawaban": "ne"},
-      {"pertanyaan": "Apa bunyi dari キャ?", "jawaban": "kya"},
-      {"pertanyaan": "Apa bunyi dari リョ?", "jawaban": "ryo"},
-      {"pertanyaan": "Apa bunyi dari フ?", "jawaban": "fu"},
-      {"pertanyaan": "Apa bunyi dari マ?", "jawaban": "ma"},
-      {"pertanyaan": "Apa bunyi dari ユ?", "jawaban": "yu"},
-      {"pertanyaan": "Apa bunyi dari ワ?", "jawaban": "wa"},
-      {"pertanyaan": "Apa bunyi dari シ?", "jawaban": "shi"},
-      {"pertanyaan": "Apa bunyi dari エ?", "jawaban": "e"},
-      {"pertanyaan": "Apa bunyi dari ラ?", "jawaban": "ra"},
-      {"pertanyaan": "Apa bunyi dari グ?", "jawaban": "gu"},
+      {
+        "soal": [
+          {
+            "pertanyaan": "Apa bunyi dari カ?",
+            "jawaban": "ka",
+            "jawabanSalah": ["ki", "ku", "ke"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari サ?",
+            "jawaban": "sa",
+            "jawabanSalah": ["shi", "su", "se"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ツ?",
+            "jawaban": "tsu",
+            "jawabanSalah": ["ta", "te", "to"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ミ?",
+            "jawaban": "mi",
+            "jawabanSalah": ["ma", "mu", "me"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ヌ?",
+            "jawaban": "nu",
+            "jawabanSalah": ["na", "ni", "ne"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ケ?",
+            "jawaban": "ke",
+            "jawabanSalah": ["ka", "ki", "ku"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari コ?",
+            "jawaban": "ko",
+            "jawabanSalah": ["ka", "ki", "ku"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ソ?",
+            "jawaban": "so",
+            "jawabanSalah": ["sa", "shi", "su"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari チ?",
+            "jawaban": "chi",
+            "jawabanSalah": ["ta", "tsu", "te"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ネ?",
+            "jawaban": "ne",
+            "jawabanSalah": ["na", "ni", "nu"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari キャ?",
+            "jawaban": "kya",
+            "jawabanSalah": ["kyu", "kyo", "ka"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari リョ?",
+            "jawaban": "ryo",
+            "jawabanSalah": ["rya", "ryu", "ro"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari フ?",
+            "jawaban": "fu",
+            "jawabanSalah": ["ha", "hi", "he"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari マ?",
+            "jawaban": "ma",
+            "jawabanSalah": ["mi", "mu", "me"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ユ?",
+            "jawaban": "yu",
+            "jawabanSalah": ["ya", "yo", "yori"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ワ?",
+            "jawaban": "wa",
+            "jawabanSalah": ["wo", "n", "wi"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari シ?",
+            "jawaban": "shi",
+            "jawabanSalah": ["sa", "su", "se"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari エ?",
+            "jawaban": "e",
+            "jawabanSalah": ["a", "i", "u"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari ラ?",
+            "jawaban": "ra",
+            "jawabanSalah": ["ri", "ru", "re"]
+          },
+          {
+            "pertanyaan": "Apa bunyi dari グ?",
+            "jawaban": "gu",
+            "jawabanSalah": ["ga", "gi", "ge"]
+          },
+        ],
+      },
     ],
   },
 ];
