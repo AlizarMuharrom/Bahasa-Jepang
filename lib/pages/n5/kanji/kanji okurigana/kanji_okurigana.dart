@@ -25,7 +25,12 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Kanji Okurigana"),
+        title: const Text(
+          "Kanji Okurigana",
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
         backgroundColor: Colors.blue.shade300,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

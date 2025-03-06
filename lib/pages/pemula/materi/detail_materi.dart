@@ -1,5 +1,6 @@
 import 'package:bahasajepang/pages/pemula/materi/isi_materi.dart';
 import 'package:bahasajepang/pages/pemula/materi/test_page.dart';
+import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
 class DetailMateriPage extends StatefulWidget {
@@ -19,8 +20,15 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor1,
       appBar: AppBar(
-        title: Text(widget.materi['judul']),
+        title: Text(
+          widget.materi['judul'],
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        backgroundColor: bgColor3,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -99,8 +107,7 @@ class _DetailMateriPageState extends State<DetailMateriPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => TestPage(
-                            soal: widget.materi['penutup'][1]['soal'] ??
-                                [], // Gunakan operator null-coalescing untuk menghindari null
+                            soal: widget.materi['penutup'][1]['soal'] ?? [],
                           ),
                         ),
                       );

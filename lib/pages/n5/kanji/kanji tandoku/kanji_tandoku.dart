@@ -25,7 +25,12 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Kanji Tandoku"),
+        title: Text(
+          "Kanji Tandoku",
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
         backgroundColor: Colors.blue.shade300,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

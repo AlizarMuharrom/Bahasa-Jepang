@@ -1,27 +1,28 @@
 class UserModel {
-  int id;
-  String fullname;
-  String username;
-  String email;
-  String password;
-  String role;
+  final int id;
+  final String fullname;
+  final String username;
+  final String email;
+  final String password;
+  final int? levelId;
 
-  UserModel(
-      {required this.id,
-      required this.fullname,
-      required this.username,
-      required this.email,
-      required this.password,
-      required this.role});
+  UserModel({
+    required this.id,
+    required this.fullname,
+    required this.username,
+    required this.email,
+    required this.password,
+    this.levelId,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      fullname: json['fullname'],
-      username: json['username'],
-      email: json['email'],
-      password: json['password'],
-      role: json['role'],
+      id: json['id'] ?? 0, // Berikan nilai default jika null
+      fullname: json['fullname'] ?? "", // Berikan nilai default jika null
+      username: json['username'] ?? "", // Berikan nilai default jika null
+      email: json['email'] ?? "", // Berikan nilai default jika null
+      password: json['password'] ?? "", // Berikan nilai default jika null
+      levelId: json['levelId'], // Biarkan null jika tidak ada
     );
   }
 }

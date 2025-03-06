@@ -25,7 +25,12 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Kanji Jukugo"),
+        title: const Text(
+          "Kanji Jukugo",
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
         backgroundColor: Colors.blue.shade300,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
