@@ -245,6 +245,30 @@ class _SignInPage extends State<SignInPage> {
       );
     }
 
+    Widget signInButton2() {
+      return Container(
+        height: 50,
+        width: double.infinity,
+        margin: EdgeInsets.only(top: 30),
+        child: TextButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/level');
+          },
+          style: TextButton.styleFrom(
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12))),
+          child: Text(
+            'Sign In',
+            style: primaryTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: medium,
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget footer() {
       return Container(
         margin: EdgeInsets.only(bottom: 30),
@@ -290,6 +314,7 @@ class _SignInPage extends State<SignInPage> {
               emailInput(),
               passwordInput(),
               signInButton(),
+              signInButton2(),
               Spacer(),
               footer(),
             ],

@@ -169,7 +169,6 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
               () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 int? userId = prefs.getInt('id');
-
                 if (userId != null) {
                   await sendLevelToDatabase(1);
                 } else {
@@ -207,6 +206,16 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
                 }
               },
             ),
+            _buildLevelButton(
+              "N5 (Mengetahui huruf dasar bahasa Jepang)",
+                Colors.blue.shade400, () {
+              Navigator.pushNamed(context, '/n5');
+            }), 
+            _buildLevelButton(
+                "N4 (Mengetahui lebih dari 100 kanji dan 800 kosakata)",
+                Colors.blue.shade400, () {
+              Navigator.pushNamed(context, '/n4');
+            }),
           ],
         ),
       ),
