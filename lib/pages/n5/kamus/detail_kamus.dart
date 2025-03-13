@@ -7,7 +7,7 @@ import 'package:audioplayers/audioplayers.dart';
 class DetailKamus5Page extends StatefulWidget {
   final int kamusId;
   final AudioPlayer audioPlayer =
-      AudioPlayer(); // Deklarasi audioPlayer di sini
+      AudioPlayer();
 
   DetailKamus5Page({super.key, required this.kamusId});
 

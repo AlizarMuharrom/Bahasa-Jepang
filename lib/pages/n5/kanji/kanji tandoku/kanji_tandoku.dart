@@ -1,4 +1,4 @@
-import 'package:bahasajepang/pages/n5/kanji/kanji%20tandoku/model/detail_kanji.model.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji_service.dart';
 import 'package:flutter/material.dart';
 
 class KanjiTandokuPage extends StatefulWidget {
@@ -10,13 +10,35 @@ class KanjiTandokuPage extends StatefulWidget {
 
 class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredKanji = List.from(detailTandokuList);
+  final KanjiService _kanjiService = KanjiService();
+  List<dynamic> _filteredKanji = [];
+  List<dynamic> _allKanji = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchKanji();
+  }
+
+  Future<void> _fetchKanji() async {
+    try {
+      var kanjiList = await _kanjiService.fetchKanjiByKategori('tandoku');
+      var filteredKanji =
+          kanjiList.where((kanji) => kanji["kategori"] == "tandoku").toList();
+      setState(() {
+        _allKanji = filteredKanji;
+        _filteredKanji = filteredKanji;
+      });
+    } catch (e) {
+      print('Error fetching kanji: $e');
+    }
+  }
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = detailTandokuList
+      _filteredKanji = _allKanji
           .where((kanji) =>
-              kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
+              kanji["judul"].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -79,7 +101,7 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
     );
   }
 
-  Widget _kanjiButton(Map<String, dynamic> kanji, BuildContext context) {
+  Widget _kanjiButton(dynamic kanji, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
@@ -95,7 +117,7 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
         ),
         child: Center(
           child: Text(
-            kanji["judul"]!,
+            kanji["judul"],
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),

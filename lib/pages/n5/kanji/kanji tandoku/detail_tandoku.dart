@@ -1,8 +1,12 @@
-import 'package:bahasajepang/theme.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:bahasajepang/theme.dart';
+import 'package:bahasajepang/service/API_config.dart';
 
 class DetailTandokuPage extends StatefulWidget {
-  const DetailTandokuPage({super.key});
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  DetailTandokuPage({super.key});
 
   @override
   State<DetailTandokuPage> createState() => _DetailTandokuPageState();
@@ -25,6 +29,16 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
         return WritingModal();
       },
     );
+  }
+
+  // Fungsi untuk memutar suara dari URL
+  void _playVoice(String voiceRecordPath) async {
+    try {
+      String fullUrl = ApiConfig.url + "/" + voiceRecordPath;
+      await widget.audioPlayer.play(UrlSource(fullUrl));
+    } catch (e) {
+      print("Error playing voice: $e");
+    }
   }
 
   @override
@@ -93,8 +107,10 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Kunyomi
                         _readingWidget("Kunyomi", kanjiData["kunyomi"]),
                         const SizedBox(height: 5),
+                        // Onyomi
                         _readingWidget("Onyomi", kanjiData["onyomi"]),
                         const SizedBox(height: 20),
                         Row(
@@ -114,7 +130,10 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                               ),
                               child: IconButton(
                                 icon: const Icon(Icons.volume_up),
-                                onPressed: () {},
+                                onPressed: () {
+                                  // Memutar voice record dari judul kanji
+                                  _playVoice(kanjiData["voice_record"]);
+                                },
                               ),
                             ),
                             Container(
@@ -152,7 +171,8 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
-                children: kanjiData["kanjiGabungan"].map<Widget>((kanji) {
+                children:
+                    (kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
                   return ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
@@ -168,7 +188,10 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.volume_up),
-                        onPressed: () {},
+                        onPressed: () {
+                          // Memutar voice record dari kanji gabungan
+                          _playVoice(kanji["voice_record"]);
+                        },
                       ),
                     ),
                     title: Row(
@@ -178,7 +201,7 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              kanji["furigana"],
+                              kanji["romaji"],
                               style: TextStyle(
                                   fontSize: 14, color: secondaryTextColor),
                             ),
@@ -206,7 +229,7 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
     );
   }
 
-  Widget _readingWidget(String title, List<String> readings) {
+  Widget _readingWidget(String title, String reading) {
     return Container(
       width: double.infinity, // Lebar container sama
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -226,7 +249,7 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
         children: [
           Text("$title : ",
               style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(readings.join("  ")),
+          Text(reading),
         ],
       ),
     );
