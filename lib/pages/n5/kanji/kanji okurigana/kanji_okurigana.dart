@@ -1,4 +1,4 @@
-import 'package:bahasajepang/pages/n5/kanji/kanji%20okurigana/model/detail_kanji.model.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji_service.dart';
 import 'package:flutter/material.dart';
 
 class KanjiOkuriganaPage extends StatefulWidget {
@@ -10,13 +10,35 @@ class KanjiOkuriganaPage extends StatefulWidget {
 
 class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredKanji = List.from(detailOkuriganaList);
+  final KanjiService _kanjiService = KanjiService();
+  List<dynamic> _filteredKanji = [];
+  List<dynamic> _allKanji = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchKanji();
+  }
+
+  Future<void> _fetchKanji() async {
+    try {
+      var kanjiList = await _kanjiService.fetchKanjiByKategori('okurigana');
+      var filteredKanji =
+          kanjiList.where((kanji) => kanji["kategori"] == "okurigana").toList();
+      setState(() {
+        _allKanji = filteredKanji;
+        _filteredKanji = filteredKanji;
+      });
+    } catch (e) {
+      print('Error fetching kanji: $e');
+    }
+  }
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = detailOkuriganaList
+      _filteredKanji = _allKanji
           .where((kanji) =>
-              kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
+              kanji["judul"].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -25,7 +47,7 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Kanji Okurigana",
           style: TextStyle(
             fontSize: 18,

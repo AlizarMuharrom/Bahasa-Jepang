@@ -1,8 +1,12 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:bahasajepang/service/API_config.dart';
 
 class DetailJukugoPage extends StatefulWidget {
-  const DetailJukugoPage({super.key});
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  DetailJukugoPage({super.key});
 
   @override
   State<DetailJukugoPage> createState() => _DetailJukugoPageState();
@@ -25,6 +29,16 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
         return WritingModal();
       },
     );
+  }
+
+  //
+  void _playVoice(String voiceRecordPath) async {
+    try {
+      String fullUrl = ApiConfig.url + "/" + voiceRecordPath;
+      await widget.audioPlayer.play(UrlSource(fullUrl));
+    } catch (e) {
+      print("Error playing voice: $e");
+    }
   }
 
   @override
@@ -116,7 +130,10 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                               ),
                               child: IconButton(
                                 icon: const Icon(Icons.volume_up),
-                                onPressed: () {},
+                                onPressed: () {
+                                  //
+                                  _playVoice(kanjiData["voice_record"]);
+                                },
                               ),
                             ),
                             Container(
@@ -154,7 +171,8 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
-                children: kanjiData["kanjiGabungan"].map<Widget>((kanji) {
+                children:
+                (kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
                   return ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
@@ -170,7 +188,10 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.volume_up),
-                        onPressed: () {},
+                        onPressed: () {
+                          //
+                          _playVoice(kanji["voice_record"]);
+                        },
                       ),
                     ),
                     title: Row(

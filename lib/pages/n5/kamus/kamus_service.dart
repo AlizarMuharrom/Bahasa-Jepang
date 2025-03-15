@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:bahasajepang/service/API_config.dart';
 import 'package:http/http.dart' as http;
+import 'package:bahasajepang/service/API_config.dart';
 
 class KamusService {
   // Gunakan baseUrl dari ApiConfig
@@ -20,12 +20,7 @@ class KamusService {
     final response = await http.get(Uri.parse('$baseUrl/$id'));
 
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-
-      if (data['contoh_penggunaan'] is String) {
-        data['contoh_penggunaan'] = json.decode(data['contoh_penggunaan']);
-      }
-      return data;
+      return json.decode(response.body);
     } else {
       throw Exception('Failed to load kamus');
     }

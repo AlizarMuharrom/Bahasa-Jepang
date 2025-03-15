@@ -1,4 +1,4 @@
-import 'package:bahasajepang/pages/n5/kanji/kanji%20jukugo/model/detail_kanji.model.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji_service.dart';
 import 'package:flutter/material.dart';
 
 class KanjiJukugoPage extends StatefulWidget {
@@ -10,11 +10,33 @@ class KanjiJukugoPage extends StatefulWidget {
 
 class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredKanji = List.from(detailJukugoList);
+  final KanjiService _kanjiService = KanjiService();
+  List<dynamic> _filteredKanji = [];
+  List<dynamic> _allKanji = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchKanji();
+  }
+
+  Future<void> _fetchKanji() async {
+    try {
+      var kanjiList = await _kanjiService.fetchKanjiByKategori('jukugo');
+      var filteredKanji =
+          kanjiList.where((kanji) => kanji["kategori"] == "jukugo").toList();
+      setState(() {
+        _allKanji = filteredKanji;
+        _filteredKanji = filteredKanji;
+      });
+    } catch (e) {
+      print('Error fetching kanji: $e');
+    }
+  }
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = detailJukugoList
+      _filteredKanji = _allKanji
           .where((kanji) =>
               kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
           .toList();

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:bahasajepang/pages/n5/kamus/detail_kamus.dart';
 
-
 class Kamus5Page extends StatefulWidget {
   const Kamus5Page({super.key});
 
@@ -49,7 +48,8 @@ class _Kamus5PageState extends State<Kamus5Page> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailKamus5Page(kamusId: item["id"]),
+                        builder: (context) =>
+                            DetailKamus5Page(kamusId: item["id"]),
                       ),
                     );
                   },

@@ -1,13 +1,12 @@
+import 'package:bahasajepang/pages/n5/kamus/kamus_service.dart';
 import 'package:bahasajepang/service/API_config.dart';
 import 'package:flutter/material.dart';
 import 'package:bahasajepang/theme.dart';
-import 'kamus_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class DetailKamus5Page extends StatefulWidget {
   final int kamusId;
-  final AudioPlayer audioPlayer =
-      AudioPlayer();
+  final AudioPlayer audioPlayer = AudioPlayer();
 
   DetailKamus5Page({super.key, required this.kamusId});
 
@@ -15,7 +14,11 @@ class DetailKamus5Page extends StatefulWidget {
   State<DetailKamus5Page> createState() => _DetailKamus5PageState();
 }
 
-class _DetailKamus5PageState extends State<DetailKamus5Page> {
+class _DetailKamus5PageState extends State<DetailKamus5Page>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true; // Pertahankan state widget
+
   late Future<dynamic> _kamusFuture;
   final KamusService _kamusService = KamusService();
 
@@ -27,6 +30,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Penting untuk memanggil ini
     return Scaffold(
       backgroundColor: bgColor1,
       appBar: AppBar(
@@ -157,8 +161,8 @@ class _DetailKamus5PageState extends State<DetailKamus5Page> {
                       ),
                       SizedBox(height: 12),
                       Column(
-                        children: (item["contoh_penggunaan"] as List)
-                            .map<Widget>((contoh) {
+                        children: (item["detail_kamuses"] as List<dynamic>)
+                            .map<Widget>((kamus) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6.0),
                             child: Column(
@@ -170,7 +174,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        contoh["kanji"],
+                                        kamus["kanji"],
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -181,22 +185,17 @@ class _DetailKamus5PageState extends State<DetailKamus5Page> {
                                     IconButton(
                                       icon: Icon(Icons.volume_up,
                                           color: primaryTextColor),
-                                      // onPressed: () {
-                                      //   print(ApiConfig.url +
-                                      //       "/" +
-                                      //       contoh["voice_record"]);
-                                      // },
                                       onPressed: () async {
                                         await widget.audioPlayer.play(UrlSource(
                                             ApiConfig.url +
                                                 "/" +
-                                                contoh["voice_record"]));
+                                                kamus["voice_record"]));
                                       },
                                     ),
                                   ],
                                 ),
                                 Text(
-                                  contoh["arti"],
+                                  kamus["arti"],
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: secondaryTextColor,
