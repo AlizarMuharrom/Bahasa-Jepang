@@ -86,8 +86,9 @@ class _SettingPageState extends State<SettingPage> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const EditProfilePage(),
+                                              builder: (context) => EditProfilePage(
+                                                  userId:
+                                                      1), // Ganti dengan userId yang sesuai
                                             ),
                                           );
                                         },

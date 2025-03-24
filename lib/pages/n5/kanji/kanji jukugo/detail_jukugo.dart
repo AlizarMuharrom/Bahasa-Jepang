@@ -256,7 +256,6 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
   }
 }
 
-// Modal untuk menulis (tidak diubah)
 class WritingModal extends StatefulWidget {
   @override
   _WritingModalState createState() => _WritingModalState();
