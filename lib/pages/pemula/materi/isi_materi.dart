@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:bahasajepang/theme.dart';
 
 class IsiMateriPage extends StatefulWidget {
-  final List<Map<String, dynamic>> items;
+  final List<dynamic> items;
   final int initialIndex;
 
   const IsiMateriPage({
@@ -23,7 +24,7 @@ class _IsiMateriPageState extends State<IsiMateriPage> {
     currentIndex = widget.initialIndex;
   }
 
-  void goToPreviousPage() {
+  void _goToPrevious() {
     if (currentIndex > 0) {
       setState(() {
         currentIndex--;
@@ -31,7 +32,7 @@ class _IsiMateriPageState extends State<IsiMateriPage> {
     }
   }
 
-  void goToNextPage(BuildContext context) {
+  void _goToNext(BuildContext context) {
     if (currentIndex < widget.items.length - 1) {
       setState(() {
         currentIndex++;
@@ -46,38 +47,73 @@ class _IsiMateriPageState extends State<IsiMateriPage> {
     final currentItem = widget.items[currentIndex];
 
     return Scaffold(
+      backgroundColor: bgColor1,
       appBar: AppBar(
-        title: Text(currentItem['judul'] ?? 'Detail'),
+        title: Text(
+          currentItem['judul'] ?? 'Detail Materi',
+          style: TextStyle(color: primaryTextColor),
+        ),
+        backgroundColor: bgColor2,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  currentItem['isi'] ?? 'Tidak ada konten',
-                  style: const TextStyle(fontSize: 16),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                currentItem['isi'] ?? 'Tidak ada konten',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: secondaryTextColor,
                 ),
               ),
             ),
-            Row(
+          ),
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: bgColor2,
+              border: Border(top: BorderSide(color: Colors.grey.shade300)),
+            ),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: currentIndex > 0 ? goToPreviousPage : null,
-                  child: const Text('Prev'),
+                  onPressed: currentIndex > 0 ? _goToPrevious : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: currentIndex > 0 
+                        ? Colors.blue.shade300 
+                        : Colors.grey,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                  ),
+                  child: const Text(
+                    'Sebelumnya',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 ElevatedButton(
-                  onPressed: () => goToNextPage(context),
+                  onPressed: () => _goToNext(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue.shade300,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                  ),
                   child: Text(
-                    currentIndex < widget.items.length - 1 ? 'Next' : 'Kembali',
+                    currentIndex < widget.items.length - 1 
+                        ? 'Selanjutnya' 
+                        : 'Selesai',
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

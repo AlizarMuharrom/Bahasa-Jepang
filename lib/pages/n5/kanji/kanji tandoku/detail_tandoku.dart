@@ -136,25 +136,6 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                                 },
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  _showWritingModal(context); // Tampilkan modal
-                                },
-                              ),
-                            ),
                           ],
                         ),
                       ],
@@ -223,6 +204,29 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                 }).toList(),
               ),
             ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity, // Membuat lebar button full width
+              child: ElevatedButton(
+                onPressed: () => _showWritingModal(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade200,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15), // Hanya vertical padding
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  "Coba",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

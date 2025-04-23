@@ -207,6 +207,11 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
               },
             ),
             _buildLevelButton(
+              "Pemula",
+                Colors.blue.shade400, () {
+              Navigator.pushNamed(context, '/pemula');
+            }), 
+            _buildLevelButton(
               "N5 (Mengetahui huruf dasar bahasa Jepang)",
                 Colors.blue.shade400, () {
               Navigator.pushNamed(context, '/n5');

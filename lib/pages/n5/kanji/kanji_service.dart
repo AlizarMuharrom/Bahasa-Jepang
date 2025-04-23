@@ -3,7 +3,6 @@ import 'package:bahasajepang/service/API_config.dart';
 import 'package:http/http.dart' as http;
 
 class KanjiService {
-  // Gunakan baseUrl dari ApiConfig
   final String baseUrl = ApiConfig.baseUrl + "/kanji";
 
   Future<List<dynamic>> fetchKanjiByKategori(String kategori) async {
