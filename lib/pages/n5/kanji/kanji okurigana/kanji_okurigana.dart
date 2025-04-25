@@ -23,8 +23,12 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
   Future<void> _fetchKanji() async {
     try {
       var kanjiList = await _kanjiService.fetchKanjiByKategori('okurigana');
-      var filteredKanji =
-          kanjiList.where((kanji) => kanji["kategori"] == "okurigana").toList();
+
+      var filteredKanji = kanjiList
+          .where((kanji) =>
+              kanji["kategori"] == "okurigana" && kanji["level_id"] == 2)
+          .toList();
+
       setState(() {
         _allKanji = filteredKanji;
         _filteredKanji = filteredKanji;
@@ -48,7 +52,7 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Kanji Okurigana",
+          "Kanji Okurigana N5", // Ubah judul untuk menunjukkan level N5
           style: TextStyle(
             fontSize: 18,
           ),
@@ -101,7 +105,7 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
     );
   }
 
-  Widget _kanjiButton(Map<String, dynamic> kanji, BuildContext context) {
+  Widget _kanjiButton(dynamic kanji, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
@@ -116,9 +120,15 @@ class _KanjiOkuriganaPageState extends State<KanjiOkuriganaPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
-          child: Text(
-            kanji["judul"]!,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                kanji["judul"],
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,8 +1,12 @@
-import 'package:bahasajepang/theme.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:bahasajepang/theme.dart';
+import 'package:bahasajepang/service/API_config.dart';
 
 class DetailJukugo4Page extends StatefulWidget {
-  const DetailJukugo4Page({super.key});
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  DetailJukugo4Page({super.key});
 
   @override
   State<DetailJukugo4Page> createState() => _DetailJukugo4PageState();
@@ -27,11 +31,24 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
     );
   }
 
+  // Fungsi untuk memutar suara dari URL
+  void _playVoice(String voiceRecordPath) async {
+    try {
+      String fullUrl = ApiConfig.url + "/" + voiceRecordPath;
+      await widget.audioPlayer.play(UrlSource(fullUrl));
+    } catch (e) {
+      print("Error playing voice: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Detail"),
+        title: const Text(
+          "Detail",
+          style: TextStyle(fontSize: 18),
+        ),
         backgroundColor: Colors.blue.shade300,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -90,8 +107,10 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Kunyomi
                         _readingWidget("Kunyomi", kanjiData["kunyomi"]),
                         const SizedBox(height: 5),
+                        // Onyomi
                         _readingWidget("Onyomi", kanjiData["onyomi"]),
                         const SizedBox(height: 20),
                         Row(
@@ -111,25 +130,9 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
                               ),
                               child: IconButton(
                                 icon: const Icon(Icons.volume_up),
-                                onPressed: () {},
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.edit),
                                 onPressed: () {
-                                  _showWritingModal(context); // Tampilkan modal
+                                  // Memutar voice record dari judul kanji
+                                  _playVoice(kanjiData["voice_record"]);
                                 },
                               ),
                             ),
@@ -149,7 +152,8 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
-                children: kanjiData["kanjiGabungan"].map<Widget>((kanji) {
+                children:
+                    (kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
                   return ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
@@ -165,7 +169,10 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.volume_up),
-                        onPressed: () {},
+                        onPressed: () {
+                          // Memutar voice record dari kanji gabungan
+                          _playVoice(kanji["voice_record"]);
+                        },
                       ),
                     ),
                     title: Row(
@@ -175,7 +182,7 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              kanji["furigana"],
+                              kanji["romaji"],
                               style: TextStyle(
                                   fontSize: 14, color: secondaryTextColor),
                             ),
@@ -197,13 +204,36 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
                 }).toList(),
               ),
             ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity, // Membuat lebar button full width
+              child: ElevatedButton(
+                onPressed: () => _showWritingModal(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade200,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15), // Hanya vertical padding
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  "Coba",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _readingWidget(String title, List<String> readings) {
+  Widget _readingWidget(String title, String reading) {
     return Container(
       width: double.infinity, // Lebar container sama
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -223,7 +253,7 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
         children: [
           Text("$title : ",
               style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(readings.join("  ")),
+          Text(reading),
         ],
       ),
     );

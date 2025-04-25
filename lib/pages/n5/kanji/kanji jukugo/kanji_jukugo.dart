@@ -23,8 +23,12 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
   Future<void> _fetchKanji() async {
     try {
       var kanjiList = await _kanjiService.fetchKanjiByKategori('jukugo');
-      var filteredKanji =
-          kanjiList.where((kanji) => kanji["kategori"] == "jukugo").toList();
+
+      var filteredKanji = kanjiList
+          .where((kanji) =>
+              kanji["kategori"] == "jukugo" && kanji["level_id"] == 2)
+          .toList();
+
       setState(() {
         _allKanji = filteredKanji;
         _filteredKanji = filteredKanji;
@@ -38,7 +42,7 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
     setState(() {
       _filteredKanji = _allKanji
           .where((kanji) =>
-              kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
+              kanji["judul"].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -47,8 +51,8 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Kanji Jukugo",
+        title: Text(
+          "Kanji Jukugo N5", // Ubah judul untuk menunjukkan level N5
           style: TextStyle(
             fontSize: 18,
           ),
@@ -101,7 +105,7 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
     );
   }
 
-  Widget _kanjiButton(Map<String, dynamic> kanji, BuildContext context) {
+  Widget _kanjiButton(dynamic kanji, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
@@ -116,9 +120,15 @@ class _KanjiJukugoPageState extends State<KanjiJukugoPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
-          child: Text(
-            kanji["judul"]!,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                kanji["judul"],
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),

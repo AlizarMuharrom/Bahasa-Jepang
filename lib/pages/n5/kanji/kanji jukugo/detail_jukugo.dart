@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:bahasajepang/theme.dart';
 import 'package:bahasajepang/service/API_config.dart';
 
 class DetailJukugoPage extends StatefulWidget {
@@ -31,7 +31,7 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
     );
   }
 
-  //
+  // Fungsi untuk memutar suara dari URL
   void _playVoice(String voiceRecordPath) async {
     try {
       String fullUrl = ApiConfig.url + "/" + voiceRecordPath;
@@ -47,9 +47,7 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
       appBar: AppBar(
         title: const Text(
           "Detail",
-          style: TextStyle(
-            fontSize: 18,
-          ),
+          style: TextStyle(fontSize: 18),
         ),
         backgroundColor: Colors.blue.shade300,
         leading: IconButton(
@@ -109,8 +107,10 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Kunyomi
                         _readingWidget("Kunyomi", kanjiData["kunyomi"]),
                         const SizedBox(height: 5),
+                        // Onyomi
                         _readingWidget("Onyomi", kanjiData["onyomi"]),
                         const SizedBox(height: 20),
                         Row(
@@ -131,27 +131,8 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                               child: IconButton(
                                 icon: const Icon(Icons.volume_up),
                                 onPressed: () {
-                                  //
+                                  // Memutar voice record dari judul kanji
                                   _playVoice(kanjiData["voice_record"]);
-                                },
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  _showWritingModal(context); // Tampilkan modal
                                 },
                               ),
                             ),
@@ -172,7 +153,7 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
               ),
               child: Column(
                 children:
-                (kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
+                    (kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
                   return ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
@@ -189,7 +170,7 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                       child: IconButton(
                         icon: const Icon(Icons.volume_up),
                         onPressed: () {
-                          //
+                          // Memutar voice record dari kanji gabungan
                           _playVoice(kanji["voice_record"]);
                         },
                       ),
@@ -201,7 +182,7 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              kanji["furigana"],
+                              kanji["romaji"],
                               style: TextStyle(
                                   fontSize: 14, color: secondaryTextColor),
                             ),
@@ -223,13 +204,36 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
                 }).toList(),
               ),
             ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity, // Membuat lebar button full width
+              child: ElevatedButton(
+                onPressed: () => _showWritingModal(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade200,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15), // Hanya vertical padding
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  "Coba",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _readingWidget(String title, List<String> readings) {
+  Widget _readingWidget(String title, String reading) {
     return Container(
       width: double.infinity, // Lebar container sama
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -249,13 +253,14 @@ class _DetailJukugoPageState extends State<DetailJukugoPage> {
         children: [
           Text("$title : ",
               style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(readings.join("  ")),
+          Text(reading),
         ],
       ),
     );
   }
 }
 
+// Modal untuk menulis (tidak diubah)
 class WritingModal extends StatefulWidget {
   @override
   _WritingModalState createState() => _WritingModalState();

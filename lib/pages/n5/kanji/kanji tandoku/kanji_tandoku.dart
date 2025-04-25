@@ -23,8 +23,12 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
   Future<void> _fetchKanji() async {
     try {
       var kanjiList = await _kanjiService.fetchKanjiByKategori('tandoku');
-      var filteredKanji =
-          kanjiList.where((kanji) => kanji["kategori"] == "tandoku").toList();
+
+      var filteredKanji = kanjiList
+          .where((kanji) =>
+              kanji["kategori"] == "tandoku" && kanji["level_id"] == 2)
+          .toList();
+
       setState(() {
         _allKanji = filteredKanji;
         _filteredKanji = filteredKanji;
@@ -48,7 +52,7 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Kanji Tandoku",
+          "Kanji Tandoku N5", // Ubah judul untuk menunjukkan level N5
           style: TextStyle(
             fontSize: 18,
           ),
@@ -116,9 +120,15 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
-          child: Text(
-            kanji["judul"],
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                kanji["judul"],
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),

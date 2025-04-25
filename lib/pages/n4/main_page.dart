@@ -82,7 +82,7 @@ class _NEmpatPageState extends State<NEmpatPage> {
     Widget body() {
       switch (currentIndex) {
         case 0:
-          return MateriPage();
+          return MateriN4Page();
         case 1:
           return Kamus4Page();
         case 2:
@@ -90,7 +90,7 @@ class _NEmpatPageState extends State<NEmpatPage> {
         case 3:
           return SettingPage();
         default:
-          return MateriPage();
+          return MateriN4Page();
       }
     }
 

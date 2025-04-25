@@ -1,4 +1,4 @@
-import 'package:bahasajepang/pages/n4/kanji/kanji%20jukugo/model/detail_kanji.model.dart';
+import 'package:bahasajepang/pages/n5/kanji/kanji_service.dart';
 import 'package:flutter/material.dart';
 
 class KanjiJukugo4Page extends StatefulWidget {
@@ -10,13 +10,39 @@ class KanjiJukugo4Page extends StatefulWidget {
 
 class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredKanji = List.from(detailJukugoList);
+  final KanjiService _kanjiService = KanjiService();
+  List<dynamic> _filteredKanji = [];
+  List<dynamic> _allKanji = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchKanji();
+  }
+
+  Future<void> _fetchKanji() async {
+    try {
+      var kanjiList = await _kanjiService.fetchKanjiByKategori('jukugo');
+
+      var filteredKanji = kanjiList
+          .where((kanji) =>
+              kanji["kategori"] == "jukugo" && kanji["level_id"] == 3)
+          .toList();
+
+      setState(() {
+        _allKanji = filteredKanji;
+        _filteredKanji = filteredKanji;
+      });
+    } catch (e) {
+      print('Error fetching kanji: $e');
+    }
+  }
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = detailJukugoList
+      _filteredKanji = _allKanji
           .where((kanji) =>
-              kanji["judul"]!.toLowerCase().contains(query.toLowerCase()))
+              kanji["judul"].toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -25,7 +51,12 @@ class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Kanji Jukugo"),
+        title: Text(
+          "Kanji Jukugo N4",
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
         backgroundColor: Colors.blue.shade300,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -74,12 +105,12 @@ class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
     );
   }
 
-  Widget _kanjiButton(Map<String, dynamic> kanji, BuildContext context) {
+  Widget _kanjiButton(dynamic kanji, BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/detail-jukugo4',
+          '/detail-jukugo',
           arguments: kanji,
         );
       },
@@ -89,9 +120,15 @@ class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
-          child: Text(
-            kanji["judul"]!,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                kanji["judul"],
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),

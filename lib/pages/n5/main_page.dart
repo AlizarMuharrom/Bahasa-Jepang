@@ -82,7 +82,7 @@ class _NlimaPageState extends State<NlimaPage> {
     Widget body() {
       switch (currentIndex) {
         case 0:
-          return MateriPage();
+          return MateriN5Page();
         case 1:
           return Kamus5Page();
         case 2:
@@ -90,7 +90,7 @@ class _NlimaPageState extends State<NlimaPage> {
         case 3:
           return SettingPage();
         default:
-          return MateriPage();
+          return MateriN5Page();
       }
     }
 
