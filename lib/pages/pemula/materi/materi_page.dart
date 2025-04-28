@@ -1,5 +1,6 @@
 import 'package:bahasajepang/pages/pemula/materi/detail_materi.dart';
 import 'package:bahasajepang/pages/pemula/materi/materi_service.dart';
+import 'package:bahasajepang/pages/pemula/materi/ujian.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -52,37 +53,74 @@ class _MateriPageState extends State<MateriPage> {
               onRefresh: _loadMateriData,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                child: ListView.builder(
-                  itemCount: _materiList.length,
-                  itemBuilder: (context, index) {
-                    final materi = _materiList[index];
-                    return Card(
-                      margin: const EdgeInsets.all(8.0),
-                      color: bgColor2,
-                      child: ListTile(
-                        title: Text(
-                          materi['judul'],
-                          style: TextStyle(
-                            color: primaryTextColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailMateriPage(
-                                materiId: materi['id'],
+                child: Column(
+                  children: [
+                    // Container Latihan Soal
+                    _buildLatihanSoalCard(),
+                    
+                    // List Materi
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: _materiList.length,
+                        itemBuilder: (context, index) {
+                          final materi = _materiList[index];
+                          return Card(
+                            margin: const EdgeInsets.all(8.0),
+                            color: bgColor2,
+                            child: ListTile(
+                              title: Text(
+                                materi['judul'],
+                                style: TextStyle(
+                                  color: primaryTextColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailMateriPage(
+                                      materiId: materi['id'],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           );
                         },
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
               ),
             ),
+    );
+  }
+
+  Widget _buildLatihanSoalCard() {
+    return Card(
+      margin: const EdgeInsets.all(8.0),
+      color: Colors.orange.shade100, // Warna berbeda untuk membedakan
+      child: ListTile(
+        leading: const Icon(Icons.quiz, color: Colors.orange),
+        title: const Text(
+          'Latihan Soal',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        subtitle: const Text('Uji pemahaman Anda dengan latihan soal'),
+        trailing: const Icon(Icons.arrow_forward_ios),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UjianPemulaPage(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

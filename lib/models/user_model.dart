@@ -4,7 +4,7 @@ class UserModel {
   final String username;
   final String email;
   final String password;
-  final int? levelId;
+  final int? level_id;
 
   UserModel({
     required this.id,
@@ -12,7 +12,7 @@ class UserModel {
     required this.username,
     required this.email,
     required this.password,
-    this.levelId,
+    this.level_id,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +22,7 @@ class UserModel {
       username: json['username'] ?? "", // Berikan nilai default jika null
       email: json['email'] ?? "", // Berikan nilai default jika null
       password: json['password'] ?? "", // Berikan nilai default jika null
-      levelId: json['levelId'], // Biarkan null jika tidak ada
+      level_id: json['level_id'], // Biarkan null jika tidak ada
     );
   }
 }
