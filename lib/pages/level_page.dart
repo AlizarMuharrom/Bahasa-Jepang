@@ -35,16 +35,18 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         switch (levelId) {
           case 1:
-            Navigator.pushNamed(context, '/pemula');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/pemula', (route) => false);
             break;
           case 2:
-            Navigator.pushNamed(context, '/n5');
+            Navigator.pushNamedAndRemoveUntil(context, '/n5', (route) => false);
             break;
           case 3:
-            Navigator.pushNamed(context, '/n4');
+            Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
             break;
           default:
-            Navigator.pushNamed(context, '/level');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/level', (route) => false);
         }
       });
     }
@@ -206,16 +208,13 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
                 }
               },
             ),
-            _buildLevelButton(
-              "Pemula",
-                Colors.blue.shade400, () {
+            _buildLevelButton("Pemula", Colors.blue.shade400, () {
               Navigator.pushNamed(context, '/pemula');
-            }), 
-            _buildLevelButton(
-              "N5 (Mengetahui huruf dasar bahasa Jepang)",
+            }),
+            _buildLevelButton("N5 (Mengetahui huruf dasar bahasa Jepang)",
                 Colors.blue.shade400, () {
               Navigator.pushNamed(context, '/n5');
-            }), 
+            }),
             _buildLevelButton(
                 "N4 (Mengetahui lebih dari 100 kanji dan 800 kosakata)",
                 Colors.blue.shade400, () {

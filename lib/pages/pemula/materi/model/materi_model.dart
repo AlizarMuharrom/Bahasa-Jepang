@@ -254,7 +254,7 @@ List<Map<String, dynamic>> detailMateri = [
       {
         "soal": [
           {
-            "pertanyaan": "Apa bunyi dari カ?",
+            "pertanyaan": "i?",
             "jawaban": "ka",
             "jawabanSalah": ["ki", "ku", "ke"]
           },

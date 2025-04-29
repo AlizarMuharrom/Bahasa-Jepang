@@ -54,27 +54,30 @@ class _SignInPage extends State<SignInPage> {
             await prefs.setString('email', user.email ?? "");
             await prefs.setString('password', user.password ?? "");
             await prefs.setString('token', token ?? "");
+            await prefs.setBool('isLoggedIn', true); // Tambahkan ini
             await prefs.setInt(
                 'level_id', user.level_id ?? 0); // Simpan level_id
 
-            // Cek level_id
             if (user.level_id == null || user.level_id == 0) {
-              Navigator.pushNamed(
-                  context, '/level'); // Arahkan ke halaman pemilihan level
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/level', (route) => false);
             } else {
-              // Arahkan ke halaman level yang sesuai
               switch (user.level_id) {
                 case 1:
-                  Navigator.pushNamed(context, '/pemula');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/pemula', (route) => false);
                   break;
                 case 2:
-                  Navigator.pushNamed(context, '/n5');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/n5', (route) => false);
                   break;
                 case 3:
-                  Navigator.pushNamed(context, '/n4');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/n4', (route) => false);
                   break;
                 default:
-                  Navigator.pushNamed(context, '/level');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/level', (route) => false);
               }
             }
           } else {
@@ -249,30 +252,6 @@ class _SignInPage extends State<SignInPage> {
       );
     }
 
-    Widget signInButton2() {
-      return Container(
-        height: 50,
-        width: double.infinity,
-        margin: EdgeInsets.only(top: 30),
-        child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/level');
-          },
-          style: TextButton.styleFrom(
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12))),
-          child: Text(
-            'Sign In',
-            style: primaryTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: medium,
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget footer() {
       return Container(
         margin: EdgeInsets.only(bottom: 30),
@@ -318,7 +297,6 @@ class _SignInPage extends State<SignInPage> {
               emailInput(),
               passwordInput(),
               signInButton(),
-              signInButton2(),
               Spacer(),
               footer(),
             ],

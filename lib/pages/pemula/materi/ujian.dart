@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:bahasajepang/service/ujian_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,10 +23,56 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
   String? _errorMessage;
   int? _ujianId;
 
+  late Duration _duration;
+  late Timer _timer;
+  bool _timeUp = false;
+
   @override
   void initState() {
     super.initState();
+    _duration = const Duration(minutes: 2);
     _loadInitialData();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    const oneSecond = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSecond, (timer) {
+      if (_duration.inSeconds == 0) {
+        _timer.cancel();
+        setState(() {
+          _timeUp = true;
+        });
+        _autoSubmitAnswers();
+      } else {
+        setState(() {
+          _duration = _duration - oneSecond;
+        });
+      }
+    });
+  }
+
+  Future<void> _autoSubmitAnswers() async {
+    try {
+      setState(() => _isSubmitting = true);
+
+      _hasilUjian = await _ujianService.submitUjian(
+        _ujianId!,
+        _jawabanUser,
+        _token!,
+      );
+
+      setState(() => _isSubmitting = false);
+    } catch (e) {
+      setState(() => _isSubmitting = false);
+      _showErrorSnackbar(
+          'Error: ${e.toString().replaceAll('Exception: ', '')}');
+    }
   }
 
   Future<void> _loadInitialData() async {
@@ -35,7 +82,6 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
         _errorMessage = null;
       });
 
-      // 1. Ambil token
       final prefs = await SharedPreferences.getInstance();
       _token = prefs.getString('token');
 
@@ -43,20 +89,22 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
         throw Exception('Silakan login kembali');
       }
 
-      // 2. Ambil daftar ujian untuk level pemula (ID 1)
       final ujianList = await _ujianService.getUjianByLevel(1);
       if (ujianList.isEmpty) {
         throw Exception('Tidak ada ujian tersedia untuk level pemula');
       }
 
-      // 3. Simpan ID ujian pertama
+      // 3. Save first exam ID
       _ujianId = ujianList[0]['id'];
 
-      // 4. Ambil soal ujian
+      // 4. Get exam questions
       _soalList = await _ujianService.getSoalUjian(_ujianId!, _token!);
       if (_soalList.isEmpty) {
         throw Exception('Tidak ada soal tersedia untuk ujian ini');
       }
+
+      // Start the timer after questions are loaded
+      _startTimer();
 
       setState(() => _isLoading = false);
     } catch (e) {
@@ -89,17 +137,17 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
     }
 
     try {
-      // Simpan jawaban sementara
+      // Save temporary answer
       _jawabanUser.add({
         'soal_id': _soalList[_currentQuestionIndex]['id'],
         'jawaban_user': _selectedAnswer!,
       });
 
-      // Jika ini soal terakhir
-      if (_currentQuestionIndex == _soalList.length - 1) {
+      // If this is the last question or time is up
+      if (_currentQuestionIndex == _soalList.length - 1 || _timeUp) {
         setState(() => _isSubmitting = true);
 
-        // Submit semua jawaban ke backend
+        // Submit all answers to backend
         _hasilUjian = await _ujianService.submitUjian(
           _ujianId!,
           _jawabanUser,
@@ -108,7 +156,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
 
         setState(() => _isSubmitting = false);
       } else {
-        // Lanjut ke soal berikutnya
+        // Move to next question
         setState(() {
           _currentQuestionIndex++;
           _selectedAnswer = null;
@@ -119,6 +167,13 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
       _showErrorSnackbar(
           'Error: ${e.toString().replaceAll('Exception: ', '')}');
     }
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
   Widget _buildLoading() {
@@ -166,6 +221,33 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Timer display
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: _duration.inSeconds <= 30
+                  ? Colors.red[100]
+                  : Colors.orange[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.timer, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  _formatDuration(_duration),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color:
+                        _duration.inSeconds <= 30 ? Colors.red : Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
           LinearProgressIndicator(
             value: (_currentQuestionIndex + 1) / _soalList.length,
             backgroundColor: Colors.grey[300],
@@ -241,7 +323,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
                 color: Colors.green, size: 60),
             const SizedBox(height: 20),
             Text(
-              'Ujian Selesai!',
+              _timeUp ? 'Waktu Habis!' : 'Ujian Selesai!',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
@@ -254,6 +336,14 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
               'Jawaban benar: ${_hasilUjian?['jumlah_benar'] ?? '0'} dari ${_soalList.length} soal',
               style: const TextStyle(fontSize: 18),
             ),
+            if (_timeUp) ...[
+              const SizedBox(height: 15),
+              const Text(
+                'Waktu ujian telah habis, jawaban otomatis dikirim',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+            ],
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
