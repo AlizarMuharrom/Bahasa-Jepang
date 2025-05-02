@@ -21,6 +21,11 @@ class _SignInPage extends State<SignInPage> {
 
   @override
   Future<void> functionLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("SEMUA ISI PREFS LOGIN :");
+    prefs.getKeys().forEach((key) {
+      print("$key : ${prefs.get(key)}");
+    });
     String email = _emailController.text;
     String password = _passwordController.text;
 
@@ -59,6 +64,7 @@ class _SignInPage extends State<SignInPage> {
                 'level_id', user.level_id ?? 0); // Simpan level_id
 
             if (user.level_id == null || user.level_id == 0) {
+              // print("sign_in_page");
               Navigator.pushNamedAndRemoveUntil(
                   context, '/level', (route) => false);
             } else {
@@ -76,6 +82,7 @@ class _SignInPage extends State<SignInPage> {
                       context, '/n4', (route) => false);
                   break;
                 default:
+                  // print("sign_in_page2");
                   Navigator.pushNamedAndRemoveUntil(
                       context, '/level', (route) => false);
               }

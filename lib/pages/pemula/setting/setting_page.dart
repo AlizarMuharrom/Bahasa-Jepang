@@ -1,4 +1,6 @@
 import 'package:bahasajepang/pages/pemula/setting/edit_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,18 @@ class SettingPage extends StatefulWidget {
 
   @override
   State<SettingPage> createState() => _SettingPageState();
+}
+
+Future<void> _logout(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  print("SEMUA ISI PREFS LOGOUTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT:");
+  prefs.getKeys().forEach((key) {
+    print("$key : ${prefs.get(key)}");
+  });
+  await prefs.clear();
+
+  // Pindah ke halaman login dan hapus semua halaman sebelumnya
+  Navigator.of(context).pushNamedAndRemoveUntil('/sign-in', (route) => false);
 }
 
 class _SettingPageState extends State<SettingPage> {
@@ -101,7 +115,9 @@ class _SettingPageState extends State<SettingPage> {
                                     ],
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _logout(context);
+                                    },
                                     child: Text("Keluar",
                                         style: TextStyle(color: Colors.red)),
                                   ),

@@ -21,16 +21,33 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> checkLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final isLevel = prefs.getInt("level_id");
 
     if (isLoggedIn) {
-      // Sudah login, langsung ke halaman level
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/level',
-        (route) => false,
-      );
+      switch (isLevel) {
+        case 1:
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/pemula', (route) => false);
+          break;
+        case 2:
+          Navigator.pushNamedAndRemoveUntil(context, '/n5', (route) => false);
+          break;
+        case 3:
+          Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
+          break;
+        default:
+          // print("level_page2");
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/level', (route) => false);
+      }
+      ;
+      // print("splash_page");
+      // Navigator.pushNamedAndRemoveUntil(
+      //   context,
+      //   '/level',
+      //   (route) => false,
+      // );
     } else {
-      // Belum login, arahkan ke sign-in
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/sign-in',

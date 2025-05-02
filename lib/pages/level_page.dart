@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bahasajepang/service/API_config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,13 +24,18 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
 
   Future<void> loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("SEMUA ISI PREFS:");
+    prefs.getKeys().forEach((key) {
+      print("$key : ${prefs.get(key)}");
+    });
     setState(() {
       userId = prefs.getInt('id');
-      levelId = prefs.getInt('levelId'); // Ambil levelId dari SharedPreferences
+      levelId = prefs.getInt('levelId');
     });
 
     // Jika levelId sudah ada, arahkan ke halaman level yang sesuai
     if (levelId != null && levelId != 0) {
+      print("LEVEL ID :  $levelId");
       WidgetsBinding.instance.addPostFrameCallback((_) {
         switch (levelId) {
           case 1:
@@ -45,8 +49,9 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
             Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
             break;
           default:
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/level', (route) => false);
+          print("level_page");
+            // Navigator.pushNamedAndRemoveUntil(
+            //     context, '/level', (route) => false);
         }
       });
     }
@@ -129,16 +134,19 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
         // Arahkan ke halaman level yang sesuai
         switch (levelId) {
           case 1:
-            Navigator.pushNamed(context, '/pemula');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/pemula', (route) => false);
             break;
           case 2:
-            Navigator.pushNamed(context, '/n5');
+            Navigator.pushNamedAndRemoveUntil(context, '/n5', (route) => false);
             break;
           case 3:
-            Navigator.pushNamed(context, '/n4');
+            Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
             break;
           default:
-            Navigator.pushNamed(context, '/level');
+          print("level_page2");
+            // Navigator.pushNamedAndRemoveUntil(
+            //     context, '/level', (route) => false);
         }
       } else {
         print('Failed to send level. Status Code: ${response.statusCode}');
@@ -208,18 +216,6 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
                 }
               },
             ),
-            _buildLevelButton("Pemula", Colors.blue.shade400, () {
-              Navigator.pushNamed(context, '/pemula');
-            }),
-            _buildLevelButton("N5 (Mengetahui huruf dasar bahasa Jepang)",
-                Colors.blue.shade400, () {
-              Navigator.pushNamed(context, '/n5');
-            }),
-            _buildLevelButton(
-                "N4 (Mengetahui lebih dari 100 kanji dan 800 kosakata)",
-                Colors.blue.shade400, () {
-              Navigator.pushNamed(context, '/n4');
-            }),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bahasajepang/service/ujian_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +31,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
   @override
   void initState() {
     super.initState();
-    _duration = const Duration(minutes: 2);
+    _duration = const Duration(minutes: 1);
     _loadInitialData();
   }
 
@@ -225,9 +226,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: _duration.inSeconds <= 30
-                  ? Colors.red[100]
-                  : Colors.orange[100],
+              color: _duration.inSeconds <= 30 ? bgColor1 : bgColor2,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -250,8 +249,8 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
           const SizedBox(height: 10),
           LinearProgressIndicator(
             value: (_currentQuestionIndex + 1) / _soalList.length,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+            backgroundColor: bgColor1,
+            valueColor: AlwaysStoppedAnimation<Color>(bgColor1),
           ),
           const SizedBox(height: 20),
           Text(
@@ -280,8 +279,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
 
                 return Card(
                   margin: const EdgeInsets.only(bottom: 10),
-                  color:
-                      _selectedAnswer == optionKey ? Colors.orange[100] : null,
+                  color: _selectedAnswer == optionKey ? bgColor1 : null,
                   child: ListTile(
                     title: Text(optionText ?? 'Opsi tidak tersedia'),
                     onTap: () => _handleAnswerSelection(optionKey),
@@ -294,12 +292,12 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
           ElevatedButton(
             onPressed: _isSubmitting ? null : _submitAnswer,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
+              backgroundColor: bgColor1,
               padding: const EdgeInsets.symmetric(vertical: 16),
               minimumSize: const Size(double.infinity, 50),
             ),
             child: _isSubmitting
-                ? const CircularProgressIndicator(color: Colors.white)
+                ? CircularProgressIndicator(color: bgColor2)
                 : Text(
                     _currentQuestionIndex == _soalList.length - 1
                         ? 'Selesai'
@@ -348,7 +346,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
+                backgroundColor: bgColor2,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
               ),
@@ -363,9 +361,10 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor1,
       appBar: AppBar(
         title: const Text('Latihan Soal Pemula'),
-        backgroundColor: Colors.orange,
+        backgroundColor: bgColor2,
       ),
       body: _isLoading
           ? _buildLoading()

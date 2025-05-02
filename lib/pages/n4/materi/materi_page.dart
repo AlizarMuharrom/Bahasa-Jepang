@@ -71,11 +71,6 @@ class _MateriN4PageState extends State<MateriN4Page> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor1,
-      appBar: AppBar(
-        title: const Text('Materi N4'),
-        backgroundColor: bgColor2,
-        elevation: 0,
-      ),
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -107,7 +102,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
               onPressed: _loadMateriData,
               child: const Text('Coba Lagi'),
             ),
-          ],
+          ],  
         ),
       );
     }
@@ -139,12 +134,16 @@ class _MateriN4PageState extends State<MateriN4Page> {
 
   Widget _buildMateriCard(Map<String, dynamic> materi) {
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+      margin: const EdgeInsets.all(4.0),
+      color: bgColor2,
+      child: ListTile(
+        title: Text(
+          materi['judul'] ?? 'Judul tidak tersedia',
+          style: TextStyle(
+            color: primaryTextColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         onTap: () {
           Navigator.push(
             context,
@@ -153,38 +152,6 @@ class _MateriN4PageState extends State<MateriN4Page> {
             ),
           );
         },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade100,
-                  shape: BoxShape.circle,
-                ),
-                child: const Text(
-                  'N4',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  materi['judul'] ?? 'Judul tidak tersedia',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const Icon(Icons.chevron_right),
-            ],
-          ),
-        ),
       ),
     );
   }

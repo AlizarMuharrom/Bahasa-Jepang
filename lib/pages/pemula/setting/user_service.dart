@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:bahasajepang/service/API_config.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
@@ -18,4 +20,13 @@ class UserService {
     );
     return response;
   }
+
+  Future<void> _logout(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear(); // Menghapus semua data login/token
+
+  // Pindah ke halaman login dan hapus semua halaman sebelumnya
+  Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+}
+
 }

@@ -17,7 +17,8 @@ class _Kamus5PageState extends State<Kamus5Page> {
   @override
   void initState() {
     super.initState();
-    _kamusesFuture = _kamusService.fetchKamuses();
+    // Level ID 1 diasumsikan untuk N5
+    _kamusesFuture = _kamusService.fetchKamusesByLevel(2);
   }
 
   @override
@@ -30,11 +31,11 @@ class _Kamus5PageState extends State<Kamus5Page> {
           future: _kamusesFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No data found'));
+              return const Center(child: Text('No data found'));
             }
 
             var kamuses = snapshot.data!;
@@ -54,7 +55,7 @@ class _Kamus5PageState extends State<Kamus5Page> {
                     );
                   },
                   child: Card(
-                    margin: EdgeInsets.all(8.0),
+                    margin: const EdgeInsets.all(8.0),
                     color: bgColor2,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),

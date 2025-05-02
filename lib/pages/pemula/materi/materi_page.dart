@@ -30,6 +30,7 @@ class _MateriPageState extends State<MateriPage> {
         _materiList = data;
         _isLoading = false;
       });
+      print("MATERI : $data");
       return data;
     } catch (e) {
       setState(() {
@@ -55,12 +56,10 @@ class _MateriPageState extends State<MateriPage> {
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                 child: Column(
                   children: [
-                    // Container Latihan Soal
-                    _buildLatihanSoalCard(),
-                    
-                    // List Materi
                     Expanded(
                       child: ListView.builder(
+                        padding: EdgeInsets.only(
+                            bottom: _materiList.isEmpty ? 0 : 16),
                         itemCount: _materiList.length,
                         itemBuilder: (context, index) {
                           final materi = _materiList[index];
@@ -90,6 +89,7 @@ class _MateriPageState extends State<MateriPage> {
                         },
                       ),
                     ),
+                    _buildLatihanSoalCard(),
                   ],
                 ),
               ),
@@ -100,9 +100,9 @@ class _MateriPageState extends State<MateriPage> {
   Widget _buildLatihanSoalCard() {
     return Card(
       margin: const EdgeInsets.all(8.0),
-      color: Colors.orange.shade100, // Warna berbeda untuk membedakan
+      color: bgColor2,
       child: ListTile(
-        leading: const Icon(Icons.quiz, color: Colors.orange),
+        leading: Icon(Icons.quiz, color: bgColor1),
         title: const Text(
           'Latihan Soal',
           style: TextStyle(
