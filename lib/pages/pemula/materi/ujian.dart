@@ -31,7 +31,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
   @override
   void initState() {
     super.initState();
-    _duration = const Duration(minutes: 1);
+    _duration = const Duration(minutes: 2);
     _loadInitialData();
   }
 

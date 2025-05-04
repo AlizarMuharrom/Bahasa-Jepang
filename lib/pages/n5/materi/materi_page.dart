@@ -54,7 +54,6 @@ class _MateriN5PageState extends State<MateriN5Page> {
         _errorMessage = errorMessage;
       });
 
-      // Tampilkan snackbar error
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -78,13 +77,6 @@ class _MateriN5PageState extends State<MateriN5Page> {
         elevation: 0,
       ),
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _loadMateriData();
-        },
-        child: const Icon(Icons.refresh),
-        backgroundColor: Colors.blue,
-      ),
     );
   }
 
@@ -126,13 +118,21 @@ class _MateriN5PageState extends State<MateriN5Page> {
       onRefresh: _loadMateriData,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.separated(
-          itemCount: _materiList.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            final materi = _materiList[index];
-            return _buildMateriCard(materi);
-          },
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.separated(
+                itemCount: _materiList.length,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final materi = _materiList[index];
+                  return _buildMateriCard(materi);
+                },
+              ),
+            ),
+            _buildLatihanSoalCard(), // Widget latihan soal di bawah list materi
+          ],
         ),
       ),
     );
