@@ -38,7 +38,7 @@ class _SplashPageState extends State<SplashPage> {
         default:
           // print("level_page2");
           Navigator.pushNamedAndRemoveUntil(
-              context, '/level', (route) => false);
+              context, '/sign-in', (route) => false);
       }
       ;
       // print("splash_page");

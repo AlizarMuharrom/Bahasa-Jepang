@@ -1,5 +1,6 @@
 import 'package:bahasajepang/pages/n5/materi/detail_materi.dart';
 import 'package:bahasajepang/pages/n5/materi/materi_service.dart';
+import 'package:bahasajepang/pages/n5/materi/ujian.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -154,6 +155,33 @@ class _MateriN5PageState extends State<MateriN5Page> {
             context,
             MaterialPageRoute(
               builder: (context) => DetailMateriN5Page(materiId: materi['id']),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLatihanSoalCard() {
+    return Card(
+      margin: const EdgeInsets.all(8.0),
+      color: bgColor2,
+      child: ListTile(
+        leading: Icon(Icons.quiz, color: bgColor1),
+        title: const Text(
+          'Latihan Soal',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        subtitle: const Text('Uji pemahaman Anda dengan latihan soal'),
+        trailing: const Icon(Icons.arrow_forward_ios),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UjianN5Page(),
             ),
           );
         },

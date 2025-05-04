@@ -13,7 +13,7 @@ class SettingPage extends StatefulWidget {
 
 Future<void> _logout(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
-  print("SEMUA ISI PREFS LOGOUTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT:");
+  print("SEMUA ISI PREFS LOGOUT:");
   prefs.getKeys().forEach((key) {
     print("$key : ${prefs.get(key)}");
   });
@@ -25,6 +25,23 @@ Future<void> _logout(BuildContext context) async {
 
 class _SettingPageState extends State<SettingPage> {
   bool _isKetentuanExpanded = false;
+  String? username;
+  int? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData(); // Panggil fungsi untuk memuat data user
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userId = prefs.getInt('id');
+      username =
+          prefs.getString('username'); // Ambil username dari SharedPreferences
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,25 +107,32 @@ class _SettingPageState extends State<SettingPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Halo, AlizarSenpai",
+                                        "Halo, ${username ?? 'Pengguna'}", // Tampilkan username atau 'Pengguna' jika null
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => EditProfilePage(
-                                                  userId:
-                                                      1), // Ganti dengan userId yang sesuai
-                                            ),
-                                          );
+                                          if (userId != null) {
+                                            // Tambahkan null check
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditProfilePage(
+                                                        userId: userId!),
+                                              ),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      "User ID tidak ditemukan")),
+                                            );
+                                          }
                                         },
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: Colors.blue,
-                                        ),
                                         child: Text("Edit",
                                             style: TextStyle(fontSize: 14)),
                                       ),
@@ -179,7 +203,7 @@ class _SettingPageState extends State<SettingPage> {
                               secondChild: Padding(
                                 padding: const EdgeInsets.only(top: 8),
                                 child: Text(
-                                  "Pada tahapan tes atau latihan, terdapat batasan nilai supaya bisa lanjut ke level berikutnya, yaitu minimal 80% jawaban benar.\n\nPada halaman kanji, terdapat voice record dan button untuk mencoba menulis kanji pada layar handphone.\n\nMateri dari aplikasi ini, semuanya berreferensi dari buku Minna no Nihongo 1 dan Minna no Nihongo 2, Untuk level N5 dan N4.\n\nMohon maaf jika terdapat banyak kekurangan, karena aplikasi ini merupakan aplikasi yang dikerjakan oleh tim kecil dan masih kurang pengalaman.",
+                                  "Pada tahapan tes atau latihan, terdapat batasan nilai supaya bisa lanjut ke level berikutnya, yaitu minimal 100% jawaban benar.\n\nPada halaman kanji, terdapat voice record dan button untuk mencoba menulis kanji pada layar handphone.\n\nMateri dari aplikasi ini, semuanya berreferensi dari buku Minna no Nihongo 1 dan Minna no Nihongo 2, Untuk level N5 dan N4.\n\nMohon maaf jika terdapat banyak kekurangan, karena aplikasi ini merupakan aplikasi yang dikerjakan oleh tim kecil dan masih kurang pengalaman.",
                                   style: TextStyle(fontSize: 14),
                                   textAlign: TextAlign.justify,
                                 ),
@@ -194,28 +218,6 @@ class _SettingPageState extends State<SettingPage> {
                       ),
 
                       SizedBox(height: 16),
-
-                      // Tombol Hapus Akun
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            padding: EdgeInsets.all(16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(color: Colors.red, width: 1),
-                            ),
-                            shadowColor: Colors.red.withOpacity(0.2),
-                            elevation: 5,
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            "Hapus akun",
-                            style: TextStyle(color: Colors.red, fontSize: 16),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),

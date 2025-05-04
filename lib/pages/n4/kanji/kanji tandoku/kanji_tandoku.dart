@@ -110,7 +110,7 @@ class _KanjiTandoku4PageState extends State<KanjiTandoku4Page> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          '/detail-tandoku4',
+          '/detail-tandoku',
           arguments: kanji,
         );
       },

@@ -14,7 +14,7 @@ class LevelSelectionPage extends StatefulWidget {
 
 class _LevelSelectionPageState extends State<LevelSelectionPage> {
   int? userId;
-  int? levelId; // Tambahkan variabel levelId
+  int? level_id; // Tambahkan variabel levelId
 
   @override
   void initState() {
@@ -28,16 +28,17 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
     prefs.getKeys().forEach((key) {
       print("$key : ${prefs.get(key)}");
     });
+
     setState(() {
       userId = prefs.getInt('id');
-      levelId = prefs.getInt('levelId');
+      level_id = prefs.getInt('level_id');
     });
 
-    // Jika levelId sudah ada, arahkan ke halaman level yang sesuai
-    if (levelId != null && levelId != 0) {
-      print("LEVEL ID :  $levelId");
+    // Hanya arahkan jika levelId memiliki nilai yang valid (1, 2, atau 3)
+    if (level_id != null && level_id! > 0 && level_id! <= 3) {
+      print("LEVEL ID :  $level_id");
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        switch (levelId) {
+        switch (level_id) {
           case 1:
             Navigator.pushNamedAndRemoveUntil(
                 context, '/pemula', (route) => false);
@@ -48,12 +49,11 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
           case 3:
             Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
             break;
-          default:
-          print("level_page");
-            // Navigator.pushNamedAndRemoveUntil(
-            //     context, '/level', (route) => false);
         }
       });
+    } else {
+      // Jika levelId null, 0, atau tidak valid, tetap di halaman level selection
+      print("Level ID belum dipilih atau tidak valid: $level_id");
     }
   }
 
@@ -85,15 +85,15 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
     }
   }
 
-  Future<void> updateUserLevel(int userId, int levelId) async {
+  Future<void> updateUserLevel(int userId, int level_id) async {
     const endpoint = "/update-level";
     try {
-      print('Sending data: user_id=$userId, level_id=$levelId');
+      print('Sending data: user_id=$userId, level_id=$level_id');
 
       var response = await http.post(
         Uri.parse(ApiConfig.baseUrl + endpoint),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'user_id': userId, 'level_id': levelId}),
+        body: jsonEncode({'user_id': userId, 'level_id': level_id}),
       );
 
       if (response.statusCode == 200) {
@@ -107,7 +107,7 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
     }
   }
 
-  Future<void> sendLevelToDatabase(int levelId) async {
+  Future<void> sendLevelToDatabase(int level_id) async {
     const endpoint = "/update-level";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -121,7 +121,7 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
       var response = await http.post(
         Uri.parse(ApiConfig.baseUrl + endpoint),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'user_id': userId, 'level_id': levelId}),
+        body: jsonEncode({'user_id': userId, 'level_id': level_id}),
       );
 
       if (response.statusCode == 200) {
@@ -129,10 +129,10 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
         print('Response: ${jsonResponse}');
 
         // Simpan levelId ke SharedPreferences
-        await prefs.setInt('levelId', levelId);
+        await prefs.setInt('levelId', level_id);
 
         // Arahkan ke halaman level yang sesuai
-        switch (levelId) {
+        switch (level_id) {
           case 1:
             Navigator.pushNamedAndRemoveUntil(
                 context, '/pemula', (route) => false);
@@ -144,9 +144,9 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
             Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
             break;
           default:
-          print("level_page2");
-            // Navigator.pushNamedAndRemoveUntil(
-            //     context, '/level', (route) => false);
+            print("level_page2");
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/level', (route) => false);
         }
       } else {
         print('Failed to send level. Status Code: ${response.statusCode}');

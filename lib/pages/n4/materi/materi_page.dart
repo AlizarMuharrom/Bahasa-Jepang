@@ -1,4 +1,5 @@
 import 'package:bahasajepang/pages/n4/materi/detail_materi.dart';
+import 'package:bahasajepang/pages/n4/materi/ujian.dart';
 import 'package:bahasajepang/pages/n5/materi/materi_service.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
@@ -72,13 +73,6 @@ class _MateriN4PageState extends State<MateriN4Page> {
     return Scaffold(
       backgroundColor: bgColor1,
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _loadMateriData();
-        },
-        child: const Icon(Icons.refresh),
-        backgroundColor: Colors.blue,
-      ),
     );
   }
 
@@ -102,17 +96,22 @@ class _MateriN4PageState extends State<MateriN4Page> {
               onPressed: _loadMateriData,
               child: const Text('Coba Lagi'),
             ),
-          ],  
+          ],
         ),
       );
     }
 
     if (_materiList.isEmpty) {
-      return const Center(
-        child: Text(
-          'Tidak ada materi tersedia',
-          style: TextStyle(fontSize: 16),
-        ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Tidak ada materi tersedia',
+            style: TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 20),
+          _buildLatihanSoalCard(), // Tetap tampilkan latihan soal meski materi kosong
+        ],
       );
     }
 
@@ -120,13 +119,21 @@ class _MateriN4PageState extends State<MateriN4Page> {
       onRefresh: _loadMateriData,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.separated(
-          itemCount: _materiList.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            final materi = _materiList[index];
-            return _buildMateriCard(materi);
-          },
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.separated(
+                itemCount: _materiList.length,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final materi = _materiList[index];
+                  return _buildMateriCard(materi);
+                },
+              ),
+            ),
+            _buildLatihanSoalCard(), // Widget latihan soal di bawah list materi
+          ],
         ),
       ),
     );
@@ -149,6 +156,33 @@ class _MateriN4PageState extends State<MateriN4Page> {
             context,
             MaterialPageRoute(
               builder: (context) => DetailMateriN4Page(materiId: materi['id']),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLatihanSoalCard() {
+    return Card(
+      margin: const EdgeInsets.all(8.0),
+      color: bgColor2,
+      child: ListTile(
+        leading: Icon(Icons.quiz, color: bgColor1),
+        title: const Text(
+          'Latihan Soal',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        subtitle: const Text('Uji pemahaman Anda dengan latihan soal'),
+        trailing: const Icon(Icons.arrow_forward_ios),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UjianN4Page(),
             ),
           );
         },
