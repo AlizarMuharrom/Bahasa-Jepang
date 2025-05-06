@@ -46,7 +46,7 @@ class _DetailTandoku4PageState extends State<DetailTandoku4Page> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Colors.blue.shade200,
                 borderRadius: BorderRadius.circular(10),

@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:bahasajepang/service/API_config.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bahasajepang/service/ujian_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class UjianN5Page extends StatefulWidget {
   const UjianN5Page({super.key});
@@ -129,6 +132,55 @@ class _UjianN5PageState extends State<UjianN5Page> {
 
   void _handleAnswerSelection(String answer) {
     setState(() => _selectedAnswer = answer);
+  }
+
+  Future<void> sendLevelToDatabase(int level_id) async {
+    const endpoint = "/update-level";
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? userId = prefs.getInt('id');
+
+      if (userId == null) {
+        print('User ID tidak ditemukan');
+        return;
+      }
+
+      var response = await http.post(
+        Uri.parse(ApiConfig.baseUrl + endpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'user_id': userId, 'level_id': level_id}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        print('Response: ${jsonResponse}');
+
+        // Simpan levelId ke SharedPreferences
+        await prefs.setInt('levelId', level_id);
+
+        // Arahkan ke halaman level yang sesuai
+        switch (level_id) {
+          case 1:
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/pemula', (route) => false);
+            break;
+          case 2:
+            Navigator.pushNamedAndRemoveUntil(context, '/n5', (route) => false);
+            break;
+          case 3:
+            Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
+            break;
+          default:
+            print("level_page2");
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/level', (route) => false);
+        }
+      } else {
+        print('Failed to send level. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   Future<void> _submitAnswer() async {
@@ -311,6 +363,8 @@ class _UjianN5PageState extends State<UjianN5Page> {
   }
 
   Widget _buildResult() {
+    final score = _hasilUjian?['score'] ?? 0;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -326,7 +380,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
             ),
             const SizedBox(height: 30),
             Text(
-              'Skor Anda: ${_hasilUjian?['score'] ?? '0'}',
+              'Skor Anda: $score',
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 15),
@@ -342,7 +396,27 @@ class _UjianN5PageState extends State<UjianN5Page> {
                 textAlign: TextAlign.center,
               ),
             ],
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
+
+            // ✅ Tampilkan tombol jika skor 100
+            if (score == 100)
+              _buildLevelButton(
+                "N5 (Mengetahui huruf dasar bahasa Jepang)",
+                const Color.fromRGBO(100, 181, 246, 1),
+                () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  int? userId = prefs.getInt('id');
+
+                  if (userId != null) {
+                    await sendLevelToDatabase(3);
+                  } else {
+                    print('User ID tidak ditemukan');
+                  }
+                },
+              ),
+
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
@@ -375,4 +449,22 @@ class _UjianN5PageState extends State<UjianN5Page> {
                   : _buildQuestion(),
     );
   }
+}
+
+Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
+  return ElevatedButton(
+    onPressed: onPressed,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: color,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      textAlign: TextAlign.center,
+    ),
+  );
 }

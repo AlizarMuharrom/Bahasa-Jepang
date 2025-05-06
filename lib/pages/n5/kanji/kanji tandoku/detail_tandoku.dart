@@ -73,7 +73,7 @@ class _DetailTandokuPageState extends State<DetailTandokuPage> {
                 children: [
                   // Kotak Kanji
                   Container(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(5),
                     width: 130,
                     height: 140,
                     decoration: BoxDecoration(

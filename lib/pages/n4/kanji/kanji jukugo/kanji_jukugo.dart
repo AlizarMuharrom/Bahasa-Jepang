@@ -40,10 +40,16 @@ class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
 
   void _filterKanji(String query) {
     setState(() {
-      _filteredKanji = _allKanji
-          .where((kanji) =>
-              kanji["judul"].toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      _filteredKanji = _allKanji.where((kanji) {
+        final judul = kanji["judul"]?.toString().toLowerCase() ?? '';
+        final nama = kanji["nama"]?.toString().toLowerCase() ?? '';
+        final kunyomi = kanji["kunyomi"]?.toString().toLowerCase() ?? '';
+        final queryLower = query.toLowerCase();
+
+        return judul.contains(queryLower) ||
+            nama.contains(queryLower) ||
+            kunyomi.contains(queryLower);
+      }).toList();
     });
   }
 

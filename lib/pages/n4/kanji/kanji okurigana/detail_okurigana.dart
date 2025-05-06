@@ -56,7 +56,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
                 children: [
                   // Kotak Kanji
                   Container(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(5),
                     width: 130,
                     height: 140,
                     decoration: BoxDecoration(

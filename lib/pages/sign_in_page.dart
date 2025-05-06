@@ -235,6 +235,25 @@ class _SignInPage extends State<SignInPage> {
       );
     }
 
+    Widget forgotPasswordButton() {
+      return Container(
+        alignment: Alignment.centerRight,
+        margin: EdgeInsets.only(top: 10),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/forgot-password');
+          },
+          child: Text(
+            'Forgot Password?',
+            style: purpleTextStyle.copyWith(
+              fontSize: 12,
+              fontWeight: medium,
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget signInButton() {
       return Container(
         height: 50,
@@ -303,6 +322,7 @@ class _SignInPage extends State<SignInPage> {
               header(),
               emailInput(),
               passwordInput(),
+              forgotPasswordButton(),
               signInButton(),
               Spacer(),
               footer(),
