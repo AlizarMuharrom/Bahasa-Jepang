@@ -27,7 +27,6 @@ class _MateriN5PageState extends State<MateriN5Page> {
   void _loadInitialData() {
     _materiFuture = _loadMateriData();
     _materiFuture.catchError((error) {
-      // Error sudah ditangani di _loadMateriData
     });
   }
 

@@ -20,7 +20,14 @@ class _MateriPageState extends State<MateriPage> {
   @override
   void initState() {
     super.initState();
+    _loadInitialData();
+  }
+
+  void _loadInitialData() {
     _materiFuture = _loadMateriData();
+    _materiFuture.catchError((error) {
+      
+    });
   }
 
   Future<List<dynamic>> _loadMateriData() async {
