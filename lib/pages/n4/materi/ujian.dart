@@ -1,11 +1,16 @@
 import 'dart:async';
-import 'package:bahasajepang/theme.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:bahasajepang/service/ujian_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:bahasajepang/service/ujian_service.dart';
+import 'package:bahasajepang/service/API_config.dart';
+import 'package:bahasajepang/theme.dart';
 
 class UjianN4Page extends StatefulWidget {
-  const UjianN4Page({super.key});
+  final int ujianId;
+
+  const UjianN4Page({Key? key, required this.ujianId}) : super(key: key);
 
   @override
   State<UjianN4Page> createState() => _UjianN4PageState();
@@ -22,7 +27,6 @@ class _UjianN4PageState extends State<UjianN4Page> {
   Map<String, dynamic>? _hasilUjian;
   String? _token;
   String? _errorMessage;
-  int? _ujianId;
 
   late Duration _duration;
   late Timer _timer;
@@ -31,7 +35,7 @@ class _UjianN4PageState extends State<UjianN4Page> {
   @override
   void initState() {
     super.initState();
-    _duration = const Duration(minutes: 1);
+    _duration = const Duration(minutes: 1); // Waktu 1 menit untuk level N4
     _loadInitialData();
   }
 
@@ -61,13 +65,11 @@ class _UjianN4PageState extends State<UjianN4Page> {
   Future<void> _autoSubmitAnswers() async {
     try {
       setState(() => _isSubmitting = true);
-
       _hasilUjian = await _ujianService.submitUjian(
-        _ujianId!,
+        widget.ujianId,
         _jawabanUser,
         _token!,
       );
-
       setState(() => _isSubmitting = false);
     } catch (e) {
       setState(() => _isSubmitting = false);
@@ -90,23 +92,12 @@ class _UjianN4PageState extends State<UjianN4Page> {
         throw Exception('Silakan login kembali');
       }
 
-      final ujianList = await _ujianService.getUjianByLevel(3);
-      if (ujianList.isEmpty) {
-        throw Exception('Tidak ada ujian tersedia untuk level N4');
-      }
-
-      // 3. Save first exam ID
-      _ujianId = ujianList[0]['id'];
-
-      // 4. Get exam questions
-      _soalList = await _ujianService.getSoalUjian(_ujianId!, _token!);
+      _soalList = await _ujianService.getSoalUjian(widget.ujianId, _token!);
       if (_soalList.isEmpty) {
         throw Exception('Tidak ada soal tersedia untuk ujian ini');
       }
 
-      // Start the timer after questions are loaded
       _startTimer();
-
       setState(() => _isLoading = false);
     } catch (e) {
       setState(() {
@@ -131,6 +122,34 @@ class _UjianN4PageState extends State<UjianN4Page> {
     setState(() => _selectedAnswer = answer);
   }
 
+  Future<void> sendLevelToDatabase(int level_id) async {
+    const endpoint = "/update-level";
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int? userId = prefs.getInt('id');
+
+      if (userId == null) {
+        throw Exception('User ID tidak ditemukan');
+      }
+
+      var response = await http.post(
+        Uri.parse(ApiConfig.baseUrl + endpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'user_id': userId, 'level_id': level_id}),
+      );
+
+      if (response.statusCode == 200) {
+        await prefs.setInt('levelId', level_id);
+        Navigator.pushNamedAndRemoveUntil(
+            context, level_id == 3 ? '/n4' : '/level', (route) => false);
+      } else {
+        throw Exception('Failed to update level: ${response.statusCode}');
+      }
+    } catch (e) {
+      _showErrorSnackbar('Error: ${e.toString()}');
+    }
+  }
+
   Future<void> _submitAnswer() async {
     if (_selectedAnswer == null) {
       _showErrorSnackbar('Pilih jawaban terlebih dahulu');
@@ -138,26 +157,20 @@ class _UjianN4PageState extends State<UjianN4Page> {
     }
 
     try {
-      // Save temporary answer
       _jawabanUser.add({
         'soal_id': _soalList[_currentQuestionIndex]['id'],
         'jawaban_user': _selectedAnswer!,
       });
 
-      // If this is the last question or time is up
       if (_currentQuestionIndex == _soalList.length - 1 || _timeUp) {
         setState(() => _isSubmitting = true);
-
-        // Submit all answers to backend
         _hasilUjian = await _ujianService.submitUjian(
-          _ujianId!,
+          widget.ujianId,
           _jawabanUser,
           _token!,
         );
-
         setState(() => _isSubmitting = false);
       } else {
-        // Move to next question
         setState(() {
           _currentQuestionIndex++;
           _selectedAnswer = null;
@@ -222,11 +235,10 @@ class _UjianN4PageState extends State<UjianN4Page> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Timer display
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: _duration.inSeconds <= 30 ? bgColor1 : bgColor2,
+              color: _duration.inSeconds <= 30 ? Colors.red[200] : bgColor2,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -249,7 +261,7 @@ class _UjianN4PageState extends State<UjianN4Page> {
           const SizedBox(height: 10),
           LinearProgressIndicator(
             value: (_currentQuestionIndex + 1) / _soalList.length,
-            backgroundColor: bgColor1,
+            backgroundColor: Colors.grey[300],
             valueColor: AlwaysStoppedAnimation<Color>(bgColor1),
           ),
           const SizedBox(height: 20),
@@ -297,12 +309,12 @@ class _UjianN4PageState extends State<UjianN4Page> {
               minimumSize: const Size(double.infinity, 50),
             ),
             child: _isSubmitting
-                ? CircularProgressIndicator(color: bgColor2)
+                ? const CircularProgressIndicator(color: Colors.white)
                 : Text(
                     _currentQuestionIndex == _soalList.length - 1
                         ? 'Selesai'
                         : 'Lanjut',
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
           ),
         ],
@@ -311,6 +323,8 @@ class _UjianN4PageState extends State<UjianN4Page> {
   }
 
   Widget _buildResult() {
+    final score = _hasilUjian?['score'] ?? 0;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -326,7 +340,7 @@ class _UjianN4PageState extends State<UjianN4Page> {
             ),
             const SizedBox(height: 30),
             Text(
-              'Skor Anda: ${_hasilUjian?['score'] ?? '0'}',
+              'Skor Anda: $score',
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 15),
@@ -342,7 +356,14 @@ class _UjianN4PageState extends State<UjianN4Page> {
                 textAlign: TextAlign.center,
               ),
             ],
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
+            if (score == 100)
+              _buildLevelButton(
+                "Lanjut ke Level N4",
+                const Color.fromRGBO(100, 181, 246, 1),
+                () => sendLevelToDatabase(3),
+              ),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
@@ -358,13 +379,31 @@ class _UjianN4PageState extends State<UjianN4Page> {
     );
   }
 
+  Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Latihan Soal N4'),
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor1,
       ),
       body: _isLoading
           ? _buildLoading()

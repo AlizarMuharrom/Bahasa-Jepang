@@ -52,8 +52,19 @@ class MyApp extends StatelessWidget {
         '/detail-okurigana4': (context) => DetailOkurigana4Page(),
         '/detail-jukugo4': (context) => DetailJukugo4Page(),
         '/forgot-password': (context) => ForgotPasswordPage(),
-        '/token-verification': (context) => TokenVerificationPage(),
-        '/reset-password': (context) => ResetPasswordPage(),
+        '/token-verification': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return TokenVerificationPage(email: args['email']);
+        },
+        '/reset-password': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return ResetPasswordPage(
+            email: args['email'],
+            token: args['token'],
+          );
+        },
       },
     );
   }

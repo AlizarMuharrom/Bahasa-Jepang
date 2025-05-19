@@ -1,54 +1,78 @@
+import 'package:bahasajepang/service/API_config.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class TokenVerificationPage extends StatefulWidget {
+  final String email;
+
+  const TokenVerificationPage({Key? key, required this.email})
+      : super(key: key);
+
   @override
   _TokenVerificationPageState createState() => _TokenVerificationPageState();
 }
 
 class _TokenVerificationPageState extends State<TokenVerificationPage> {
-  final List<TextEditingController> _controllers =
-      List.generate(4, (index) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
+  final TextEditingController _tokenController = TextEditingController();
+  bool _isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _verifyToken() async {
+    final token = _tokenController.text.trim();
 
-    // Setup listener untuk setiap controller
-    for (int i = 0; i < 4; i++) {
-      _controllers[i].addListener(() => _onTextChanged(i));
-    }
-
-    // Fokus otomatis ke kotak pertama setelah widget selesai dibangun
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).requestFocus(_focusNodes[0]);
+    setState(() {
+      _isLoading = true;
     });
-  }
 
-  void _onTextChanged(int index) {
-    if (_controllers[index].text.isNotEmpty) {
-      // Jika ada input dan bukan kotak terakhir, pindah ke kotak berikutnya
-      if (index < 3) {
-        FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+    try {
+      final url = Uri.parse('${ApiConfig.baseUrl}/verify-token');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: json.encode({
+          'email': widget.email,
+          'token': token,
+        }),
+      );
+
+      final responseData = json.decode(response.body);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Navigator.pushNamed(
+          context,
+          '/reset-password',
+          arguments: {
+            'email': widget.email,
+            'token': token,
+          },
+        );
       } else {
-        // Jika kotak terakhir, hilangkan keyboard
-        _focusNodes[index].unfocus();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(responseData['message'] ?? 'Token tidak valid')),
+        );
       }
-    } else if (_controllers[index].text.isEmpty && index > 0) {
-      // Jika menghapus dan kotak kosong, kembali ke kotak sebelumnya
-      FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal verifikasi token: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    for (var node in _focusNodes) {
-      node.dispose();
-    }
+    _tokenController.dispose();
     super.dispose();
   }
 
@@ -64,54 +88,42 @@ class _TokenVerificationPageState extends State<TokenVerificationPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const Text('Masukkan 4 digit kode yang dikirim ke email Anda'),
+            Text('Masukkan 4 digit kode yang dikirim ke ${widget.email}'),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                4,
-                (index) => SizedBox(
-                  width: 50,
-                  child: TextField(
-                    controller: _controllers[index],
-                    focusNode: _focusNodes[index],
-                    keyboardType: TextInputType.number,
-                    maxLength: 1,
-                    textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                      counterText: '',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (value) {
-                      if (value.isNotEmpty) {
-                        if (index < 3) {
-                          FocusScope.of(context)
-                              .requestFocus(_focusNodes[index + 1]);
-                        } else {
-                          _focusNodes[index].unfocus();
-                        }
-                      } else if (value.isEmpty && index > 0) {
-                        FocusScope.of(context)
-                            .requestFocus(_focusNodes[index - 1]);
-                      }
-                    },
-                  ),
-                ),
+            TextField(
+              controller: _tokenController,
+              keyboardType: TextInputType.text,
+              maxLength: 100,
+              decoration: const InputDecoration(
+                labelText: 'Token',
+                border: OutlineInputBorder(),
+                counterText: '',
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                String token = _controllers.map((c) => c.text).join();
-                if (token == '1234') {
-                  Navigator.pushNamed(context, '/reset-password');
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Token tidak valid')),
-                  );
-                }
-              },
-              child: const Text('Verifikasi'),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: primaryColor,
+                ),
+                onPressed: _isLoading ? null : _verifyToken,
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        'Verifikasi',
+                        style: TextStyle(fontSize: 16),
+                      ),
+              ),
+            ),
+            TextButton(
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      // Logika kirim ulang token
+                    },
+              child: const Text('Kirim ulang token'),
             ),
           ],
         ),

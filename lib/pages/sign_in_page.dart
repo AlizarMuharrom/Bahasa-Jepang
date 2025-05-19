@@ -22,7 +22,6 @@ class _SignInPage extends State<SignInPage> {
   @override
   Future<void> functionLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("SEMUA ISI PREFS LOGIN :");
     prefs.getKeys().forEach((key) {
       print("$key : ${prefs.get(key)}");
     });
@@ -39,7 +38,7 @@ class _SignInPage extends State<SignInPage> {
 
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
-        var token = jsonResponse['token']; // ambil token di sini
+        var token = jsonResponse['token'];
         print('Token: $token');
         print("Cek JSON Response: $jsonResponse");
 

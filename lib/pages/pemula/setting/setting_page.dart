@@ -14,7 +14,6 @@ class SettingPage extends StatefulWidget {
 
 Future<void> _logout(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
-  print("SEMUA ISI PREFS LOGOUT:");
   prefs.getKeys().forEach((key) {
     print("$key : ${prefs.get(key)}");
   });
@@ -240,9 +239,9 @@ class _SettingPageState extends State<SettingPage> {
       child: TextButton(
         onPressed: () {
           Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => const RiwayatUjianPage()),
-);
+            context,
+            MaterialPageRoute(builder: (context) => const RiwayatUjianPage()),
+          );
         },
         style: TextButton.styleFrom(
             backgroundColor: primaryColor,

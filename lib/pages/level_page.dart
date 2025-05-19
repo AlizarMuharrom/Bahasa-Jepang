@@ -24,7 +24,6 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
 
   Future<void> loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("SEMUA ISI PREFS:");
     prefs.getKeys().forEach((key) {
       print("$key : ${prefs.get(key)}");
     });

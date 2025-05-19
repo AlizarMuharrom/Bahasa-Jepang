@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:bahasajepang/service/API_config.dart';
-import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bahasajepang/service/ujian_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:bahasajepang/service/ujian_service.dart';
+import 'package:bahasajepang/service/API_config.dart';
+import 'package:bahasajepang/theme.dart';
 
 class UjianPemulaPage extends StatefulWidget {
-  const UjianPemulaPage({super.key});
+  final int ujianId;
+
+  const UjianPemulaPage({Key? key, required this.ujianId}) : super(key: key);
 
   @override
   State<UjianPemulaPage> createState() => _UjianPemulaPageState();
@@ -25,7 +27,6 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
   Map<String, dynamic>? _hasilUjian;
   String? _token;
   String? _errorMessage;
-  int? _ujianId;
 
   late Duration _duration;
   late Timer _timer;
@@ -64,19 +65,61 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
   Future<void> _autoSubmitAnswers() async {
     try {
       setState(() => _isSubmitting = true);
-
       _hasilUjian = await _ujianService.submitUjian(
-        _ujianId!,
+        widget.ujianId,
         _jawabanUser,
         _token!,
       );
-
       setState(() => _isSubmitting = false);
     } catch (e) {
       setState(() => _isSubmitting = false);
       _showErrorSnackbar(
           'Error: ${e.toString().replaceAll('Exception: ', '')}');
     }
+  }
+
+  Future<void> _loadInitialData() async {
+    try {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      final prefs = await SharedPreferences.getInstance();
+      _token = prefs.getString('token');
+
+      if (_token == null) {
+        throw Exception('Silakan login kembali');
+      }
+
+      _soalList = await _ujianService.getSoalUjian(widget.ujianId, _token!);
+      if (_soalList.isEmpty) {
+        throw Exception('Tidak ada soal tersedia untuk ujian ini');
+      }
+
+      _startTimer();
+      setState(() => _isLoading = false);
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString().replaceAll('Exception: ', '');
+      });
+      _showErrorSnackbar(_errorMessage!);
+    }
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  void _handleAnswerSelection(String answer) {
+    setState(() => _selectedAnswer = answer);
   }
 
   Future<void> sendLevelToDatabase(int level_id) async {
@@ -128,61 +171,6 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
     }
   }
 
-  Future<void> _loadInitialData() async {
-    try {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
-
-      final prefs = await SharedPreferences.getInstance();
-      _token = prefs.getString('token');
-
-      if (_token == null) {
-        throw Exception('Silakan login kembali');
-      }
-
-      final ujianList = await _ujianService.getUjianByLevel(1);
-      if (ujianList.isEmpty) {
-        throw Exception('Tidak ada ujian tersedia untuk level pemula');
-      }
-
-      // 3. Save first exam ID
-      _ujianId = ujianList[0]['id'];
-
-      // 4. Get exam questions
-      _soalList = await _ujianService.getSoalUjian(_ujianId!, _token!);
-      if (_soalList.isEmpty) {
-        throw Exception('Tidak ada soal tersedia untuk ujian ini');
-      }
-
-      // Start the timer after questions are loaded
-      _startTimer();
-
-      setState(() => _isLoading = false);
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString().replaceAll('Exception: ', '');
-      });
-      _showErrorSnackbar(_errorMessage!);
-    }
-  }
-
-  void _showErrorSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
-  void _handleAnswerSelection(String answer) {
-    setState(() => _selectedAnswer = answer);
-  }
-
   Future<void> _submitAnswer() async {
     if (_selectedAnswer == null) {
       _showErrorSnackbar('Pilih jawaban terlebih dahulu');
@@ -190,26 +178,20 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
     }
 
     try {
-      // Save temporary answer
       _jawabanUser.add({
         'soal_id': _soalList[_currentQuestionIndex]['id'],
         'jawaban_user': _selectedAnswer!,
       });
 
-      // If this is the last question or time is up
       if (_currentQuestionIndex == _soalList.length - 1 || _timeUp) {
         setState(() => _isSubmitting = true);
-
-        // Submit all answers to backend
         _hasilUjian = await _ujianService.submitUjian(
-          _ujianId!,
+          widget.ujianId,
           _jawabanUser,
           _token!,
         );
-
         setState(() => _isSubmitting = false);
       } else {
-        // Move to next question
         setState(() {
           _currentQuestionIndex++;
           _selectedAnswer = null;
@@ -274,11 +256,10 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Timer display
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: _duration.inSeconds <= 30 ? bgColor1 : bgColor2,
+              color: _duration.inSeconds <= 30 ? Colors.red[200] : bgColor2,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -301,7 +282,7 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
           const SizedBox(height: 10),
           LinearProgressIndicator(
             value: (_currentQuestionIndex + 1) / _soalList.length,
-            backgroundColor: bgColor1,
+            backgroundColor: Colors.grey[300],
             valueColor: AlwaysStoppedAnimation<Color>(bgColor1),
           ),
           const SizedBox(height: 20),
@@ -349,12 +330,12 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
               minimumSize: const Size(double.infinity, 50),
             ),
             child: _isSubmitting
-                ? CircularProgressIndicator(color: bgColor1)
+                ? const CircularProgressIndicator(color: Colors.white)
                 : Text(
                     _currentQuestionIndex == _soalList.length - 1
                         ? 'Selesai'
                         : 'Lanjut',
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
           ),
         ],
@@ -397,11 +378,9 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
               ),
             ],
             const SizedBox(height: 30),
-
-            // ✅ Tampilkan tombol jika skor 100
             if (score == 100)
               _buildLevelButton(
-                "Lanjut ke level N5",
+                "Lanjut Ke Level N5",
                 const Color.fromRGBO(100, 181, 246, 1),
                 () async {
                   SharedPreferences prefs =
@@ -409,14 +388,13 @@ class _UjianPemulaPageState extends State<UjianPemulaPage> {
                   int? userId = prefs.getInt('id');
 
                   if (userId != null) {
-                    await sendLevelToDatabase(2);
+                    await sendLevelToDatabase(3);
                   } else {
                     print('User ID tidak ditemukan');
                   }
                 },
               ),
-
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(

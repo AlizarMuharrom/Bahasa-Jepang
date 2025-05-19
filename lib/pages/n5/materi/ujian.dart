@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:bahasajepang/service/API_config.dart';
-import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:bahasajepang/service/ujian_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:bahasajepang/service/ujian_service.dart';
+import 'package:bahasajepang/service/API_config.dart';
+import 'package:bahasajepang/theme.dart';
 
 class UjianN5Page extends StatefulWidget {
-  const UjianN5Page({super.key});
+  final int ujianId;
+  
+  const UjianN5Page({Key? key, required this.ujianId}) : super(key: key);
 
   @override
   State<UjianN5Page> createState() => _UjianN5PageState();
@@ -25,7 +27,6 @@ class _UjianN5PageState extends State<UjianN5Page> {
   Map<String, dynamic>? _hasilUjian;
   String? _token;
   String? _errorMessage;
-  int? _ujianId;
 
   late Duration _duration;
   late Timer _timer;
@@ -34,7 +35,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
   @override
   void initState() {
     super.initState();
-    _duration = const Duration(minutes: 1);
+    _duration = const Duration(minutes: 1); // Waktu lebih singkat untuk level N5
     _loadInitialData();
   }
 
@@ -64,18 +65,15 @@ class _UjianN5PageState extends State<UjianN5Page> {
   Future<void> _autoSubmitAnswers() async {
     try {
       setState(() => _isSubmitting = true);
-
       _hasilUjian = await _ujianService.submitUjian(
-        _ujianId!,
+        widget.ujianId,
         _jawabanUser,
         _token!,
       );
-
       setState(() => _isSubmitting = false);
     } catch (e) {
       setState(() => _isSubmitting = false);
-      _showErrorSnackbar(
-          'Error: ${e.toString().replaceAll('Exception: ', '')}');
+      _showErrorSnackbar('Error: ${e.toString().replaceAll('Exception: ', '')}');
     }
   }
 
@@ -93,23 +91,12 @@ class _UjianN5PageState extends State<UjianN5Page> {
         throw Exception('Silakan login kembali');
       }
 
-      final ujianList = await _ujianService.getUjianByLevel(2);
-      if (ujianList.isEmpty) {
-        throw Exception('Tidak ada ujian tersedia untuk level N5');
-      }
-
-      // 3. Save first exam ID
-      _ujianId = ujianList[0]['id'];
-
-      // 4. Get exam questions
-      _soalList = await _ujianService.getSoalUjian(_ujianId!, _token!);
+      _soalList = await _ujianService.getSoalUjian(widget.ujianId, _token!);
       if (_soalList.isEmpty) {
         throw Exception('Tidak ada soal tersedia untuk ujian ini');
       }
 
-      // Start the timer after questions are loaded
       _startTimer();
-
       setState(() => _isLoading = false);
     } catch (e) {
       setState(() {
@@ -141,8 +128,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
       int? userId = prefs.getInt('id');
 
       if (userId == null) {
-        print('User ID tidak ditemukan');
-        return;
+        throw Exception('User ID tidak ditemukan');
       }
 
       var response = await http.post(
@@ -152,34 +138,17 @@ class _UjianN5PageState extends State<UjianN5Page> {
       );
 
       if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        print('Response: ${jsonResponse}');
-
-        // Simpan levelId ke SharedPreferences
         await prefs.setInt('levelId', level_id);
-
-        // Arahkan ke halaman level yang sesuai
-        switch (level_id) {
-          case 1:
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/pemula', (route) => false);
-            break;
-          case 2:
-            Navigator.pushNamedAndRemoveUntil(context, '/n5', (route) => false);
-            break;
-          case 3:
-            Navigator.pushNamedAndRemoveUntil(context, '/n4', (route) => false);
-            break;
-          default:
-            print("level_page2");
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/level', (route) => false);
-        }
+        Navigator.pushNamedAndRemoveUntil(
+          context, 
+          level_id == 3 ? '/n4' : '/level', 
+          (route) => false
+        );
       } else {
-        print('Failed to send level. Status Code: ${response.statusCode}');
+        throw Exception('Failed to update level: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error: $e');
+      _showErrorSnackbar('Error: ${e.toString()}');
     }
   }
 
@@ -190,26 +159,20 @@ class _UjianN5PageState extends State<UjianN5Page> {
     }
 
     try {
-      // Save temporary answer
       _jawabanUser.add({
         'soal_id': _soalList[_currentQuestionIndex]['id'],
         'jawaban_user': _selectedAnswer!,
       });
 
-      // If this is the last question or time is up
       if (_currentQuestionIndex == _soalList.length - 1 || _timeUp) {
         setState(() => _isSubmitting = true);
-
-        // Submit all answers to backend
         _hasilUjian = await _ujianService.submitUjian(
-          _ujianId!,
+          widget.ujianId,
           _jawabanUser,
           _token!,
         );
-
         setState(() => _isSubmitting = false);
       } else {
-        // Move to next question
         setState(() {
           _currentQuestionIndex++;
           _selectedAnswer = null;
@@ -217,8 +180,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
       }
     } catch (e) {
       setState(() => _isSubmitting = false);
-      _showErrorSnackbar(
-          'Error: ${e.toString().replaceAll('Exception: ', '')}');
+      _showErrorSnackbar('Error: ${e.toString().replaceAll('Exception: ', '')}');
     }
   }
 
@@ -266,19 +228,17 @@ class _UjianN5PageState extends State<UjianN5Page> {
 
   Widget _buildQuestion() {
     final currentQuestion = _soalList[_currentQuestionIndex];
-    final pilihanJawaban =
-        currentQuestion['pilihan_jawaban'] as Map<String, dynamic>? ?? {};
+    final pilihanJawaban = currentQuestion['pilihan_jawaban'] as Map<String, dynamic>? ?? {};
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Timer display
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: _duration.inSeconds <= 30 ? bgColor1 : bgColor2,
+              color: _duration.inSeconds <= 30 ? Colors.red[200] : bgColor2,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -291,8 +251,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color:
-                        _duration.inSeconds <= 30 ? Colors.red : Colors.black,
+                    color: _duration.inSeconds <= 30 ? Colors.red : Colors.black,
                   ),
                 ),
               ],
@@ -301,7 +260,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
           const SizedBox(height: 10),
           LinearProgressIndicator(
             value: (_currentQuestionIndex + 1) / _soalList.length,
-            backgroundColor: bgColor1,
+            backgroundColor: Colors.grey[300],
             valueColor: AlwaysStoppedAnimation<Color>(bgColor1),
           ),
           const SizedBox(height: 20),
@@ -349,12 +308,12 @@ class _UjianN5PageState extends State<UjianN5Page> {
               minimumSize: const Size(double.infinity, 50),
             ),
             child: _isSubmitting
-                ? CircularProgressIndicator(color: bgColor2)
+                ? const CircularProgressIndicator(color: Colors.white)
                 : Text(
                     _currentQuestionIndex == _soalList.length - 1
                         ? 'Selesai'
                         : 'Lanjut',
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
           ),
         ],
@@ -371,8 +330,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.assignment_turned_in,
-                color: Colors.green, size: 60),
+            const Icon(Icons.assignment_turned_in, color: Colors.green, size: 60),
             const SizedBox(height: 20),
             Text(
               _timeUp ? 'Waktu Habis!' : 'Ujian Selesai!',
@@ -397,32 +355,18 @@ class _UjianN5PageState extends State<UjianN5Page> {
               ),
             ],
             const SizedBox(height: 30),
-
-            // ✅ Tampilkan tombol jika skor 100
             if (score == 100)
               _buildLevelButton(
-                "N5 (Mengetahui huruf dasar bahasa Jepang)",
+                "Lanjut ke Level N4",
                 const Color.fromRGBO(100, 181, 246, 1),
-                () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  int? userId = prefs.getInt('id');
-
-                  if (userId != null) {
-                    await sendLevelToDatabase(3);
-                  } else {
-                    print('User ID tidak ditemukan');
-                  }
-                },
+                () => sendLevelToDatabase(3),
               ),
-
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: bgColor2,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
               ),
               child: const Text('Kembali ke Materi'),
             ),
@@ -432,13 +376,30 @@ class _UjianN5PageState extends State<UjianN5Page> {
     );
   }
 
+  Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Latihan Soal N5'),
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor1,
       ),
       body: _isLoading
           ? _buildLoading()
@@ -449,22 +410,4 @@ class _UjianN5PageState extends State<UjianN5Page> {
                   : _buildQuestion(),
     );
   }
-}
-
-Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
-  return ElevatedButton(
-    onPressed: onPressed,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: color,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-    ),
-    child: Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      textAlign: TextAlign.center,
-    ),
-  );
 }
