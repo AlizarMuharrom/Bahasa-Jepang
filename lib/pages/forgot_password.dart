@@ -106,14 +106,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: primaryColor,
+                  backgroundColor: bgColor2,
                 ),
                 onPressed: _isLoading ? null : _sendEmail,
                 child: _isLoading
-                    ? CircularProgressIndicator(color: Colors.white)
-                    : const Text(
+                    ? CircularProgressIndicator(color: bgColor2)
+                    : Text(
                         'Kirim Token',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
               ),
             ),

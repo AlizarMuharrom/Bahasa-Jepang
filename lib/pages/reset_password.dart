@@ -155,14 +155,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: primaryColor,
+                  backgroundColor: bgColor2,
                 ),
                 onPressed: _isLoading ? null : _resetPassword,
                 child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
+                    ? CircularProgressIndicator(color: bgColor2)
                     : const Text(
                         'Simpan Password Baru',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
               ),
             ),

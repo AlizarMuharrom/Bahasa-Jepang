@@ -88,7 +88,7 @@ class _TokenVerificationPageState extends State<TokenVerificationPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('Masukkan 4 digit kode yang dikirim ke ${widget.email}'),
+            Text('Masukkan token yang dikirim ke ${widget.email}'),
             const SizedBox(height: 20),
             TextField(
               controller: _tokenController,
@@ -106,24 +106,16 @@ class _TokenVerificationPageState extends State<TokenVerificationPage> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: primaryColor,
+                  backgroundColor: bgColor2,
                 ),
                 onPressed: _isLoading ? null : _verifyToken,
                 child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
+                    ? CircularProgressIndicator(color: bgColor2)
+                    : Text(
                         'Verifikasi',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
               ),
-            ),
-            TextButton(
-              onPressed: _isLoading
-                  ? null
-                  : () {
-                      // Logika kirim ulang token
-                    },
-              child: const Text('Kirim ulang token'),
             ),
           ],
         ),

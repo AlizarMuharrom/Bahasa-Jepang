@@ -191,6 +191,7 @@ class _SignUpPage extends State<SignUpPage> {
                     SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         style: primaryTextStyle.copyWith(
                           fontSize: 14,
