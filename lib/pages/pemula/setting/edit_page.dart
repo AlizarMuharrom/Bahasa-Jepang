@@ -101,7 +101,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       backgroundColor: bgColor1,
       appBar: AppBar(
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor3,
         title: const Text(
           "Edit Profile",
           style: TextStyle(fontSize: 18),
@@ -185,7 +185,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _updateProfile,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
+                    backgroundColor: bgColor2,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -193,20 +193,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     elevation: 3,
                   ),
                   child: _isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: Colors.white,
+                            color: bgColor1,
                           ),
                         )
-                      : const Text(
+                      : Text(
                           "Save Changes",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: bgColor1,
                           ),
                         ),
                 ),

@@ -32,7 +32,7 @@ class _DetailTandoku4PageState extends State<DetailTandoku4Page> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detail"),
-        backgroundColor: Colors.blue.shade300,
+        backgroundColor: bgColor3,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -40,7 +40,7 @@ class _DetailTandoku4PageState extends State<DetailTandoku4Page> {
           },
         ),
       ),
-      backgroundColor: Colors.blue.shade100,
+      backgroundColor: bgColor3,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(

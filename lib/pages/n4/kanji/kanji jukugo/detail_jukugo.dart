@@ -49,7 +49,7 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
           "Detail",
           style: TextStyle(fontSize: 18),
         ),
-        backgroundColor: Colors.blue.shade300,
+        backgroundColor: bgColor3,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

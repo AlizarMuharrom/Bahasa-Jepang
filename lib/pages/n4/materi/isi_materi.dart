@@ -57,28 +57,65 @@ class _IsiMateriN4PageState extends State<IsiMateriN4Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1,
+      backgroundColor: bgColor1.withOpacity(0.95),
       appBar: AppBar(
         title: Text(
           'Materi JLPT ${widget.level}',
-          style: TextStyle(
-            color: primaryTextColor,
+          style: const TextStyle(
+            color: Colors.black,
             fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: bgColor2,
-        iconTheme: IconThemeData(color: primaryTextColor),
+        backgroundColor: bgColor3,
+        elevation: 4,
+        shadowColor: bgColor2.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Column(
         children: [
-          // Progress indicator
-          LinearProgressIndicator(
-            value: (currentIndex + 1) / widget.items.length,
-            backgroundColor: Colors.grey.shade300,
-            valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-            minHeight: 4,
+          // Progress indicator with percentage
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            color: bgColor1.withOpacity(0.2),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Progress: ${((currentIndex + 1) / widget.items.length * 100).toStringAsFixed(0)}%',
+                      style: TextStyle(
+                        color: Colors.blue.shade400,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      '${currentIndex + 1}/${widget.items.length}',
+                      style: TextStyle(
+                        color: Colors.blue.shade400,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                LinearProgressIndicator(
+                  value: (currentIndex + 1) / widget.items.length,
+                  backgroundColor: Colors.grey.shade300,
+                  valueColor: AlwaysStoppedAnimation<Color>(bgColor2),
+                  minHeight: 6,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ],
+            ),
           ),
-          
+
           // Page content
           Expanded(
             child: PageView.builder(
@@ -97,62 +134,108 @@ class _IsiMateriN4PageState extends State<IsiMateriN4Page> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Judul materi
-                      Text(
-                        item['judul'] ?? 'Judul Materi',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: primaryTextColor,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      
-                      // Konten materi
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: bgColor2,
-                          borderRadius: BorderRadius.circular(12),
+                          color: bgColor2.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          item['judul'] ?? 'Judul Materi',
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Konten materi
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: Text(
                           item['isi'] ?? 'Tidak ada konten',
                           style: TextStyle(
                             fontSize: 16,
                             height: 1.6,
-                            color: secondaryTextColor,
+                            color: Colors.grey[800],
                           ),
                         ),
                       ),
-                      
+
                       // Contoh penggunaan untuk materi bahasa Jepang
                       if (item['contoh'] != null) ...[
                         const SizedBox(height: 20),
-                        Text(
-                          'Contoh:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: primaryTextColor,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.blue.shade50,
-                            borderRadius: BorderRadius.circular(12),
+                            color: bgColor2.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: Colors.blue.shade100,
-                              width: 1,
+                              color: bgColor2.withOpacity(0.3),
+                              width: 1.5,
                             ),
                           ),
-                          child: Text(
-                            item['contoh'],
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.blue.shade800,
-                              fontStyle: FontStyle.italic,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.lightbulb_outline,
+                                    color: bgColor2,
+                                    size: 24,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Contoh Penggunaan',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: bgColor2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: bgColor2.withOpacity(0.05),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: bgColor2.withOpacity(0.2),
+                                  ),
+                                ),
+                                child: Text(
+                                  item['contoh'],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[800],
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -162,17 +245,22 @@ class _IsiMateriN4PageState extends State<IsiMateriN4Page> {
               },
             ),
           ),
-          
+
           // Navigation buttons
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             decoration: BoxDecoration(
-              color: bgColor2,
-              border: Border(
-                top: BorderSide(
-                  color: Colors.grey.withOpacity(0.2),
-                  width: 1,
+              color: bgColor3,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
                 ),
+              ],
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
             child: Row(
@@ -182,61 +270,59 @@ class _IsiMateriN4PageState extends State<IsiMateriN4Page> {
                 ElevatedButton(
                   onPressed: currentIndex > 0 ? _goToPrevious : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: currentIndex > 0 
-                        ? primaryColor 
-                        : Colors.grey.shade400,
+                    backgroundColor:
+                        currentIndex > 0 ? bgColor1 : Colors.grey.shade400,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20, 
-                      vertical: 12
-                    ),
+                        horizontal: 20, vertical: 14),
+                    elevation: 2,
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_back, size: 18),
+                      Icon(
+                        Icons.arrow_back,
+                        size: 18,
+                        color: bgColor2,
+                      ),
                       SizedBox(width: 8),
                       Text('Sebelumnya'),
                     ],
                   ),
                 ),
-                
-                // Page indicator
-                Text(
-                  '${currentIndex + 1}/${widget.items.length}',
-                  style: TextStyle(
-                    color: secondaryTextColor,
-                    fontSize: 14,
-                  ),
-                ),
-                
+
                 // Next button
                 ElevatedButton(
                   onPressed: () => _goToNext(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
+                    backgroundColor: bgColor1,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20, 
-                      vertical: 12
-                    ),
+                        horizontal: 24, vertical: 14),
+                    elevation: 2,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        currentIndex < widget.items.length - 1 
-                            ? 'Selanjutnya' 
+                        currentIndex < widget.items.length - 1
+                            ? 'Selanjutnya'
                             : 'Selesai',
                       ),
-                      if (currentIndex < widget.items.length - 1) 
+                      if (currentIndex < widget.items.length - 1)
                         const SizedBox(width: 8),
                       if (currentIndex < widget.items.length - 1)
-                        const Icon(Icons.arrow_forward, size: 18),
+                        Icon(
+                          Icons.arrow_forward,
+                          size: 18,
+                          color: bgColor2,
+                        ),
                     ],
                   ),
                 ),

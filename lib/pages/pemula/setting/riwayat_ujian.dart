@@ -41,7 +41,7 @@ class _RiwayatUjianPageState extends State<RiwayatUjianPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor3,
         title: Text(
           "Riwayat Latihan",
           style: GoogleFonts.poppins(

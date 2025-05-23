@@ -70,7 +70,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Forgot Password'),
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor3,
       ),
       backgroundColor: bgColor1,
       body: Padding(

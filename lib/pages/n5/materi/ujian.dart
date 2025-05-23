@@ -9,7 +9,7 @@ import 'package:bahasajepang/theme.dart';
 
 class UjianN5Page extends StatefulWidget {
   final int ujianId;
-  
+
   const UjianN5Page({Key? key, required this.ujianId}) : super(key: key);
 
   @override
@@ -35,7 +35,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
   @override
   void initState() {
     super.initState();
-    _duration = const Duration(minutes: 1); // Waktu lebih singkat untuk level N5
+    _duration = const Duration(minutes: 2);
     _loadInitialData();
   }
 
@@ -73,7 +73,8 @@ class _UjianN5PageState extends State<UjianN5Page> {
       setState(() => _isSubmitting = false);
     } catch (e) {
       setState(() => _isSubmitting = false);
-      _showErrorSnackbar('Error: ${e.toString().replaceAll('Exception: ', '')}');
+      _showErrorSnackbar(
+          'Error: ${e.toString().replaceAll('Exception: ', '')}');
     }
   }
 
@@ -140,10 +141,7 @@ class _UjianN5PageState extends State<UjianN5Page> {
       if (response.statusCode == 200) {
         await prefs.setInt('levelId', level_id);
         Navigator.pushNamedAndRemoveUntil(
-          context, 
-          level_id == 3 ? '/n4' : '/level', 
-          (route) => false
-        );
+            context, level_id == 3 ? '/n4' : '/level', (route) => false);
       } else {
         throw Exception('Failed to update level: ${response.statusCode}');
       }
@@ -180,7 +178,8 @@ class _UjianN5PageState extends State<UjianN5Page> {
       }
     } catch (e) {
       setState(() => _isSubmitting = false);
-      _showErrorSnackbar('Error: ${e.toString().replaceAll('Exception: ', '')}');
+      _showErrorSnackbar(
+          'Error: ${e.toString().replaceAll('Exception: ', '')}');
     }
   }
 
@@ -192,13 +191,22 @@ class _UjianN5PageState extends State<UjianN5Page> {
   }
 
   Widget _buildLoading() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 20),
-          Text('Memuat soal...'),
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade400),
+            strokeWidth: 3,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Memuat soal...',
+            style: TextStyle(
+              color: Colors.blue.shade400,
+              fontSize: 16,
+            ),
+          ),
         ],
       ),
     );
@@ -209,17 +217,41 @@ class _UjianN5PageState extends State<UjianN5Page> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error, color: Colors.red, size: 50),
-          const SizedBox(height: 20),
-          Text(
-            _errorMessage ?? 'Terjadi kesalahan',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16),
+          Icon(
+            Icons.error_outline,
+            color: Colors.red[400],
+            size: 50,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              _errorMessage ?? 'Terjadi kesalahan',
+              style: TextStyle(
+                color: Colors.red[400],
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: _loadInitialData,
-            child: const Text('Coba Lagi'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: bgColor2,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
+            ),
+            child: const Text(
+              'Coba Lagi',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ],
       ),
@@ -228,92 +260,203 @@ class _UjianN5PageState extends State<UjianN5Page> {
 
   Widget _buildQuestion() {
     final currentQuestion = _soalList[_currentQuestionIndex];
-    final pilihanJawaban = currentQuestion['pilihan_jawaban'] as Map<String, dynamic>? ?? {};
+    final pilihanJawaban =
+        currentQuestion['pilihan_jawaban'] as Map<String, dynamic>? ?? {};
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Timer and progress
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: _duration.inSeconds <= 30 ? Colors.red[200] : bgColor2,
-              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
               children: [
-                const Icon(Icons.timer, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  _formatDuration(_duration),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: _duration.inSeconds <= 30 ? Colors.red : Colors.black,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.timer,
+                          size: 20,
+                          color:
+                              _duration.inSeconds <= 30 ? Colors.red : bgColor2,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _formatDuration(_duration),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: _duration.inSeconds <= 30
+                                ? Colors.red
+                                : bgColor2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      'Soal ${_currentQuestionIndex + 1}/${_soalList.length}',
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                LinearProgressIndicator(
+                  value: (_currentQuestionIndex + 1) / _soalList.length,
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation<Color>(bgColor2),
+                  minHeight: 6,
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 10),
-          LinearProgressIndicator(
-            value: (_currentQuestionIndex + 1) / _soalList.length,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(bgColor1),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Soal ${_currentQuestionIndex + 1}/${_soalList.length}',
-            style: const TextStyle(fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
+
+          // Question card
           Card(
-            elevation: 3,
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0),
               child: Text(
                 currentQuestion['soal'] ?? 'Pertanyaan tidak tersedia',
-                style: const TextStyle(fontSize: 18),
+                style: const TextStyle(
+                  fontSize: 18,
+                  height: 1.5,
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
+
+          // Answer options
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: pilihanJawaban.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final optionKey = pilihanJawaban.keys.elementAt(index);
                 final optionText = pilihanJawaban[optionKey];
 
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  color: _selectedAnswer == optionKey ? bgColor1 : null,
-                  child: ListTile(
-                    title: Text(optionText ?? 'Opsi tidak tersedia'),
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
                     onTap: () => _handleAnswerSelection(optionKey),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: _selectedAnswer == optionKey
+                            ? bgColor2.withOpacity(0.2)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _selectedAnswer == optionKey
+                              ? bgColor2
+                              : Colors.grey.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _selectedAnswer == optionKey
+                                  ? bgColor2
+                                  : Colors.grey.withOpacity(0.2),
+                              border: Border.all(
+                                color: _selectedAnswer == optionKey
+                                    ? bgColor2
+                                    : Colors.grey.withOpacity(0.5),
+                              ),
+                            ),
+                            child: _selectedAnswer == optionKey
+                                ? const Icon(
+                                    Icons.check,
+                                    size: 16,
+                                    color: Colors.white,
+                                  )
+                                : null,
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              optionText ?? 'Opsi tidak tersedia',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
+
+          // Submit button
           ElevatedButton(
             onPressed: _isSubmitting ? null : _submitAnswer,
             style: ElevatedButton.styleFrom(
-              backgroundColor: bgColor1,
+              backgroundColor: bgColor3,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
-              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
             ),
             child: _isSubmitting
-                ? const CircularProgressIndicator(color: Colors.white)
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Colors.white,
+                    ),
+                  )
                 : Text(
                     _currentQuestionIndex == _soalList.length - 1
-                        ? 'Selesai'
-                        : 'Lanjut',
-                    style: const TextStyle(fontSize: 18, color: Colors.white),
+                        ? 'Selesai Ujian'
+                        : 'Lanjut ke Soal Berikutnya',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
           ),
         ],
@@ -323,52 +466,155 @@ class _UjianN5PageState extends State<UjianN5Page> {
 
   Widget _buildResult() {
     final score = _hasilUjian?['score'] ?? 0;
+    final isPerfectScore = score == 100;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.assignment_turned_in, color: Colors.green, size: 60),
-            const SizedBox(height: 20),
-            Text(
-              _timeUp ? 'Waktu Habis!' : 'Ujian Selesai!',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 30),
-            Text(
-              'Skor Anda: $score',
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              'Jawaban benar: ${_hasilUjian?['jumlah_benar'] ?? '0'} dari ${_soalList.length} soal',
-              style: const TextStyle(fontSize: 18),
-            ),
-            if (_timeUp) ...[
-              const SizedBox(height: 15),
-              const Text(
-                'Waktu ujian telah habis, jawaban otomatis dikirim',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-                textAlign: TextAlign.center,
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            bgColor1.withOpacity(0.1),
+            bgColor1.withOpacity(0.3),
+          ],
+        ),
+      ),
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      isPerfectScore
+                          ? Icons.star
+                          : _timeUp
+                              ? Icons.timer_off
+                              : Icons.assignment_turned_in,
+                      color: isPerfectScore
+                          ? Colors.amber
+                          : _timeUp
+                              ? Colors.orange
+                              : Colors.green,
+                      size: 60,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      isPerfectScore
+                          ? 'Sempurna!'
+                          : _timeUp
+                              ? 'Waktu Habis!'
+                              : 'Ujian Selesai!',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Text(
+                      'Skor Anda',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Text(
+                      '$score',
+                      style: TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        color: bgColor2,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '${_hasilUjian?['jumlah_benar'] ?? '0'} dari ${_soalList.length} soal benar',
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    if (_timeUp) ...[
+                      const SizedBox(height: 20),
+                      Text(
+                        'Waktu ujian telah habis, jawaban otomatis dikirim',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[500],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                    const SizedBox(height: 30),
+                    if (isPerfectScore)
+                      _buildLevelButton(
+                        "Lanjut ke Level N4",
+                        Colors.blueAccent,
+                        () => sendLevelToDatabase(3),
+                      ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: bgColor2,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text('Kembali ke Materi'),
+                    ),
+                  ],
+                ),
               ),
             ],
-            const SizedBox(height: 30),
-            if (score == 100)
-              _buildLevelButton(
-                "Lanjut ke Level N4",
-                const Color.fromRGBO(100, 181, 246, 1),
-                () => sendLevelToDatabase(3),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 2,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.arrow_forward),
+            const SizedBox(width: 8),
+            Text(
+              text,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: bgColor2,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-              ),
-              child: const Text('Kembali ke Materi'),
             ),
           ],
         ),
@@ -376,30 +622,27 @@ class _UjianN5PageState extends State<UjianN5Page> {
     );
   }
 
-  Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: bgColor1.withOpacity(0.95),
       appBar: AppBar(
-        title: const Text('Latihan Soal N5'),
-        backgroundColor: bgColor1,
+        title: const Text(
+          'Latihan Soal N5',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: bgColor3,
+        elevation: 4,
+        shadowColor: bgColor2.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: _isLoading
           ? _buildLoading()

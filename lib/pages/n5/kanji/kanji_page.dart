@@ -12,6 +12,25 @@ class _KanjiPageState extends State<KanjiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Kanji N5',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: bgColor3,
+        elevation: 4,
+        shadowColor: bgColor2.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
+      ),
       backgroundColor: bgColor1,
       body: Center(
         child: Column(
@@ -50,7 +69,7 @@ class _KanjiPageState extends State<KanjiPage> {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(color: primaryTextColor, fontSize: 16),
+          style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
     );

@@ -53,7 +53,7 @@ class _IsiMateriPageState extends State<IsiMateriPage> {
           currentItem['judul'] ?? 'Detail Materi',
           style: TextStyle(color: primaryTextColor),
         ),
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor3,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),

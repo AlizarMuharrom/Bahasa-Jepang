@@ -1,6 +1,6 @@
 import 'package:bahasajepang/pages/n4/materi/detail_materi.dart';
-import 'package:bahasajepang/pages/n4/materi/ujian.dart';
 import 'package:bahasajepang/pages/n5/materi/materi_service.dart';
+import 'package:bahasajepang/pages/n4/materi/ujian.dart';
 import 'package:bahasajepang/service/ujian_service.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +27,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
 
   void _loadInitialData() {
     _materiFuture = _loadMateriData();
-    _materiFuture.catchError((error) {
-      // Error sudah ditangani di _loadMateriData
-    });
+    _materiFuture.catchError((error) {});
   }
 
   Future<List<dynamic>> _loadMateriData() async {
@@ -55,12 +53,15 @@ class _MateriN4PageState extends State<MateriN4Page> {
         _errorMessage = errorMessage;
       });
 
-      // Tampilkan snackbar error
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.red[400],
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         );
       }
@@ -72,14 +73,38 @@ class _MateriN4PageState extends State<MateriN4Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1,
+      backgroundColor: bgColor1.withOpacity(0.95),
+      appBar: AppBar(
+        title: const Text(
+          'Materi N4',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: bgColor3,
+        elevation: 4,
+        shadowColor: bgColor2.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
+      ),
       body: _buildBody(),
     );
   }
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(bgColor2),
+          strokeWidth: 3,
+        ),
+      );
     }
 
     if (_errorMessage.isNotEmpty) {
@@ -87,15 +112,42 @@ class _MateriN4PageState extends State<MateriN4Page> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              _errorMessage,
-              style: const TextStyle(color: Colors.red),
-              textAlign: TextAlign.center,
+            Icon(
+              Icons.error_outline,
+              color: Colors.red[400],
+              size: 50,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                _errorMessage,
+                style: TextStyle(
+                  color: Colors.red[400],
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 24),
             ElevatedButton(
               onPressed: _loadMateriData,
-              child: const Text('Coba Lagi'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: bgColor2,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 2,
+              ),
+              child: const Text(
+                'Coba Lagi',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ],
         ),
@@ -103,20 +155,31 @@ class _MateriN4PageState extends State<MateriN4Page> {
     }
 
     if (_materiList.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Tidak ada materi tersedia',
-            style: TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 20),
-          _buildLatihanSoalCard(), // Tetap tampilkan latihan soal meski materi kosong
-        ],
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.library_books_outlined,
+              color: bgColor2.withOpacity(0.7),
+              size: 60,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Tidak ada materi tersedia',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
       );
     }
 
     return RefreshIndicator(
+      color: bgColor2,
+      backgroundColor: bgColor1,
       onRefresh: _loadMateriData,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -126,14 +189,14 @@ class _MateriN4PageState extends State<MateriN4Page> {
               child: ListView.separated(
                 itemCount: _materiList.length,
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                 itemBuilder: (context, index) {
                   final materi = _materiList[index];
                   return _buildMateriCard(materi);
                 },
               ),
             ),
-            _buildLatihanSoalCard(), // Widget latihan soal di bawah list materi
+            _buildLatihanSoalCard(),
           ],
         ),
       ),
@@ -141,25 +204,51 @@ class _MateriN4PageState extends State<MateriN4Page> {
   }
 
   Widget _buildMateriCard(Map<String, dynamic> materi) {
-    return Card(
-      margin: const EdgeInsets.all(4.0),
-      color: bgColor2,
-      child: ListTile(
-        title: Text(
-          materi['judul'] ?? 'Judul tidak tersedia',
-          style: TextStyle(
-            color: primaryTextColor,
-            fontWeight: FontWeight.bold,
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailMateriN4Page(materiId: materi['id']),
+          ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        color: bgColor2.withOpacity(0.9),
+        shadowColor: bgColor2.withOpacity(0.3),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Icon(
+                Icons.article_outlined,
+                color: Colors.white.withOpacity(0.9),
+                size: 28,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  materi['judul'] ?? 'Judul tidak tersedia',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.white.withOpacity(0.7),
+              ),
+            ],
           ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailMateriN4Page(materiId: materi['id']),
-            ),
-          );
-        },
       ),
     );
   }
@@ -168,18 +257,33 @@ class _MateriN4PageState extends State<MateriN4Page> {
     final UjianService ujianService = UjianService();
 
     return FutureBuilder<List<dynamic>>(
-      future: ujianService.getUjianByLevel(3),
+      future: ujianService.getUjianByLevel(3), // Level pemula
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(bgColor2),
+            ),
+          );
         }
 
         if (snapshot.hasError) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Error: ${snapshot.error}',
-              style: TextStyle(color: Colors.red),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  color: Colors.red[400],
+                  size: 40,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Error: ${snapshot.error}',
+                  style: TextStyle(color: Colors.red[400]),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           );
         }
@@ -187,34 +291,44 @@ class _MateriN4PageState extends State<MateriN4Page> {
         final ujianList = snapshot.data ?? [];
 
         if (ujianList.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('Tidak ada ujian tersedia'),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.quiz_outlined,
+                  color: bgColor2.withOpacity(0.7),
+                  size: 40,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Tidak ada ujian tersedia',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
           );
         }
 
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: ujianList.length,
-          itemBuilder: (context, index) {
-            final ujian = ujianList[index];
-            return Card(
-              margin: const EdgeInsets.all(8.0),
-              color: bgColor2,
-              child: ListTile(
-                leading: Icon(Icons.quiz, color: bgColor1),
-                title: Text(
-                  ujian['judul'] ?? 'Latihan Soal',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8, top: 16, bottom: 8),
+              child: Text(
+                'Latihan Soal',
+                style: TextStyle(
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
-                subtitle: Text(
-                  ujian['deskripsi'] ?? 'Jumlah soal: ${ujian['jumlah_soal']}',
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
+              ),
+            ),
+            ...ujianList.map((ujian) {
+              return InkWell(
+                borderRadius: BorderRadius.circular(12),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -223,9 +337,64 @@ class _MateriN4PageState extends State<MateriN4Page> {
                     ),
                   );
                 },
-              ),
-            );
-          },
+                child: Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  color: bgColor2.withOpacity(0.9),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: bgColor1.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.quiz_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ujian['judul'] ?? 'Latihan Soal',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                ujian['deskripsi'] ??
+                                    'Jumlah soal: ${ujian['jumlah_soal']}',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: Colors.white.withOpacity(0.7),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ],
         );
       },
     );

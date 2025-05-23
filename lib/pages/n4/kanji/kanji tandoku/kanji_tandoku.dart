@@ -1,4 +1,5 @@
 import 'package:bahasajepang/pages/n5/kanji/kanji_service.dart';
+import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
 
 class KanjiTandoku4Page extends StatefulWidget {
@@ -63,7 +64,7 @@ class _KanjiTandoku4PageState extends State<KanjiTandoku4Page> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: Colors.blue.shade300,
+        backgroundColor: bgColor3,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

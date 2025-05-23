@@ -32,7 +32,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detail"),
-        backgroundColor: Colors.blue.shade300,
+        backgroundColor: bgColor3,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

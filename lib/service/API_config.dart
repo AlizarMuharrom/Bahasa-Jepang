@@ -1,4 +1,4 @@
 class ApiConfig {
-  static const String url = "https://69bf-112-78-133-192.ngrok-free.app";
+  static const String url = "https://ta.myhost.id/E31222888/public";
   static const baseUrl = url + "/api";
 }

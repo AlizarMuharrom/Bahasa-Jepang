@@ -81,7 +81,7 @@ class _TokenVerificationPageState extends State<TokenVerificationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verifikasi Token'),
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor3,
       ),
       backgroundColor: bgColor1,
       body: Padding(

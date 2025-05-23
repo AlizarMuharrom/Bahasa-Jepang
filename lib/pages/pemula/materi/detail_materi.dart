@@ -46,12 +46,23 @@ class _DetailMateriPageState extends State<DetailMateriPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor1,
-      appBar: AppBar(
-        title: Text(
-          _isLoading ? 'Loading...' : _materiData['judul'],
-          style: TextStyle(color: primaryTextColor),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+          child: AppBar(
+            title: Text(
+              _isLoading ? 'Loading...' : _materiData['judul'],
+              style: TextStyle(
+                  color: primaryTextColor, fontWeight: bold, fontSize: 18),
+            ),
+            backgroundColor: bgColor3,
+            elevation: 0,
+          ),
         ),
-        backgroundColor: bgColor2,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -92,8 +103,8 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                                     _materiData['judul'],
                                     style: TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.normal,
-                                      color: primaryTextColor,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -201,6 +212,117 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                       ],
                     ),
                   ),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: bgColor2.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline_rounded,
+                              color: Colors.white.withOpacity(0.9),
+                              size: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Tentang Materi Pemula',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Materi Pemula adalah level paling dasar dalam kemampuan bahasa Jepang. '
+                          'Materi yang cocok ketika belum pernah belajar bahasa Jepang sama sekali',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white.withOpacity(0.9),
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (_materiData['detail_materis'] != null &&
+                      _materiData['detail_materis'].isNotEmpty)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: bgColor2.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Mulai Belajar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            height: 48,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => IsiMateriPage(
+                                      items: _materiData['detail_materis'],
+                                      initialIndex: 0,
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: bgColor2,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 2,
+                              ),
+                              child: const Text(
+                                'Mulai dari Sub Materi Pertama',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
