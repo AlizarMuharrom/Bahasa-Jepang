@@ -41,25 +41,37 @@ class _RiwayatUjianPageState extends State<RiwayatUjianPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: bgColor3,
-        title: Text(
-          "Riwayat Latihan",
-          style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w600,
+        title: const Text(
+          'Riwayat Ujian',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
           ),
         ),
+        backgroundColor: bgColor3,
+        elevation: 4,
+        shadowColor: bgColor3.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       backgroundColor: bgColor1,
       body: _hasilUjian == null
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(color: bgColor2))
           : FutureBuilder<List<HasilUjianModel>>(
               future: _hasilUjian,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(color: bgColor2));
                 } else if (snapshot.hasError) {
                   return Center(
-                      child: Text('Terjadi kesalahan: ${snapshot.error}'));
+                    child: Text('Terjadi kesalahan: ${snapshot.error}'),
+                  );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(child: Text('Belum ada riwayat ujian.'));
                 }
@@ -71,69 +83,96 @@ class _RiwayatUjianPageState extends State<RiwayatUjianPage> {
                   itemBuilder: (context, index) {
                     final hasil = data[index];
                     return Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
                         color: bgColor2,
-                        elevation: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: primaryColor.withOpacity(0.2),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.description,
-                                ),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      hasil.judulUjian,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Benar: ${hasil.jumlahBenar} | Skor: ${hasil.score.toStringAsFixed(2)}',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              padding: const EdgeInsets.all(12),
+                              child: const Icon(
+                                Icons.description,
+                                color: Colors.white,
+                                size: 32,
                               ),
-                              const SizedBox(width: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(
-                                    Icons.calendar_today,
-                                    size: 16,
-                                  ),
-                                  const SizedBox(height: 4),
                                   Text(
-                                    hasil.createdAt.split('T').first,
+                                    hasil.judulUjian,
                                     style: GoogleFonts.poppins(
-                                      fontSize: 12,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    '✅ Benar: ${hasil.jumlahBenar} | 📊 Skor: ${hasil.score.toStringAsFixed(2)}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(Icons.calendar_today,
+                                        size: 14, color: Colors.white),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      hasil.createdAt.split('T').first,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 6),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    'Selesai',
+                                    style: GoogleFonts.poppins(
+                                      color: bgColor2,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     );

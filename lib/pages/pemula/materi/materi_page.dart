@@ -116,7 +116,7 @@ class _MateriPageState extends State<MateriPage> {
           ),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: _buildBody(),
     );

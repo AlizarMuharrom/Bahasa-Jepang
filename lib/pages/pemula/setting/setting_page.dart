@@ -1,5 +1,6 @@
 import 'package:bahasajepang/pages/pemula/setting/edit_page.dart';
 import 'package:bahasajepang/pages/pemula/setting/riwayat_ujian.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
@@ -280,8 +281,8 @@ class _SettingPageState extends State<SettingPage> {
                 child: Text(
                   "Pada tahapan tes atau latihan, terdapat batasan nilai supaya bisa lanjut ke level berikutnya, yaitu minimal 100% jawaban benar.\n\nPada halaman kanji, terdapat voice record dan button untuk mencoba menulis kanji pada layar handphone.\n\nMateri dari aplikasi ini, semuanya berreferensi dari buku Minna no Nihongo 1 dan Minna no Nihongo 2, Untuk level N5 dan N4.\n\nMohon maaf jika terdapat banyak kekurangan, karena aplikasi ini merupakan aplikasi yang dikerjakan oleh tim kecil dan masih kurang pengalaman.",
                   style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[700],
+                    fontSize: 16,
+                    color: Colors.white,
                     height: 1.5,
                   ),
                   textAlign: TextAlign.justify,
@@ -291,31 +292,80 @@ class _SettingPageState extends State<SettingPage> {
             const SizedBox(height: 12),
 
             _buildSettingsCard(
-              title: 'Beri Rating',
-              icon: Icons.star_border,
-              onTap: () {
-                // Implementasi fungsi rating
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Fitur rating akan segera tersedia'),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 12),
-
-            _buildSettingsCard(
-              title: 'Bantuan & Dukungan',
-              icon: Icons.help_outline,
-              onTap: () {
-                // Implementasi fungsi bantuan
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Fitur bantuan akan segera tersedia'),
-                  ),
-                );
-              },
-            ),
+                title: 'Beri Rating',
+                icon: Icons.star_border,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text(
+                        'Beri Rating',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Silakan buka link berikut untuk memberikan rating:',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(height: 10),
+                          SelectableText(
+                            'https://docs.google.com/forms/d/e/1FAIpQLSfK7usm8_n-0ybKn8EjynIaNf53_NnKZP4FXIF5o9gF8GkjYw/viewform?usp=dialog',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            'Tutup',
+                            style: TextStyle(color: bgColor2),
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Clipboard.setData(const ClipboardData(
+                              text:
+                                  'https://docs.google.com/forms/d/e/1FAIpQLSfK7usm8_n-0ybKn8EjynIaNf53_NnKZP4FXIF5o9gF8GkjYw/viewform?usp=dialog',
+                            ));
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text(
+                                  'Link berhasil disalin',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                backgroundColor: bgColor2,
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.copy,
+                              color: Colors.white), // Ubah ke putih
+                          label: const Text(
+                            'Salin Link',
+                            style:
+                                TextStyle(color: Colors.white), // Ubah ke putih
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                bgColor2, // Gunakan bgColor2 sebagai background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                    ),
+                  );
+                }),
           ],
         ),
       ),
@@ -364,6 +414,8 @@ class _SettingPageState extends State<SettingPage> {
               initiallyExpanded: expanded,
               onExpansionChanged: onExpansionChanged,
               children: [child!],
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(16),
@@ -375,15 +427,17 @@ class _SettingPageState extends State<SettingPage> {
               onTap: onTap,
               leading: Icon(
                 icon,
-                color: bgColor2,
+                color: Colors.white,
               ),
               title: Text(
                 title,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
+                    fontWeight: FontWeight.w500, color: Colors.white),
               ),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: const Icon(
+                Icons.chevron_right,
+                color: Colors.white,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

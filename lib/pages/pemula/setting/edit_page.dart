@@ -101,118 +101,196 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       backgroundColor: bgColor1,
       appBar: AppBar(
-        backgroundColor: bgColor3,
         title: const Text(
-          "Edit Profile",
-          style: TextStyle(fontSize: 18),
+          'Edit Profile',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
-        centerTitle: true,
+        backgroundColor: bgColor3,
+        elevation: 4,
+        shadowColor: bgColor3.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Username",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  hintText: "Enter your username",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              decoration: BoxDecoration(
+                color: bgColor2,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: bgColor2.withOpacity(0.6),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
                   ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Username cannot be empty";
-                  }
-                  if (value.length < 3) {
-                    return "Username must be at least 3 characters";
-                  }
-                  return null;
-                },
+                ],
               ),
-              const SizedBox(height: 20),
-              const Text(
-                "Password",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: !_isPasswordVisible,
-                decoration: InputDecoration(
-                  hintText: "Enter new password (leave empty to keep current)",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.grey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "Ubah Informasi Profil",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    onPressed: () {
-                      setState(() => _isPasswordVisible = !_isPasswordVisible);
-                    },
                   ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return null; // Biarkan kosong untuk password
-                  }
-                  if (value.length < 6) {
-                    return "Password minimal 6 karakter";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _updateProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: bgColor2,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                  SizedBox(height: 6),
+                  Text(
+                    "Pastikan data yang kamu masukkan benar",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
                     ),
-                    elevation: 3,
                   ),
-                  child: _isLoading
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: bgColor2,
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Form dalam Card agar lebih rapi
+            Card(
+              color: bgColor2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      // Username Field tanpa labelText, border warna bgColor1
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                          hintText: "Username",
+                          prefixIcon: const Icon(Icons.person),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: bgColor1),
                           ),
-                        )
-                      : Text(
-                          "Save Changes",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: bgColor1,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: bgColor1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: bgColor1, width: 2),
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Username tidak boleh kosong";
+                          }
+                          if (value.length < 3) {
+                            return "Minimal 3 karakter";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Password Field tanpa labelText, border warna bgColor1
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: !_isPasswordVisible,
+                        decoration: InputDecoration(
+                          hintText: "Password Baru",
+                          prefixIcon: const Icon(Icons.lock),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: bgColor1),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: bgColor1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: bgColor1, width: 2),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() =>
+                                  _isPasswordVisible = !_isPasswordVisible);
+                            },
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value != null &&
+                              value.isNotEmpty &&
+                              value.length < 6) {
+                            return "Password minimal 6 karakter";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 30),
+
+                      // Save Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _updateProfile,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: bgColor1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 4,
+                          ),
+                          child: _isLoading
+                              ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: bgColor2,
+                                  ),
+                                )
+                              : Text(
+                                  "Simpan Perubahan",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: bgColor2,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

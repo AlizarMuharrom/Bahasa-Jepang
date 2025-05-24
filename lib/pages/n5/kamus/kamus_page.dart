@@ -148,7 +148,24 @@ class _Kamus5PageState extends State<Kamus5Page> {
                         )
                       : _filteredKamus.isEmpty
                           ? const Center(
-                              child: Text('Tidak ada hasil yang ditemukan'),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.search_off,
+                                    size: 64,
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(height: 12),
+                                  Text(
+                                    'Tidak ada kamus yang ditemukan',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             )
                           : ListView.builder(
                               itemCount: _filteredKamus.length,
@@ -217,7 +234,7 @@ class _Kamus5PageState extends State<Kamus5Page> {
                                 );
                               },
                             ),
-            ),
+            )
           ],
         ),
       ),

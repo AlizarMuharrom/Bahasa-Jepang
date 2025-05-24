@@ -19,6 +19,8 @@ class _SignInPage extends State<SignInPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
+  String? _errorMessage;
+
   @override
   Future<void> functionLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -27,6 +29,11 @@ class _SignInPage extends State<SignInPage> {
     });
     String email = _emailController.text;
     String password = _passwordController.text;
+
+    // Reset error message sebelum mencoba login
+    setState(() {
+      _errorMessage = null;
+    });
 
     try {
       const endpoint = "/login";
@@ -58,12 +65,10 @@ class _SignInPage extends State<SignInPage> {
             await prefs.setString('email', user.email ?? "");
             await prefs.setString('password', user.password ?? "");
             await prefs.setString('token', token ?? "");
-            await prefs.setBool('isLoggedIn', true); // Tambahkan ini
-            await prefs.setInt(
-                'level_id', user.level_id ?? 0); // Simpan level_id
+            await prefs.setBool('isLoggedIn', true);
+            await prefs.setInt('level_id', user.level_id ?? 0);
 
             if (user.level_id == null || user.level_id == 0) {
-              // print("sign_in_page");
               Navigator.pushNamedAndRemoveUntil(
                   context, '/level', (route) => false);
             } else {
@@ -81,22 +86,30 @@ class _SignInPage extends State<SignInPage> {
                       context, '/n4', (route) => false);
                   break;
                 default:
-                  // print("sign_in_page2");
                   Navigator.pushNamedAndRemoveUntil(
                       context, '/level', (route) => false);
               }
             }
           } else {
-            print("Error: Key 'user' tidak ditemukan dalam JSON response");
+            setState(() {
+              _errorMessage = "Data pengguna tidak ditemukan";
+            });
           }
         } else {
-          print("Login gagal: ${jsonResponse['message']}");
+          setState(() {
+            _errorMessage =
+                jsonResponse['message'] ?? "Email atau password salah";
+          });
         }
       } else {
-        print("Error: Status code ${response.statusCode}");
+        setState(() {
+          _errorMessage = "Email atau password salah";
+        });
       }
     } catch (e) {
-      print('Error: $e');
+      setState(() {
+        _errorMessage = "Terjadi kesalahan: ${e.toString()}";
+      });
     }
   }
 
@@ -235,25 +248,6 @@ class _SignInPage extends State<SignInPage> {
       );
     }
 
-    Widget forgotPasswordButton() {
-      return Container(
-        alignment: Alignment.centerRight,
-        margin: EdgeInsets.only(top: 10),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/forgot-password');
-          },
-          child: Text(
-            'Forgot Password?',
-            style: purpleTextStyle.copyWith(
-              fontSize: 12,
-              fontWeight: medium,
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget signInButton() {
       return Container(
         height: 50,
@@ -308,6 +302,29 @@ class _SignInPage extends State<SignInPage> {
       );
     }
 
+    Widget errorMessage() {
+      return Visibility(
+        visible: _errorMessage != null,
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(12),
+          margin: EdgeInsets.only(top: 16),
+          decoration: BoxDecoration(
+            color: bgColor2,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            _errorMessage ?? "",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: secondaryColor,
       resizeToAvoidBottomInset: false,
@@ -319,10 +336,10 @@ class _SignInPage extends State<SignInPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              errorMessage(),
               header(),
               emailInput(),
               passwordInput(),
-              forgotPasswordButton(),
               signInButton(),
               Spacer(),
               footer(),
