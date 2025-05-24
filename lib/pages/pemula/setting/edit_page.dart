@@ -198,7 +198,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           height: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: bgColor1,
+                            color: bgColor2,
                           ),
                         )
                       : Text(

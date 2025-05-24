@@ -14,12 +14,24 @@ class DetailJukugo4Page extends StatefulWidget {
 
 class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
   late Map<String, dynamic> kanjiData;
+  bool _isPlaying = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     kanjiData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    widget.audioPlayer.onPlayerStateChanged.listen((state) {
+      setState(() {
+        _isPlaying = state == PlayerState.playing;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.audioPlayer.dispose();
+    super.dispose();
   }
 
   void _showWritingModal(BuildContext context) {
@@ -31,58 +43,77 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
     );
   }
 
-  // Fungsi untuk memutar suara dari URL
-  void _playVoice(String voiceRecordPath) async {
+  Future<void> _playVoice(String? voiceRecordPath) async {
+    if (voiceRecordPath == null || voiceRecordPath.isEmpty) return;
+
     try {
       String fullUrl = ApiConfig.url + "/" + voiceRecordPath;
       await widget.audioPlayer.play(UrlSource(fullUrl));
     } catch (e) {
-      print("Error playing voice: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Audio Tidak Tersedia'),
+          backgroundColor: bgColor3,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor1.withOpacity(0.95),
       appBar: AppBar(
         title: const Text(
-          "Detail",
-          style: TextStyle(fontSize: 18),
+          'Detail Kanji Jukugo',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
         backgroundColor: bgColor3,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        elevation: 4,
+        shadowColor: bgColor3.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
         ),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      backgroundColor: Colors.blue.shade100,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            // Kanji Card
             Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.blue.shade200,
-                borderRadius: BorderRadius.circular(10),
+                color: bgColor2.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Kotak Kanji
+                  // Kanji Display
                   Container(
-                    padding: const EdgeInsets.all(5),
-                    width: 130,
+                    width: 120,
                     height: 140,
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+                      color: bgColor1,
+                      borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.6),
-                          blurRadius: 5,
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 6,
                           offset: const Offset(0, 3),
                         ),
                       ],
@@ -91,52 +122,58 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          kanjiData["judul"],
+                          kanjiData["judul"] ?? '?',
                           style: const TextStyle(
-                              fontSize: 50, fontWeight: FontWeight.bold),
+                            fontSize: 48,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
+                        const SizedBox(height: 8),
                         Text(
-                          kanjiData["nama"],
-                          style: const TextStyle(fontSize: 13),
+                          kanjiData["nama"] ?? '',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 16),
+                  // Kanji Info
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Kunyomi
-                        _readingWidget("Kunyomi", kanjiData["kunyomi"]),
-                        const SizedBox(height: 5),
-                        // Onyomi
-                        _readingWidget("Onyomi", kanjiData["onyomi"]),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: IconButton(
-                                icon: const Icon(Icons.volume_up),
-                                onPressed: () {
-                                  // Memutar voice record dari judul kanji
-                                  _playVoice(kanjiData["voice_record"]);
-                                },
-                              ),
+                        _buildReadingCard('Kunyomi', kanjiData["kunyomi"]),
+                        const SizedBox(height: 8),
+                        _buildReadingCard('Onyomi', kanjiData["onyomi"]),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
                             ),
-                          ],
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.volume_up,
+                                color: bgColor2,
+                              ),
+                              onPressed: () {
+                                _playVoice(kanjiData["voice_record"]);
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -145,122 +182,199 @@ class _DetailJukugo4PageState extends State<DetailJukugo4Page> {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Contoh Penggunaan
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.blue.shade200,
-                borderRadius: BorderRadius.circular(10),
+                color: bgColor2,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
-                children:
-                    (kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
-                  return ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.format_quote,
+                        color: bgColor1,
+                        size: 24,
                       ),
-                      child: IconButton(
-                        icon: const Icon(Icons.volume_up),
-                        onPressed: () {
-                          // Memutar voice record dari kanji gabungan
-                          _playVoice(kanji["voice_record"]);
-                        },
+                      const SizedBox(width: 8),
+                      Text(
+                        'Contoh Penggunaan',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  if (kanjiData["detail_kanji"] != null &&
+                      (kanjiData["detail_kanji"] as List).isNotEmpty)
+                    ...(kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
+                      return _buildExampleUsage(kanji);
+                    }).toList()
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        'Tidak ada contoh penggunaan',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              kanji["romaji"],
-                              style: TextStyle(
-                                  fontSize: 14, color: secondaryTextColor),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              kanji["kanji"],
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          kanji["arti"],
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                ],
               ),
             ),
             const SizedBox(height: 20),
+
             SizedBox(
-              width: double.infinity, // Membuat lebar button full width
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: () => _showWritingModal(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade200,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 15), // Hanya vertical padding
+                  backgroundColor: bgColor2,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                  elevation: 2,
                 ),
                 child: const Text(
-                  "Coba",
+                  "Coba Menulis Kanji",
                   style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _readingWidget(String title, String reading) {
+  Widget _buildReadingCard(String title, String? reading) {
     return Container(
-      width: double.infinity, // Lebar container sama
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        color: bgColor1,
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Text("$title : ",
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(reading),
+          Text(
+            "$title: ",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            reading ?? '-',
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildExampleUsage(Map<String, dynamic> kanji) {
+    return Card(
+      color: bgColor1,
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2), // Warna bayangan
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: Offset(0, 1), // Posisi bayangan (x, y)
+                    ),
+                  ],
+                  color: Colors.white),
+              child: IconButton(
+                icon: Icon(
+                  Icons.volume_up,
+                  color: bgColor2,
+                ),
+                onPressed: () {
+                  _playVoice(kanji["voice_record"]);
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    kanji["kanji"] ?? '',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    kanji["romaji"] ?? '',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Text(
+                kanji["arti"] ?? '',
+                style: const TextStyle(fontSize: 14, color: Colors.white),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-// Modal untuk menulis (tidak diubah)
 class WritingModal extends StatefulWidget {
   @override
   _WritingModalState createState() => _WritingModalState();
@@ -269,6 +383,7 @@ class WritingModal extends StatefulWidget {
 class _WritingModalState extends State<WritingModal> {
   List<Offset> points = [];
   final GlobalKey _paintKey = GlobalKey();
+  Rect? _drawingArea;
 
   void _clearDrawing() {
     setState(() {
@@ -278,60 +393,136 @@ class _WritingModalState extends State<WritingModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.6,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onPanUpdate: (DragUpdateDetails details) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(20),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "Latihan Menulis Kanji",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Simpan ukuran area gambar setelah layout selesai
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final renderBox = _paintKey.currentContext?.findRenderObject()
+                      as RenderBox?;
+                  if (renderBox != null) {
+                    final offset = renderBox.localToGlobal(Offset.zero);
                     setState(() {
-                      RenderBox renderBox = _paintKey.currentContext!
-                          .findRenderObject() as RenderBox;
-                      Offset localPosition =
-                          renderBox.globalToLocal(details.globalPosition);
-                      points = List.from(points)..add(localPosition);
+                      _drawingArea = Rect.fromLTWH(
+                        offset.dx,
+                        offset.dy,
+                        renderBox.size.width,
+                        renderBox.size.height,
+                      );
                     });
-                  },
-                  onPanEnd: (DragEndDetails details) {
-                    points.add(Offset.zero);
-                  },
-                  child: CustomPaint(
-                    key: _paintKey,
-                    size: Size.infinite,
-                    painter: DrawingPainter(points),
+                  }
+                });
+
+                return Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: GestureDetector(
+                    onPanStart: (details) {
+                      if (_drawingArea?.contains(details.globalPosition) ??
+                          false) {
+                        setState(() {
+                          final localPosition =
+                              _globalToLocal(details.globalPosition);
+                          points.add(localPosition);
+                        });
+                      }
+                    },
+                    onPanUpdate: (details) {
+                      if (_drawingArea?.contains(details.globalPosition) ??
+                          false) {
+                        setState(() {
+                          final localPosition =
+                              _globalToLocal(details.globalPosition);
+                          points.add(localPosition);
+                        });
+                      } else {
+                        // Tambahkan titik kosong ketika keluar area
+                        setState(() {
+                          points.add(Offset.zero);
+                        });
+                      }
+                    },
+                    onPanEnd: (details) {
+                      setState(() {
+                        points.add(Offset.zero);
+                      });
+                    },
+                    child: CustomPaint(
+                      key: _paintKey,
+                      size: Size.infinite,
+                      painter: DrawingPainter(points),
+                    ),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: _clearDrawing,
+                  child: const Row(
+                    children: [
+                      Icon(Icons.delete, color: Colors.red),
+                      SizedBox(width: 4),
+                      Text("Hapus", style: TextStyle(color: Colors.red)),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: _clearDrawing,
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: bgColor2,
+                    foregroundColor: Colors.white,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Kembali"),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                  child: const Text("Selesai"),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Offset _globalToLocal(Offset global) {
+    if (_drawingArea == null) return Offset.zero;
+    return Offset(
+      global.dx - _drawingArea!.left,
+      global.dy - _drawingArea!.top,
     );
   }
 }

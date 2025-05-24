@@ -196,7 +196,7 @@ class _UjianN4PageState extends State<UjianN4Page> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade400),
+            valueColor: AlwaysStoppedAnimation<Color>(bgColor2,),
             strokeWidth: 3,
           ),
           const SizedBox(height: 20),

@@ -311,7 +311,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
                 ),
                 IconButton(
                   icon: Icon(
-                    _isPlaying ? Icons.pause : Icons.volume_up,
+                    Icons.volume_up,
                     color: bgColor2,
                     size: 30,
                   ),

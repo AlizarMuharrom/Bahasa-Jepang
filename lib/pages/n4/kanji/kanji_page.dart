@@ -69,7 +69,7 @@ class _KanjiPageState extends State<KanjiPage> {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(color: primaryTextColor, fontSize: 16),
+          style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:bahasajepang/pages/n5/kanji/kanji_service.dart';
-import 'package:bahasajepang/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:bahasajepang/theme.dart';
 
 class KanjiJukugo4Page extends StatefulWidget {
   const KanjiJukugo4Page({super.key});
@@ -14,17 +14,30 @@ class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
   final KanjiService _kanjiService = KanjiService();
   List<dynamic> _filteredKanji = [];
   List<dynamic> _allKanji = [];
+  bool _isLoading = true;
+  String _errorMessage = '';
 
   @override
   void initState() {
     super.initState();
     _fetchKanji();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchKanji() async {
     try {
-      var kanjiList = await _kanjiService.fetchKanjiByKategori('jukugo');
+      setState(() {
+        _isLoading = true;
+        _errorMessage = '';
+      });
 
+      var kanjiList = await _kanjiService.fetchKanjiByKategori('jukugo');
       var filteredKanji = kanjiList
           .where((kanji) =>
               kanji["kategori"] == "jukugo" && kanji["level_id"] == 3)
@@ -33,13 +46,25 @@ class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
       setState(() {
         _allKanji = filteredKanji;
         _filteredKanji = filteredKanji;
+        _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching kanji: $e');
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Gagal memuat data kanji';
+      });
     }
   }
 
-  void _filterKanji(String query) {
+  void _onSearchChanged() {
+    final query = _searchController.text;
+    if (query.isEmpty) {
+      setState(() {
+        _filteredKanji = _allKanji;
+      });
+      return;
+    }
+
     setState(() {
       _filteredKanji = _allKanji.where((kanji) {
         final judul = kanji["judul"]?.toString().toLowerCase() ?? '';
@@ -56,86 +81,185 @@ class _KanjiJukugo4PageState extends State<KanjiJukugo4Page> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardSize =
+        screenWidth / 3.5; // Menyesuaikan ukuran card berdasarkan lebar layar
+
     return Scaffold(
+      backgroundColor: bgColor1.withOpacity(0.95),
       appBar: AppBar(
-        title: Text(
-          "Kanji Jukugo N4",
+        title: const Text(
+          'Kanji Jukugo N4',
           style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
         ),
         backgroundColor: bgColor3,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        elevation: 4,
+        shadowColor: bgColor3.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
         ),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      backgroundColor: Colors.blue.shade100,
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _filterKanji,
-              decoration: InputDecoration(
-                hintText: "Cari kanji...",
-                filled: true,
-                fillColor: Colors.blue.shade200,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
+          // Search Bar
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: "Cari kanji...",
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: bgColor2.withOpacity(0.7),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 16,
+                  ),
                 ),
               ),
             ),
           ),
+
+          // Content
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: _filteredKanji.length,
-                itemBuilder: (context, index) {
-                  return _kanjiButton(_filteredKanji[index], context);
-                },
-              ),
-            ),
+            child: _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: bgColor2,
+                    ),
+                  )
+                : _errorMessage.isNotEmpty
+                    ? Center(
+                        child: Text(
+                          _errorMessage,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      )
+                    : _filteredKanji.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  size: 50,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Tidak ada kanji yang ditemukan',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: GridView.builder(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio:
+                                    0.85, // Nilai yang lebih optimal
+                                mainAxisExtent:
+                                    cardSize, // Gunakan ukuran dinamis
+                              ),
+                              itemCount: _filteredKanji.length,
+                              itemBuilder: (context, index) {
+                                return _kanjiCard(
+                                    _filteredKanji[index], context);
+                              },
+                            ),
+                          ),
           ),
         ],
       ),
     );
   }
 
-  Widget _kanjiButton(dynamic kanji, BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          '/detail-jukugo',
-          arguments: kanji,
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.blue.shade200,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                kanji["judul"],
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ],
+  Widget _kanjiCard(dynamic kanji, BuildContext context) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            '/detail-jukugo4',
+            arguments: kanji,
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(8), // Padding yang lebih kecil
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                bgColor2.withOpacity(0.7),
+                bgColor2.withOpacity(0.9),
+              ],
+            ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    kanji["judul"] ?? '?',
+                    style: const TextStyle(
+                      fontSize: 30, // Ukuran font yang lebih moderat
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    kanji["nama"] ?? '',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

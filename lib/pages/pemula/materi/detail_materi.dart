@@ -65,7 +65,10 @@ class _DetailMateriPageState extends State<DetailMateriPage>
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(
+              color: bgColor2,
+            ))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(

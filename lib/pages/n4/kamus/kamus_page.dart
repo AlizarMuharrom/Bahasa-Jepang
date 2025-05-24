@@ -134,8 +134,10 @@ class _Kamus4PageState extends State<Kamus4Page> {
             // List Kamus
             Expanded(
               child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: bgColor2,
+                      ),
                     )
                   : _errorMessage.isNotEmpty
                       ? Center(

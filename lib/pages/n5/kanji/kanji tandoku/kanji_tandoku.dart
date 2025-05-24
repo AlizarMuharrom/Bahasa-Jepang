@@ -81,25 +81,30 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardSize =
+        screenWidth / 3.5; // Menyesuaikan ukuran card berdasarkan lebar layar
+
     return Scaffold(
       backgroundColor: bgColor1.withOpacity(0.95),
       appBar: AppBar(
         title: const Text(
           'Kanji Tandoku N5',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontWeight: FontWeight.bold,
+            fontSize: 18,
           ),
         ),
-        backgroundColor: bgColor2,
+        backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor2.withOpacity(0.5),
+        shadowColor: bgColor3.withOpacity(0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
           ),
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Column(
         children: [
@@ -123,7 +128,7 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
                   hintText: "Cari kanji...",
                   prefixIcon: const Icon(Icons.search),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: bgColor2.withOpacity(0.7),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -140,8 +145,10 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
           // Content
           Expanded(
             child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: bgColor2,
+                    ),
                   )
                 : _errorMessage.isNotEmpty
                     ? Center(
@@ -171,14 +178,18 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
                             ),
                           )
                         : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: GridView.builder(
+                              padding: const EdgeInsets.only(bottom: 20),
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
-                                childAspectRatio: 0.9,
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio:
+                                    0.85, // Nilai yang lebih optimal
+                                mainAxisExtent:
+                                    cardSize, // Gunakan ukuran dinamis
                               ),
                               itemCount: _filteredKanji.length,
                               itemBuilder: (context, index) {
@@ -209,6 +220,7 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
           );
         },
         child: Container(
+          padding: const EdgeInsets.all(8), // Padding yang lebih kecil
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(
@@ -224,20 +236,26 @@ class _KanjiTandokuPageState extends State<KanjiTandokuPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  kanji["judul"] ?? '?',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    kanji["judul"] ?? '?',
+                    style: const TextStyle(
+                      fontSize: 30, // Ukuran font yang lebih moderat
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  kanji["nama"] ?? '',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
+                const SizedBox(height: 4),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    kanji["nama"] ?? '',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
                   ),
                 ),
               ],
