@@ -155,85 +155,171 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade100,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/image_splash.png',
-              width: 150,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "Pilih level kemampuanmu",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            _buildLevelButton(
-              "Pemula (Belum pernah belajar bahasa Jepang)",
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.blue.shade50,
+              Colors.blue.shade100,
               Colors.blue.shade200,
-              () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                int? userId = prefs.getInt('id');
-                if (userId != null) {
-                  await sendLevelToDatabase(1);
-                } else {
-                  print('User ID tidak ditemukan');
-                }
-              },
+            ],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/image_splash.png',
+                  width: 180,
+                  height: 180,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  "Pilih Level Kemampuanmu",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Silakan pilih level yang sesuai dengan kemampuan bahasa Jepang Anda",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                _buildLevelCard(
+                  title: "Pemula",
+                  subtitle: "Belum pernah belajar bahasa Jepang",
+                  color: Colors.blue.shade200,
+                  icon: Icons.school,
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    int? userId = prefs.getInt('id');
+                    if (userId != null) {
+                      await sendLevelToDatabase(1);
+                    } else {
+                      print('User ID tidak ditemukan');
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildLevelCard(
+                  title: "N5",
+                  subtitle: "Mengetahui huruf dasar bahasa Jepang",
+                  color: const Color.fromRGBO(100, 181, 246, 1),
+                  icon: Icons.language,
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    int? userId = prefs.getInt('id');
+                    if (userId != null) {
+                      await sendLevelToDatabase(2);
+                    } else {
+                      print('User ID tidak ditemukan');
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildLevelCard(
+                  title: "N4",
+                  subtitle: "Mengetahui lebih dari 100 kanji dan 800 kosakata",
+                  color: Colors.blue.shade400,
+                  icon: Icons.auto_awesome,
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    int? userId = prefs.getInt('id');
+                    if (userId != null) {
+                      await sendLevelToDatabase(3);
+                    } else {
+                      print('User ID tidak ditemukan');
+                    }
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            _buildLevelButton(
-              "N5 (Mengetahui huruf dasar bahasa Jepang)",
-              const Color.fromRGBO(100, 181, 246, 1),
-              () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                int? userId = prefs.getInt('id');
-
-                if (userId != null) {
-                  await sendLevelToDatabase(2);
-                } else {
-                  print('User ID tidak ditemukan');
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-            _buildLevelButton(
-              "N4 (Mengetahui lebih dari 100 kanji dan 800 kosakata)",
-              Colors.blue.shade400,
-              () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                int? userId = prefs.getInt('id');
-
-                if (userId != null) {
-                  await sendLevelToDatabase(3);
-                } else {
-                  print('User ID tidak ditemukan');
-                }
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLevelButton(String text, Color color, VoidCallback onPressed) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+  Widget _buildLevelCard({
+    required String title,
+    required String subtitle,
+    required Color color,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
-      onPressed: onPressed,
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: const TextStyle(color: Colors.black, fontSize: 14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onPressed,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: color.withOpacity(0.5), width: 1),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.3),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color.withOpacity(0.8), size: 28),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: color.withOpacity(0.9),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.blueGrey.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right, color: color.withOpacity(0.7)),
+            ],
+          ),
+        ),
       ),
     );
   }

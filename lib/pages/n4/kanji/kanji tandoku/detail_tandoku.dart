@@ -270,7 +270,7 @@ class _DetailTandoku4PageState extends State<DetailTandoku4Page> {
 
   Widget _buildReadingCard(String title, String? reading) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: bgColor1,
         borderRadius: BorderRadius.circular(8),
