@@ -98,7 +98,7 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1.withOpacity(0.95),
+      backgroundColor: bgColor1.withValues(alpha:0.95),
       appBar: AppBar(
         title: Text(
           _isLoading ? 'Loading...' : _materiData['judul'] ?? 'Materi N5',
@@ -110,7 +110,7 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
         ),
         backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor2.withOpacity(0.5),
+        shadowColor: bgColor2.withValues(alpha:0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
@@ -141,11 +141,11 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                     width: double.infinity,
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: bgColor2.withOpacity(0.9),
+                      color: bgColor2.withValues(alpha:0.9),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha:0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -224,7 +224,7 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 16, vertical: 12),
                                             decoration: BoxDecoration(
-                                              color: bgColor1.withOpacity(0.8),
+                                              color: bgColor1.withValues(alpha:0.8),
                                               borderRadius:
                                                   BorderRadius.circular(12),
                                             ),
@@ -236,11 +236,11 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                                                   alignment: Alignment.center,
                                                   decoration: BoxDecoration(
                                                     color: bgColor2
-                                                        .withOpacity(0.2),
+                                                        .withValues(alpha:0.2),
                                                     shape: BoxShape.circle,
                                                     border: Border.all(
                                                       color: bgColor2
-                                                          .withOpacity(0.5),
+                                                          .withValues(alpha:0.5),
                                                       width: 1.5,
                                                     ),
                                                   ),
@@ -272,7 +272,7 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                                                       .arrow_forward_ios_rounded,
                                                   size: 16,
                                                   color: Colors.white
-                                                      .withOpacity(0.7),
+                                                      .withValues(alpha:0.7),
                                                 ),
                                               ],
                                             ),
@@ -294,11 +294,11 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                     padding: const EdgeInsets.all(20),
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: bgColor2.withOpacity(0.9),
+                      color: bgColor2.withValues(alpha:0.9),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha:0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -311,7 +311,7 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                           children: [
                             Icon(
                               Icons.info_outline_rounded,
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha:0.9),
                               size: 24,
                             ),
                             const SizedBox(width: 8),
@@ -331,7 +331,7 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                           'Materi ini mencakup kosakata dasar, tata bahasa sederhana, dan kalimat pendek.',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha:0.9),
                             height: 1.5,
                           ),
                         ),
@@ -346,11 +346,11 @@ class _DetailMateriN5PageState extends State<DetailMateriN5Page>
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: bgColor2.withOpacity(0.9),
+                        color: bgColor2.withValues(alpha:0.9),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha:0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),

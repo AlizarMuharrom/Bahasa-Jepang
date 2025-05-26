@@ -14,7 +14,6 @@ class DetailOkurigana4Page extends StatefulWidget {
 
 class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
   late Map<String, dynamic> kanjiData;
-  bool _isPlaying = false;
 
   @override
   void didChangeDependencies() {
@@ -23,7 +22,6 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     widget.audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
-        _isPlaying = state == PlayerState.playing;
       });
     });
   }
@@ -43,26 +41,30 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
     );
   }
 
-  Future<void> _playVoice(String? voiceRecordPath) async {
-    if (voiceRecordPath == null || voiceRecordPath.isEmpty) return;
+  Future<void> _playVoice(String? audioUrl) async {
+  if (audioUrl == null || audioUrl.isEmpty) return;
 
-    try {
-      String fullUrl = ApiConfig.url + "/" + voiceRecordPath;
-      await widget.audioPlayer.play(UrlSource(fullUrl));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Audio Tidak Tersedia'),
-          backgroundColor: bgColor3,
-        ),
-      );
-    }
+  try {
+    final fullUrl = "${ApiConfig.url}/$audioUrl";
+    await widget.audioPlayer.play(UrlSource(fullUrl));
+
+    if (!mounted) return;
+  } catch (e) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Audio Tidak Tersedia'),
+        backgroundColor: bgColor3,
+      ),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1.withOpacity(0.95),
+      backgroundColor: bgColor1.withValues(alpha:0.95),
       appBar: AppBar(
         title: const Text(
           'Detail Kanji Okurigana',
@@ -74,7 +76,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
         ),
         backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor3.withOpacity(0.5),
+        shadowColor: bgColor3.withValues(alpha:0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
@@ -90,11 +92,11 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: bgColor2.withOpacity(0.9),
+                color: bgColor2.withValues(alpha:0.9),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -112,7 +114,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha:0.1),
                           blurRadius: 6,
                           offset: const Offset(0, 3),
                         ),
@@ -158,7 +160,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withValues(alpha:0.1),
                                   blurRadius: 6,
                                   offset: const Offset(0, 3),
                                 ),
@@ -191,7 +193,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -223,7 +225,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
                       (kanjiData["detail_kanji"] as List).isNotEmpty)
                     ...(kanjiData["detail_kanji"] as List).map<Widget>((kanji) {
                       return _buildExampleUsage(kanji);
-                    }).toList()
+                    })
                   else
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
@@ -276,7 +278,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -320,7 +322,7 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2), // Warna bayangan
+                      color: Colors.black.withValues(alpha:0.2), // Warna bayangan
                       spreadRadius: 1,
                       blurRadius: 1,
                       offset: Offset(0, 1), // Posisi bayangan (x, y)
@@ -376,6 +378,8 @@ class _DetailOkurigana4PageState extends State<DetailOkurigana4Page> {
 }
 
 class WritingModal extends StatefulWidget {
+  const WritingModal({super.key});
+
   @override
   _WritingModalState createState() => _WritingModalState();
 }
@@ -404,7 +408,7 @@ class _WritingModalState extends State<WritingModal> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha:0.2),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),

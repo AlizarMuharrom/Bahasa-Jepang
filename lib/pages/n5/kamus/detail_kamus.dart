@@ -21,7 +21,6 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
 
   late Future<dynamic> _kamusFuture;
   final KamusService _kamusService = KamusService();
-  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -29,7 +28,6 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
     _kamusFuture = _kamusService.fetchKamusById(widget.kamusId);
     widget.audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
-        _isPlaying = state == PlayerState.playing;
       });
     });
   }
@@ -41,26 +39,29 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
   }
 
   Future<void> _playAudio(String? audioUrl) async {
-    if (audioUrl == null || audioUrl.isEmpty) return;
+  if (audioUrl == null || audioUrl.isEmpty) return;
 
-    try {
-      final fullUrl = ApiConfig.url + "/" + audioUrl;
-      await widget.audioPlayer.play(UrlSource(fullUrl));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Audio Tidak Tersedia'),
-          backgroundColor: bgColor3,
-        ),
-      );
-    }
+  try {
+    final fullUrl = "${ApiConfig.url}/$audioUrl";
+    await widget.audioPlayer.play(UrlSource(fullUrl));
+
+    if (!mounted) return;
+  } catch (e) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Audio Tidak Tersedia'),
+        backgroundColor: bgColor3,
+      ),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: bgColor1.withOpacity(0.95),
+      backgroundColor: bgColor1.withValues(alpha: 0.95),
       appBar: AppBar(
         title: const Text(
           'Detail Kamus N5',
@@ -69,7 +70,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
         ),
         backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor2.withOpacity(0.5),
+        shadowColor: bgColor2.withValues(alpha: 0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
@@ -130,11 +131,11 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: bgColor2.withOpacity(0.9),
+                    color: bgColor2.withValues(alpha:0.9),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha:0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -148,7 +149,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha:0.2),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -188,7 +189,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha:0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -202,7 +203,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withValues(alpha:0.8),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -228,7 +229,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
                         ...(item["detail_kamuses"] as List<dynamic>)
                             .map<Widget>((kamus) {
                           return _buildExampleCard(kamus);
-                        }).toList()
+                        })
                       else
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16),
@@ -261,7 +262,7 @@ class _DetailKamus5PageState extends State<DetailKamus5Page>
             label,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha:0.8),
             ),
           ),
           const SizedBox(height: 4),

@@ -73,7 +73,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1.withOpacity(0.95),
+      backgroundColor: bgColor1.withValues(alpha:0.95),
       appBar: AppBar(
         title: const Text(
           'Materi N4',
@@ -84,14 +84,14 @@ class _MateriN4PageState extends State<MateriN4Page> {
         ),
         backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor2.withOpacity(0.5),
+        shadowColor: bgColor2.withValues(alpha:0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
           ),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
+        iconTheme: IconThemeData(color: Colors.white.withValues(alpha:0.9)),
       ),
       body: _buildBody(),
     );
@@ -161,7 +161,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
           children: [
             Icon(
               Icons.library_books_outlined,
-              color: bgColor2.withOpacity(0.7),
+              color: bgColor2.withValues(alpha:0.7),
               size: 60,
             ),
             const SizedBox(height: 16),
@@ -220,15 +220,15 @@ class _MateriN4PageState extends State<MateriN4Page> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        color: bgColor2.withOpacity(0.9),
-        shadowColor: bgColor2.withOpacity(0.3),
+        color: bgColor2.withValues(alpha:0.9),
+        shadowColor: bgColor2.withValues(alpha:0.3),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Icon(
                 Icons.article_outlined,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha:0.9),
                 size: 28,
               ),
               const SizedBox(width: 16),
@@ -244,7 +244,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
               ),
               Icon(
                 Icons.chevron_right,
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha:0.7),
               ),
             ],
           ),
@@ -297,7 +297,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
               children: [
                 Icon(
                   Icons.quiz_outlined,
-                  color: bgColor2.withOpacity(0.7),
+                  color: bgColor2.withValues(alpha:0.7),
                   size: 40,
                 ),
                 const SizedBox(height: 8),
@@ -343,7 +343,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  color: bgColor2.withOpacity(0.9),
+                  color: bgColor2.withValues(alpha:0.9),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -351,7 +351,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: bgColor1.withOpacity(0.3),
+                            color: bgColor1.withValues(alpha:0.3),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -377,7 +377,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
                                 ujian['deskripsi'] ??
                                     'Jumlah soal: ${ujian['jumlah_soal']}',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white.withValues(alpha:0.8),
                                   fontSize: 14,
                                 ),
                               ),
@@ -386,7 +386,7 @@ class _MateriN4PageState extends State<MateriN4Page> {
                         ),
                         Icon(
                           Icons.chevron_right,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha:0.7),
                         ),
                       ],
                     ),

@@ -91,14 +91,14 @@ class _SettingPageState extends State<SettingPage> {
         ),
         backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor2.withOpacity(0.5),
+        shadowColor: bgColor2.withValues(alpha:0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
           ),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
+        iconTheme: IconThemeData(color: Colors.white.withValues(alpha:0.9)),
       ),
       backgroundColor: bgColor1,
       body: SingleChildScrollView(
@@ -113,7 +113,7 @@ class _SettingPageState extends State<SettingPage> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha:0.05),
                     blurRadius: 15,
                     offset: const Offset(0, 5),
                   ),
@@ -132,15 +132,15 @@ class _SettingPageState extends State<SettingPage> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: bgColor1.withOpacity(0.3),
+                        color: bgColor1.withValues(alpha:0.3),
                         width: 2,
                       ),
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          bgColor1.withOpacity(0.5),
-                          bgColor1.withOpacity(0.8),
+                          bgColor1.withValues(alpha:0.5),
+                          bgColor1.withValues(alpha:0.8),
                         ],
                       ),
                     ),
@@ -387,7 +387,7 @@ class _SettingPageState extends State<SettingPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),

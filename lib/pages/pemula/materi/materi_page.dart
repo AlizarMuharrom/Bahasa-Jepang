@@ -98,7 +98,7 @@ class _MateriPageState extends State<MateriPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1.withOpacity(0.95),
+      backgroundColor: bgColor1.withValues(alpha:0.95),
       appBar: AppBar(
         title: const Text(
           'Materi Pemula',
@@ -109,7 +109,7 @@ class _MateriPageState extends State<MateriPage> {
         ),
         backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor2.withOpacity(0.5),
+        shadowColor: bgColor2.withValues(alpha:0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
@@ -186,7 +186,7 @@ class _MateriPageState extends State<MateriPage> {
           children: [
             Icon(
               Icons.library_books_outlined,
-              color: bgColor2.withOpacity(0.7),
+              color: bgColor2.withValues(alpha:0.7),
               size: 60,
             ),
             const SizedBox(height: 16),
@@ -245,15 +245,15 @@ class _MateriPageState extends State<MateriPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        color: bgColor2.withOpacity(0.9),
-        shadowColor: bgColor2.withOpacity(0.3),
+        color: bgColor2.withValues(alpha:0.9),
+        shadowColor: bgColor2.withValues(alpha:0.3),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Icon(
                 Icons.article_outlined,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha:0.9),
                 size: 28,
               ),
               const SizedBox(width: 16),
@@ -269,7 +269,7 @@ class _MateriPageState extends State<MateriPage> {
               ),
               Icon(
                 Icons.chevron_right,
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha:0.7),
               ),
             ],
           ),
@@ -322,7 +322,7 @@ class _MateriPageState extends State<MateriPage> {
               children: [
                 Icon(
                   Icons.quiz_outlined,
-                  color: bgColor2.withOpacity(0.7),
+                  color: bgColor2.withValues(alpha:0.7),
                   size: 40,
                 ),
                 const SizedBox(height: 8),
@@ -369,7 +369,7 @@ class _MateriPageState extends State<MateriPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  color: bgColor2.withOpacity(0.9),
+                  color: bgColor2.withValues(alpha:0.9),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -377,7 +377,7 @@ class _MateriPageState extends State<MateriPage> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: bgColor1.withOpacity(0.3),
+                            color: bgColor1.withValues(alpha:0.3),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -403,7 +403,7 @@ class _MateriPageState extends State<MateriPage> {
                                 ujian['deskripsi'] ??
                                     'Jumlah soal: ${ujian['jumlah_soal']}',
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white.withValues(alpha:0.8),
                                   fontSize: 14,
                                 ),
                               ),
@@ -412,7 +412,7 @@ class _MateriPageState extends State<MateriPage> {
                         ),
                         Icon(
                           Icons.chevron_right,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha:0.7),
                         ),
                       ],
                     ),

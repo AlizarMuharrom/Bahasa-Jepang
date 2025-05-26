@@ -76,7 +76,7 @@ class _Kamus5PageState extends State<Kamus5Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor1.withOpacity(0.95),
+      backgroundColor: bgColor1.withValues(alpha:0.95),
       appBar: AppBar(
         title: const Text(
           'Kamus N5',
@@ -87,14 +87,14 @@ class _Kamus5PageState extends State<Kamus5Page> {
         ),
         backgroundColor: bgColor3,
         elevation: 4,
-        shadowColor: bgColor2.withOpacity(0.5),
+        shadowColor: bgColor2.withValues(alpha:0.5),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(15),
           ),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white.withOpacity(0.9)),
+        iconTheme: IconThemeData(color: Colors.white.withValues(alpha:0.9)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -106,7 +106,7 @@ class _Kamus5PageState extends State<Kamus5Page> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),

@@ -35,7 +35,7 @@ class _UjianN4PageState extends State<UjianN4Page> {
   @override
   void initState() {
     super.initState();
-    _duration = const Duration(minutes: 2);
+    _duration = const Duration(minutes: 5);
     _loadInitialData();
   }
 
@@ -196,7 +196,9 @@ class _UjianN4PageState extends State<UjianN4Page> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(bgColor2,),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              bgColor2,
+            ),
             strokeWidth: 3,
           ),
           const SizedBox(height: 20),
@@ -560,13 +562,6 @@ class _UjianN4PageState extends State<UjianN4Page> {
                       ),
                     ],
                     const SizedBox(height: 30),
-                    if (isPerfectScore)
-                      _buildLevelButton(
-                        "Lanjut ke Level N4",
-                        Colors.blueAccent,
-                        () => sendLevelToDatabase(3),
-                      ),
-                    const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(

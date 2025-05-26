@@ -81,7 +81,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -115,7 +115,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                                   _isExpanded
                                       ? Icons.keyboard_arrow_up
                                       : Icons.keyboard_arrow_down,
-                                  color: primaryTextColor,
+                                  color: Colors.white,
                                   size: 28,
                                 ),
                               ],
@@ -162,7 +162,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                                           boxShadow: [
                                             BoxShadow(
                                               color: Colors.black
-                                                  .withOpacity(0.05),
+                                                  .withValues(alpha: 0.05),
                                               blurRadius: 6,
                                               offset: const Offset(0, 3),
                                             ),
@@ -175,8 +175,8 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                                               height: 30,
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
-                                                color: primaryColor
-                                                    .withOpacity(0.15),
+                                                color: primaryColor.withValues(
+                                                    alpha: 0.15),
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Text(
@@ -194,7 +194,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                                                 detail['judul'],
                                                 style: TextStyle(
                                                   fontSize: 16,
-                                                  color: primaryTextColor,
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.w500,
                                                 ),
                                               ),
@@ -202,7 +202,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                                             const Icon(
                                               Icons.arrow_forward_ios_rounded,
                                               size: 16,
-                                              color: Colors.grey,
+                                              color: Colors.white,
                                             ),
                                           ],
                                         ),
@@ -220,11 +220,11 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                     padding: const EdgeInsets.all(20),
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: bgColor2.withOpacity(0.9),
+                      color: bgColor2.withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -237,7 +237,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                           children: [
                             Icon(
                               Icons.info_outline_rounded,
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               size: 24,
                             ),
                             const SizedBox(width: 8),
@@ -257,7 +257,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                           'Materi yang cocok ketika belum pernah belajar bahasa Jepang sama sekali',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             height: 1.5,
                           ),
                         ),
@@ -270,11 +270,11 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: bgColor2.withOpacity(0.9),
+                        color: bgColor2.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),
