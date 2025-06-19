@@ -332,8 +332,7 @@ class _DetailMateriN4PageState extends State<DetailMateriN4Page>
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'JLPT N4 adalah level paling dasar dalam ujian kemampuan bahasa Jepang. '
-                          'Materi ini mencakup kosakata dasar, tata bahasa sederhana, dan kalimat pendek.',
+                          'JLPT N4 adalah tingkat kedua dari bawah dalam ujian kemampuan bahasa Jepang. Level ini menunjukkan bahwa seseorang sudah memahami bahasa Jepang dasar yang digunakan dalam kehidupan sehari-hari dan dapat memahami percakapan sederhana dengan konteks umum. Dapat dikatakan level N4 ketika sudah menguasai 1500 kosakata dan 300 kanji',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withValues(alpha: 0.9),

@@ -150,7 +150,7 @@ class _SignInPage extends State<SignInPage> {
             ),
             SizedBox(height: 12),
             Container(
-              height: 45,
+              height: 44,
               padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),

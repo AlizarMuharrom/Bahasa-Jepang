@@ -300,13 +300,26 @@ class _DetailKamus4PageState extends State<DetailKamus4Page>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    kamus["kanji"] ?? '-',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        kamus["kanji"] ?? '-',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      if (kamus["romaji"] != null && kamus["romaji"].isNotEmpty)
+                        Text(
+                          kamus["romaji"],
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white.withOpacity(0.7),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 IconButton(

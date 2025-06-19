@@ -254,7 +254,7 @@ class _DetailMateriPageState extends State<DetailMateriPage>
                         const SizedBox(height: 12),
                         Text(
                           'Materi Pemula adalah level paling dasar dalam kemampuan bahasa Jepang. '
-                          'Materi yang cocok ketika belum pernah belajar bahasa Jepang sama sekali',
+                          'Materi yang cocok ketika belum pernah belajar bahasa Jepang sama sekali, pada materi ini mempelajari hiragana dan katanana. Hiragana adalah salah satu dari tiga sistem penulisan dalam bahasa Jepang. Ini adalah sistem suku kata fonetik (setiap karakter mewakili satu suku kata), dan merupakan sistem tulisan pertama yang dipelajari oleh anak-anak Jepang maupun pelajar asing. Sedangkan Katakana adalah sistem penulisan kedua dalam bahasa Jepang, juga fonetik seperti Hiragana, tapi digunakan untuk keperluan yang berbeda, yaitu digunakan pada kalimat atau kata asing seperti transmart/apartment.',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withValues(alpha: 0.9),

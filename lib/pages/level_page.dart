@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bahasajepang/pages/pretest_page.dart';
 import 'package:bahasajepang/service/API_config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -202,55 +203,69 @@ class _LevelSelectionPageState extends State<LevelSelectionPage> {
                 ),
                 const SizedBox(height: 30),
                 _buildLevelCard(
-                  title: "Pemula",
-                  subtitle: "Belum pernah belajar bahasa Jepang",
+                  title: "Tes Kemampuan",
+                  subtitle: "Ikuti pretest untuk mengetahui level Anda",
                   color: Colors.blue.shade200,
-                  icon: Icons.school,
-                  onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    int? userId = prefs.getInt('id');
-                    if (userId != null) {
-                      await sendLevelToDatabase(1);
-                    } else {
-                      print('User ID tidak ditemukan');
-                    }
+                  icon: Icons.quiz,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PretestPage()),
+                    );
                   },
                 ),
-                const SizedBox(height: 16),
-                _buildLevelCard(
-                  title: "N5",
-                  subtitle: "Mengetahui huruf dasar bahasa Jepang",
-                  color: const Color.fromRGBO(100, 181, 246, 1),
-                  icon: Icons.language,
-                  onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    int? userId = prefs.getInt('id');
-                    if (userId != null) {
-                      await sendLevelToDatabase(2);
-                    } else {
-                      print('User ID tidak ditemukan');
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
-                _buildLevelCard(
-                  title: "N4",
-                  subtitle: "Mengetahui lebih dari 100 kanji dan 800 kosakata",
-                  color: Colors.blue.shade400,
-                  icon: Icons.auto_awesome,
-                  onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    int? userId = prefs.getInt('id');
-                    if (userId != null) {
-                      await sendLevelToDatabase(3);
-                    } else {
-                      print('User ID tidak ditemukan');
-                    }
-                  },
-                ),
+                // const SizedBox(height: 16),
+                // _buildLevelCard(
+                //   title: "Pemula",
+                //   subtitle: "Belum pernah belajar bahasa Jepang",
+                //   color: Colors.blue.shade200,
+                //   icon: Icons.school,
+                //   onPressed: () async {
+                //     SharedPreferences prefs =
+                //         await SharedPreferences.getInstance();
+                //     int? userId = prefs.getInt('id');
+                //     if (userId != null) {
+                //       await sendLevelToDatabase(1);
+                //     } else {
+                //       print('User ID tidak ditemukan');
+                //     }
+                //   },
+                // ),
+                // const SizedBox(height: 16),
+                // _buildLevelCard(
+                //   title: "N5",
+                //   subtitle: "Mengetahui huruf dasar bahasa Jepang",
+                //   color: const Color.fromRGBO(100, 181, 246, 1),
+                //   icon: Icons.language,
+                //   onPressed: () async {
+                //     SharedPreferences prefs =
+                //         await SharedPreferences.getInstance();
+                //     int? userId = prefs.getInt('id');
+                //     if (userId != null) {
+                //       await sendLevelToDatabase(2);
+                //     } else {
+                //       print('User ID tidak ditemukan');
+                //     }
+                //   },
+                // ),
+                // const SizedBox(height: 16),
+                // _buildLevelCard(
+                //   title: "N4",
+                //   subtitle: "Mengetahui lebih dari 100 kanji dan 800 kosakata",
+                //   color: Colors.blue.shade400,
+                //   icon: Icons.auto_awesome,
+                //   onPressed: () async {
+                //     SharedPreferences prefs =
+                //         await SharedPreferences.getInstance();
+                //     int? userId = prefs.getInt('id');
+                //     if (userId != null) {
+                //       await sendLevelToDatabase(3);
+                //     } else {
+                //       print('User ID tidak ditemukan');
+                //     }
+                //   },
+                // ),
               ],
             ),
           ),
